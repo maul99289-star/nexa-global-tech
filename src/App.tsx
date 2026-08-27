@@ -1,42 +1,41 @@
 export default function App() {
-  return (
-    <div style={{ minHeight: '100vh', background: '#090d16', color: '#f3f4f6', fontFamily: 'sans-serif', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-      {/* Navbar */}
-      <nav style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '20px 50px', borderBottom: '1px solid #1f2937' }}>
-        <h2 style={{ fontSize: '1.5rem', fontWeight: 'bold', color: '#38bdf8', margin: 0 }}>NEXA GLOBAL TECH</h2>
-        <div style={{ display: 'flex', gap: '30px', fontSize: '0.95rem', color: '#9ca3af' }}>
-          <span style={{ cursor: 'pointer' }}>Solutions</span>
-          <span style={{ cursor: 'pointer' }}>Infrastructure</span>
-          <span style={{ cursor: 'pointer' }}>Enterprise</span>
-          <span style={{ cursor: 'pointer' }}>Contact</span>
-        </div>
-      </nav>
+  const features = [
+    { title: "AI Cloud Orchestration", desc: "Automated scaling and predictive workload management." },
+    { title: "Quantum-Resistant Security", desc: "Next-gen end-to-end encryption safeguarding core databases." },
+    { title: "Global CDN Mesh", desc: "Ultra-low latency edge delivery across 200+ global nodes." },
+    { title: "Real-time Telemetry", desc: "Deep-dive diagnostic monitoring and instant anomaly detection." },
+    { title: "Zero-Trust Architecture", desc: "Granular access controls and continuous identity verification." },
+    { title: "Auto-Failover Clusters", desc: "99.999% high availability with seamless disaster recovery." },
+    { title: "Edge Computing Engine", desc: "Process data closer to the source for real-time responsiveness." },
+    { title: "Automated CI/CD Pipelines", desc: "Streamlined deployment workflows integrated seamlessly." },
+    { title: "Enterprise Database Sharding", desc: "Horizontal scaling optimized for massive data throughput." },
+    { title: "Distributed Load Balancing", desc: "Intelligent traffic distribution preventing server bottlenecks." },
+    { title: "Advanced Compliance Tools", desc: "Automated audits meeting global enterprise regulatory standards." },
+    { title: "Custom API Gateway", desc: "High-performance routing and rate-limiting infrastructure." }
+  ];
 
-      {/* Hero Section */}
-      <div style={{ textAlign: 'center', padding: '80px 20px', maxWidth: '800px', margin: '0 auto' }}>
-        <span style={{ background: '#0369a1', color: '#e0f2fe', padding: '6px 16px', borderRadius: '20px', fontSize: '0.85rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>
-          Next-Gen Cloud Architecture
-        </span>
-        <h1 style={{ fontSize: '3.5rem', fontWeight: '800', margin: '20px 0', lineHeight: '1.2' }}>
-          Enterprise Cloud Infrastructure & Solutions
-        </h1>
-        <p style={{ fontSize: '1.15rem', color: '#9ca3af', marginBottom: '40px', lineHeight: '1.6' }}>
-          Empowering global enterprises with high-performance computing, secure data pipelines, and scalable cloud infrastructures.
-        </p>
-        <div style={{ display: 'flex', justifyContent: 'center', gap: '15px' }}>
-          <button style={{ background: '#0ea5e9', color: '#fff', border: 'none', padding: '12px 28px', fontSize: '1rem', fontWeight: '600', borderRadius: '6px', cursor: 'pointer' }}>
-            Get Started
-          </button>
-          <button style={{ background: 'transparent', color: '#f3f4f6', border: '1px solid #374151', padding: '12px 28px', fontSize: '1rem', fontWeight: '600', borderRadius: '6px', cursor: 'pointer' }}>
-            Documentation
-          </button>
+  return (
+    <div style={{ minHeight: '100vh', background: '#030712', color: '#f3f4f6', fontFamily: 'sans-serif', padding: '40px 20px' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
+        <header style={{ textAlign: 'center', marginBottom: '50px' }}>
+          <span style={{ background: '#0284c7', color: '#e0f2fe', padding: '6px 16px', borderRadius: '20px', fontSize: '0.85rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>
+            Enterprise Edition
+          </span>
+          <h1 style={{ fontSize: '3rem', fontWeight: '800', margin: '20px 0' }}>Nexa Global Tech</h1>
+          <p style={{ fontSize: '1.1rem', color: '#9ca3af', maxWidth: '600px', margin: '0 auto' }}>
+            Menampilkan 12 Fitur Infrastruktur Cloud Tingkat Dewa untuk Performa Tanpa Batas.
+          </p>
+        </header>
+
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '20px' }}>
+          {features.map((f, i) => (
+            <div key={i} style={{ background: '#111827', border: '1px solid #1f2937', padding: '25px', borderRadius: '12px', transition: 'border-color 0.2s' }}>
+              <div style={{ color: '#38bdf8', fontWeight: 'bold', fontSize: '1.2rem', marginBottom: '10px' }}>0{i + 1}. {f.title}</div>
+              <p style={{ color: '#9ca3af', fontSize: '0.95rem', lineHeight: '1.5', margin: 0 }}>{f.desc}</p>
+            </div>
+          ))}
         </div>
       </div>
-
-      {/* Footer */}
-      <footer style={{ textAlign: 'center', padding: '20px', borderTop: '1px solid #1f2937', color: '#6b7280', fontSize: '0.85rem' }}>
-        &copy; 2026 Nexa Global Tech. All rights reserved.
-      </footer>
     </div>
   );
 }
