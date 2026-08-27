@@ -8,15 +8,18 @@ export const AdvancedFeatures: React.FC = () => {
   const [matrixActive, setMatrixActive] = useState<boolean>(true);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   const [isListening, setIsListening] = useState<boolean>(false);
+  const [camActive, setCamActive] = useState<boolean>(false);
   
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
-    { type: 'system', text: 'Nexa Voice & Neural Core v8.0.0 (Supreme Edition)' },
+    { type: 'system', text: 'Nexa Overlord Core v9.0.0 (Supreme Cyber God-Tier)' },
     { type: 'system', text: 'Lead Architect & Owner: Maulana Rifa\'i' },
-    { type: 'system', text: 'Type "help", "voice-on", "trace", "snake", or use voice command.' },
+    { type: 'system', text: 'Type "help", "cam", "run 5 + 5", "trace", "snake", or use voice command.' },
   ]);
   
   const terminalEndRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const asciiCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Live Clock & Ping Simulator
   useEffect(() => {
@@ -63,13 +66,13 @@ export const AdvancedFeatures: React.FC = () => {
     }
 
     const recognition = new SpeechRecognition();
-    recognition.lang = 'id-ID'; // Bisa bahasa Indonesia atau Inggris
+    recognition.lang = 'id-ID';
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
     recognition.onstart = () => {
       setIsListening(true);
-      setLogs((prev) => [...prev, { type: 'system', text: '[🎙️] Mendengarkan suara... Silakan bicara (contoh: "ping", "owner", "matrix").' }]);
+      setLogs((prev) => [...prev, { type: 'system', text: '[🎙️] Mendengarkan suara... (contoh: "cam", "ping", "owner").' }]);
     };
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
@@ -139,12 +142,68 @@ export const AdvancedFeatures: React.FC = () => {
     terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [logs]);
 
+  // Webcam ASCII Stream Handler
+  const toggleCamStream = async () => {
+    if (camActive) {
+      if (videoRef.current && videoRef.current.srcObject) {
+        const stream = videoRef.current.srcObject as MediaStream;
+        stream.getTracks().forEach(track => track.stop());
+      }
+      setCamActive(false);
+      setLogs(prev => [...prev, { type: 'system', text: '[cam] Matrix Webcam Stream stopped.' }]);
+    } else {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 160, height: 120 } });
+        if (videoRef.current) {
+          videoRef.current.srcObject = stream;
+          videoRef.current.play();
+        }
+        setCamActive(true);
+        setLogs(prev => [...prev, { type: 'system', text: '[cam] Matrix ASCII Webcam Stream active! Wajah Anda dipetakan ke terminal.' }]);
+      } catch {
+        setLogs(prev => [...prev, { type: 'error', text: '[!] Akses kamera ditolak atau tidak tersedia.' }]);
+      }
+    }
+  };
+
   const executeCommand = (cmdText: string) => {
     const rawCmd = cmdText.trim();
     const lowerCmd = rawCmd.toLowerCase();
     if (!rawCmd) return;
 
     const newLogs = [...logs, { type: 'input', text: `$ ${rawCmd}` }];
+
+    // Handle JS Code Sandbox Runner: "run <script>"
+    if (lowerCmd.startsWith('run ')) {
+      const codeSnippet = rawCmd.substring(4).trim();
+      try {
+        // Safe evaluation simulation
+        const result = Function(`'use strict'; return (${codeSnippet});`)();
+        newLogs.push({ type: 'output', text: `[JS Sandbox Result] => ${String(result)}` });
+      } catch (err: unknown) {
+        const errorMessage = err instanceof Error ? err.message : String(err);
+        try {
+          // Fallback if it's a statement like console.log or assignment
+          const logsOutput: string[] = [];
+          const customConsole = { log: (...args: unknown[]) => logsOutput.push(args.join(' ')) };
+          const runFunc = new Function('console', `'use strict'; ${codeSnippet}`);
+          runFunc(customConsole);
+          newLogs.push({ type: 'output', text: `[JS Output] => ${logsOutput.join('\n') || 'Executed successfully.'}` });
+        } catch (innerErr: unknown) {
+          const innerMessage = innerErr instanceof Error ? innerErr.message : String(innerErr);
+          newLogs.push({ type: 'error', text: `[JS Error] => ${errorMessage || innerMessage}` });
+        }
+      }
+      setLogs(newLogs);
+      return;
+    }
+
+    // Webcam Command
+    if (lowerCmd === 'cam' || lowerCmd === 'webcam') {
+      toggleCamStream();
+      setLogs(newLogs);
+      return;
+    }
 
     // Trace Route Simulation
     if (lowerCmd === 'trace' || lowerCmd === 'traceroute') {
@@ -207,7 +266,7 @@ export const AdvancedFeatures: React.FC = () => {
       let codeSnippet = '';
 
       if (targetLang === 'react' || targetLang === 'tsx') {
-        codeSnippet = `// React Component Structure by Maulana Rifa'i\nimport React, { useState } from 'react';\n\nexport const App = () => {\n  const [count, setCount] = useState(0);\n  return (\n    <div className="p-4 bg-slate-900 text-white">\n      <h1>Nexa Cloud UI</h1>\n      <button onClick={() => setCount(count + 1)}>Clicks: {count}</button>\n    </div>\n  );\n};`;
+        codeSnippet = `// React Component Structure by Maulana Rifa'i\nimport React, { useState } from 'react';\n\nexport const App = () => {\n  const [count, setCount] = useState(0);\n  return (\n    <div className=\"p-4 bg-slate-900 text-white\">\n      <h1>Nexa Cloud UI</h1>\n      <button onClick={() => setCount(count + 1)}>Clicks: {count}</button>\n    </div>\n  );\n};`;
       } else if (targetLang === 'typescript' || targetLang === 'ts') {
         codeSnippet = `// TypeScript Enterprise Interface\ninterface CloudConfig {\n  nodeId: string;\n  region: string;\n  secure: boolean;\n}\n\nconst deployNode = (config: CloudConfig): void => {\n  console.log(\`Deploying to \${config.region}...\`);\n};`;
       } else if (targetLang === 'docker') {
@@ -241,7 +300,7 @@ export const AdvancedFeatures: React.FC = () => {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: trace, snake, attack-sim, sfx-on, sfx-off, code react, code typescript, code docker, ai <pesan>, decrypt, owner, status, ping, matrix-on, matrix-off, clear',
+          text: 'Commands: cam, run <js_code>, trace, snake, attack-sim, sfx-on, sfx-off, code react, code typescript, code docker, ai <pesan>, decrypt, owner, status, ping, matrix-on, matrix-off, clear',
         });
         break;
       case 'owner':
@@ -260,7 +319,7 @@ export const AdvancedFeatures: React.FC = () => {
       case 'status':
         newLogs.push({
           type: 'output',
-          text: `Edge Status: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i | Voice Engine: ACTIVE`,
+          text: `Edge Status: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i | Overlord Core: SECURE`,
         });
         break;
       case 'ping':
@@ -283,7 +342,7 @@ export const AdvancedFeatures: React.FC = () => {
       default:
         newLogs.push({
           type: 'error',
-          text: `command not found: ${rawCmd}. Ketik "trace", "snake", atau "help".`,
+          text: `command not found: ${rawCmd}. Ketik "cam", "run 10 * 5", atau "help".`,
         });
     }
 
@@ -320,7 +379,7 @@ export const AdvancedFeatures: React.FC = () => {
         />
       )}
 
-      <div style={{ position: 'relative', zIndex: 1 }}>
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: '800px', margin: '0 auto', padding: '10px' }}>
         {/* Telemetry Bar */}
         <div className="telemetry-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
           <div>
@@ -330,31 +389,56 @@ export const AdvancedFeatures: React.FC = () => {
             <span className="telemetry-info" style={{ marginLeft: '12px' }}>Ping: {ping}ms</span>
             <span className="telemetry-info" style={{ marginLeft: '12px' }}>Owner: Maulana Rifa'i</span>
           </div>
-          <div>
+          <div style={{ display: 'flex', gap: '8px' }}>
+            <button
+              onClick={toggleCamStream}
+              style={{
+                background: camActive ? '#ef4444' : '#0284c7',
+                color: '#fff',
+                border: 'none',
+                padding: '5px 10px',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                fontSize: '0.8rem',
+              }}
+            >
+              {camActive ? '📷 Stop Cam' : '📷 Matrix Cam'}
+            </button>
             <button
               onClick={startVoiceCommand}
               style={{
                 background: isListening ? '#ef4444' : '#22c55e',
                 color: '#fff',
                 border: 'none',
-                padding: '5px 12px',
+                padding: '5px 10px',
                 borderRadius: '4px',
                 cursor: 'pointer',
                 fontWeight: 'bold',
                 fontSize: '0.8rem',
-                boxShadow: '0 0 10px rgba(0,255,100,0.3)',
               }}
             >
-              {isListening ? '🎙️ Mendengarkan...' : '🎙️ Voice Command'}
+              {isListening ? '🎙️ Mendengarkan...' : '🎙️ Voice'}
             </button>
           </div>
         </div>
 
+        {/* Hidden video stream element for webcam processing */}
+        <video ref={videoRef} style={{ display: 'none' }} playsInline muted />
+
+        {/* Live Webcam ASCII Preview Box if Active */}
+        {camActive && (
+          <div style={{ marginBottom: '15px', background: 'rgba(3, 7, 18, 0.95)', border: '1px solid #22c55e', borderRadius: '8px', padding: '10px', textAlign: 'center' }}>
+            <p style={{ margin: '0 0 5px 0', color: '#4ade80', fontSize: '0.85rem', fontWeight: 'bold' }}>[LIVE MATRIX WEBCAM FEED STREAM ACTIVE]</p>
+            <canvas ref={asciiCanvasRef} style={{ width: '100%', maxWidth: '320px', height: '120px', background: '#000', borderRadius: '4px' }} />
+          </div>
+        )}
+
         {/* Info Card / Welcome Preview */}
-        <div style={{ maxWidth: '700px', margin: '0 auto 20px auto', background: 'rgba(15, 23, 42, 0.85)', border: '1px solid #1e293b', borderRadius: '8px', padding: '15px', color: '#cbd5e1', fontSize: '0.9rem', backdropFilter: 'blur(5px)' }}>
-          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>🎙️ Supreme Voice & Neural Terminal (Maulana Rifa'i):</p>
+        <div style={{ margin: '0 0 20px 0', background: 'rgba(15, 23, 42, 0.85)', border: '1px solid #1e293b', borderRadius: '8px', padding: '15px', color: '#cbd5e1', fontSize: '0.9rem', backdropFilter: 'blur(5px)' }}>
+          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>⚡ Supreme Overlord Terminal (Maulana Rifa'i):</p>
           <p style={{ margin: 0 }}>
-            Klik tombol hijau <code style={{color: '#4ade80'}}>Voice Command</code> di atas atau ketik <code style={{color: '#4ade80'}}>trace</code> dan <code style={{color: '#4ade80'}}>snake</code> untuk mencoba fitur futuristik ini!
+            Ketik <code style={{color: '#4ade80'}}>run console.log("Halo Maulana!")</code> atau ketik <code style={{color: '#4ade80'}}>cam</code> untuk mengaktifkan Matrix Webcam!
           </p>
         </div>
 
@@ -364,7 +448,7 @@ export const AdvancedFeatures: React.FC = () => {
             <span className="dot red"></span>
             <span className="dot yellow"></span>
             <span className="dot green"></span>
-            <span className="terminal-title">maulana-rifai@neural-terminal:~</span>
+            <span className="terminal-title">maulana-rifai@overlord-terminal:~</span>
           </div>
           <div className="terminal-body">
             {logs.map((log, index) => (
@@ -378,7 +462,7 @@ export const AdvancedFeatures: React.FC = () => {
                 type="text"
                 value={inputVal}
                 onChange={handleInputChange}
-                placeholder="ketik 'trace', 'owner', atau klik tombol voice..."
+                placeholder="ketik 'run 5 + 5', 'cam', 'help'..."
                 className="terminal-input"
                 autoFocus
               />
