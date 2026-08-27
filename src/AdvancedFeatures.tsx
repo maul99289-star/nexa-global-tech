@@ -7,7 +7,7 @@ export const AdvancedFeatures: React.FC = () => {
   const [inputVal, setInputVal] = useState<string>('');
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
     { type: 'system', text: 'Nexa Global Tech Terminal v2.4.0 (x86_64-pc-vercel)' },
-    { type: 'system', text: 'Type "help" to see available commands.' },
+    { type: 'system', text: 'Type "help" to see available commands or click shortcuts below.' },
   ]);
   
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -25,12 +25,11 @@ export const AdvancedFeatures: React.FC = () => {
     terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [logs]);
 
-  const handleCommand = (e: React.FormEvent) => {
-    e.preventDefault();
-    const cmd = inputVal.trim().toLowerCase();
+  const executeCommand = (cmdText: string) => {
+    const cmd = cmdText.trim().toLowerCase();
     if (!cmd) return;
 
-    const newLogs = [...logs, { type: 'input', text: `$ ${inputVal}` }];
+    const newLogs = [...logs, { type: 'input', text: `$ ${cmdText}` }];
 
     switch (cmd) {
       case 'help':
@@ -109,7 +108,6 @@ export const AdvancedFeatures: React.FC = () => {
         break;
       case 'clear':
         setLogs([]);
-        setInputVal('');
         return;
       default:
         newLogs.push({
@@ -119,11 +117,17 @@ export const AdvancedFeatures: React.FC = () => {
     }
 
     setLogs(newLogs);
+  };
+
+  const handleFormSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    executeCommand(inputVal);
     setInputVal('');
   };
 
   return (
     <div className="advanced-container">
+      {/* Telemetry Bar */}
       <div className="telemetry-bar">
         <span className="status-indicator">
           <span className="pulse-dot"></span> Vercel Edge: ONLINE
@@ -132,6 +136,15 @@ export const AdvancedFeatures: React.FC = () => {
         <span className="telemetry-info">Live UTC: {currentTime}</span>
       </div>
 
+      {/* Info Card / Welcome Preview */}
+      <div style={{ maxWidth: '700px', margin: '0 auto 20px auto', background: 'rgba(15, 23, 42, 0.7)', border: '1px solid #1e293b', borderRadius: '8px', padding: '15px', color: '#cbd5e1', fontSize: '0.9rem' }}>
+        <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>🚀 Core Architecture Overview:</p>
+        <p style={{ margin: 0 }}>
+          <strong>React:</strong> A declarative, component-based JavaScript library for building high-performance UIs.
+        </p>
+      </div>
+
+      {/* Terminal Box */}
       <div className="terminal-box">
         <div className="terminal-header">
           <span className="dot red"></span>
@@ -145,13 +158,13 @@ export const AdvancedFeatures: React.FC = () => {
               {log.text}
             </div>
           ))}
-          <form onSubmit={handleCommand} className="terminal-form">
+          <form onSubmit={handleFormSubmit} className="terminal-form">
             <span className="prompt">$</span>
             <input
               type="text"
               value={inputVal}
               onChange={(e) => setInputVal(e.target.value)}
-              placeholder="ketik 'help' atau 'react' di sini..."
+              placeholder="ketik 'help', 'react', 'docker'..."
               className="terminal-input"
               autoFocus
             />
