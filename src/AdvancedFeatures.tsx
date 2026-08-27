@@ -8,9 +8,9 @@ export const AdvancedFeatures: React.FC = () => {
   const [matrixActive, setMatrixActive] = useState<boolean>(true);
   
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
-    { type: 'system', text: 'Nexa Global Cloud IDE v5.0.0 (Advanced Code Runner)' },
+    { type: 'system', text: 'Nexa Global Cyber Core v6.0.0 (God-Tier Edition)' },
     { type: 'system', text: 'Lead Architect & Owner: Maulana Rifa\'i' },
-    { type: 'system', text: 'Type "help", "code react", "code typescript", "ai <pesan>", or "decrypt".' },
+    { type: 'system', text: 'Type "help", "attack-sim", "code react", "ai <pesan>", or try "sudo rm -rf /".' },
   ]);
   
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -82,13 +82,33 @@ export const AdvancedFeatures: React.FC = () => {
 
     const newLogs = [...logs, { type: 'input', text: `$ ${rawCmd}` }];
 
+    // Easter Egg: Dangerous Linux command simulation
+    if (lowerCmd === 'sudo rm -rf /' || lowerCmd === 'rm -rf /') {
+      newLogs.push({
+        type: 'error',
+        text: '[WARNING] CRITICAL ERROR: Attempting to wipe system root directory...\n[!] Intercepted by Master Firewall Security...\n[SUCCESS] Just kidding! This system is heavily armored and owned by Maulana Rifa\'i. Nice try! 😎',
+      });
+      setLogs(newLogs);
+      return;
+    }
+
+    // God-Tier Simulation: Cyber Attack / Penetration Testing
+    if (lowerCmd === 'attack-sim' || lowerCmd === 'hack') {
+      newLogs.push({
+        type: 'output',
+        text: '[*] Initializing penetration testing sequence...\n[+] Scanning target firewall ports (80, 443, 22)...\n[+] Bypassing sub-routine encryption layers...\n[+] Injecting payload to secure node...\n[SUCCESS] Target penetrated! System fully secured and monitored by Maulana Rifa\'i.',
+      });
+      setLogs(newLogs);
+      return;
+    }
+
     // Handle Code Snippet command: "code <lang>"
     if (lowerCmd.startsWith('code ')) {
       const targetLang = lowerCmd.substring(5).trim();
       let codeSnippet = '';
 
       if (targetLang === 'react' || targetLang === 'tsx') {
-        codeSnippet = `// React Component Structure by Maulana Rifa'i\nimport React, { useState } from 'react';\n\nexport const App = () => {\n  const [count, setCount] = useState(0);\n  return (\n    <div className=\"p-4 bg-slate-900 text-white\">\n      <h1>Nexa Cloud UI</h1>\n      <button onClick={() => setCount(count + 1)}>Clicks: {count}</button>\n    </div>\n  );\n};`;
+        codeSnippet = `// React Component Structure by Maulana Rifa'i\nimport React, { useState } from 'react';\n\nexport const App = () => {\n  const [count, setCount] = useState(0);\n  return (\n    <div className="p-4 bg-slate-900 text-white">\n      <h1>Nexa Cloud UI</h1>\n      <button onClick={() => setCount(count + 1)}>Clicks: {count}</button>\n    </div>\n  );\n};`;
       } else if (targetLang === 'typescript' || targetLang === 'ts') {
         codeSnippet = `// TypeScript Enterprise Interface\ninterface CloudConfig {\n  nodeId: string;\n  region: string;\n  secure: boolean;\n}\n\nconst deployNode = (config: CloudConfig): void => {\n  console.log(\`Deploying to \${config.region}...\`);\n};`;
       } else if (targetLang === 'docker') {
@@ -122,7 +142,7 @@ export const AdvancedFeatures: React.FC = () => {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: code react, code typescript, code docker, ai <pesan>, decrypt, owner, skills, status, ping, matrix-on, matrix-off, clear',
+          text: 'Commands: attack-sim, code react, code typescript, code docker, ai <pesan>, decrypt, owner, skills, status, ping, matrix-on, matrix-off, clear',
         });
         break;
       case 'owner':
@@ -141,7 +161,7 @@ export const AdvancedFeatures: React.FC = () => {
       case 'status':
         newLogs.push({
           type: 'output',
-          text: `Edge Status: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i | Security: SECURE`,
+          text: `Edge Status: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i | Security: GOD-TIER`,
         });
         break;
       case 'ping':
@@ -164,7 +184,7 @@ export const AdvancedFeatures: React.FC = () => {
       default:
         newLogs.push({
           type: 'error',
-          text: `command not found: ${rawCmd}. Ketik "code react", "owner", atau "help".`,
+          text: `command not found: ${rawCmd}. Ketik "attack-sim", "code react", atau "help".`,
         });
     }
 
@@ -208,9 +228,9 @@ export const AdvancedFeatures: React.FC = () => {
 
         {/* Info Card / Welcome Preview */}
         <div style={{ maxWidth: '700px', margin: '0 auto 20px auto', background: 'rgba(15, 23, 42, 0.85)', border: '1px solid #1e293b', borderRadius: '8px', padding: '15px', color: '#cbd5e1', fontSize: '0.9rem', backdropFilter: 'blur(5px)' }}>
-          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>💻 Cloud Code Runner Active (Maulana Rifa'i):</p>
+          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>🚀 God-Tier Terminal Active (Maulana Rifa'i):</p>
           <p style={{ margin: 0 }}>
-            Ketik perintah <code style={{color: '#4ade80'}}>code react</code>, <code style={{color: '#4ade80'}}>code typescript</code>, atau <code style={{color: '#4ade80'}}>code docker</code> di bawah untuk melihat cuplikan kodenya!
+            Ketik perintah <code style={{color: '#4ade80'}}>attack-sim</code> atau <code style={{color: '#4ade80'}}>sudo rm -rf /</code> di bawah untuk melihat aksi simulasi tingkat dewa!
           </p>
         </div>
 
@@ -220,7 +240,7 @@ export const AdvancedFeatures: React.FC = () => {
             <span className="dot red"></span>
             <span className="dot yellow"></span>
             <span className="dot green"></span>
-            <span className="terminal-title">maulana-rifai@nexa-cloud-ide:~</span>
+            <span className="terminal-title">maulana-rifai@god-tier-terminal:~</span>
           </div>
           <div className="terminal-body">
             {logs.map((log, index) => (
@@ -234,7 +254,7 @@ export const AdvancedFeatures: React.FC = () => {
                 type="text"
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
-                placeholder="ketik 'code react', 'owner', 'help'..."
+                placeholder="ketik 'attack-sim', 'sudo rm -rf /', 'help'..."
                 className="terminal-input"
                 autoFocus
               />
