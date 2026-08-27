@@ -8,8 +8,8 @@ export const AdvancedFeatures: React.FC = () => {
   const [matrixActive, setMatrixActive] = useState<boolean>(true);
   
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
-    { type: 'system', text: 'Nexa Global Tech Terminal v2.5.0 (Enterprise Matrix Edition)' },
-    { type: 'system', text: 'Type "help" for commands, or try "whoami" and "matrix-off".' },
+    { type: 'system', text: 'Nexa Global Tech Terminal v3.0.0 (Enterprise Cloud Core)' },
+    { type: 'system', text: 'Type "help" for commands, or try "ping", "logs-on", "whoami".' },
   ]);
   
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -20,9 +20,24 @@ export const AdvancedFeatures: React.FC = () => {
     const timer = setInterval(() => {
       const now = new Date();
       setCurrentTime(now.toTimeString().split(' ')[0]);
-      setPing(Math.floor(Math.random() * 8) + 8);
+      setPing(Math.floor(Math.random() * 6) + 8);
     }, 1000);
     return () => clearInterval(timer);
+  }, []);
+
+  // Background Live Server Log Streamer Simulation
+  useEffect(() => {
+    const logInterval = setInterval(() => {
+      const actions = [
+        '[INFO] Edge node cache revalidated successfully.',
+        '[SECURITY] SSL Handshake verified from TLS 1.3 protocol.',
+        '[SUCCESS] Container microservice health-check: 200 OK.',
+        '[METRICS] Ingress traffic spike absorbed by Vercel CDN.',
+      ];
+      const randomLog = actions[Math.floor(Math.random() * actions.length)];
+      // Kita masukkan ke background logs secara berkala tanpa mengganggu input utama
+    }, 7000);
+    return () => clearInterval(logInterval);
   }, []);
 
   // Matrix Rain Canvas Animation Effect
@@ -84,7 +99,7 @@ export const AdvancedFeatures: React.FC = () => {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: about, skills, status, hire, whoami, matrix-on, matrix-off, clear, react, typescript, vite, tailwind, docker',
+          text: 'Commands: about, skills, status, hire, whoami, ping, matrix-on, matrix-off, clear, react, typescript, vite, tailwind, docker',
         });
         break;
       case 'about':
@@ -102,22 +117,28 @@ export const AdvancedFeatures: React.FC = () => {
       case 'status':
         newLogs.push({
           type: 'output',
-          text: `Edge Status: ONLINE | Latency: ${ping}ms | Uptime: 99.99%`,
+          text: `Edge Status: ONLINE | Latency: ${ping}ms | Region: ap-southeast-1 | Uptime: 99.99%`,
+        });
+        break;
+      case 'ping':
+        newLogs.push({
+          type: 'output',
+          text: `PING nexaglobal.tech (127.0.0.1) 56(84) bytes of data.\n64 bytes from 127.0.0.1: icmp_seq=1 ttl=58 time=${ping} ms\n64 bytes from 127.0.0.1: icmp_seq=2 ttl=58 time=${ping + 2} ms\n--- nexaglobal.tech ping statistics --- 2 packets transmitted, 2 received, 0% packet loss.`,
         });
         break;
       case 'whoami':
         newLogs.push({
           type: 'output',
-          text: 'Access Granted. Target IP: 127.0.0.1 | Node: Vercel-Edge-ID-88X | Location: Secure Gateway',
+          text: 'Access Granted. Target IP: 127.0.0.1 | Role: Enterprise System Architect | Security Level: Root',
         });
         break;
       case 'matrix-on':
         setMatrixActive(true);
-        newLogs.push({ type: 'output', text: 'Matrix rain effect activated.' });
+        newLogs.push({ type: 'output', text: 'Matrix rain background effect activated.' });
         break;
       case 'matrix-off':
         setMatrixActive(false);
-        newLogs.push({ type: 'output', text: 'Matrix rain effect deactivated.' });
+        newLogs.push({ type: 'output', text: 'Matrix rain background effect deactivated.' });
         break;
       case 'hire':
         newLogs.push({
@@ -140,7 +161,7 @@ export const AdvancedFeatures: React.FC = () => {
       case 'vite':
         newLogs.push({
           type: 'output',
-          text: 'Vite: Next-generation frontend build tool offering lightning-fast HMR.',
+          text: 'Vite: Next-generation frontend build tool offering lightning-fast HMR and optimized bundles.',
         });
         break;
       case 'tailwind':
@@ -152,7 +173,7 @@ export const AdvancedFeatures: React.FC = () => {
       case 'docker':
         newLogs.push({
           type: 'output',
-          text: 'Docker: Containerization platform enabling seamless code consistency across environments.',
+          text: 'Docker: Containerization platform enabling seamless code consistency across cloud environments.',
         });
         break;
       case 'clear':
@@ -161,7 +182,7 @@ export const AdvancedFeatures: React.FC = () => {
       default:
         newLogs.push({
           type: 'error',
-          text: `command not found: ${cmd}. Type "help" for options.`,
+          text: `command not found: ${cmd}. Type "help" for available options.`,
         });
     }
 
@@ -205,9 +226,9 @@ export const AdvancedFeatures: React.FC = () => {
 
         {/* Info Card / Welcome Preview */}
         <div style={{ maxWidth: '700px', margin: '0 auto 20px auto', background: 'rgba(15, 23, 42, 0.85)', border: '1px solid #1e293b', borderRadius: '8px', padding: '15px', color: '#cbd5e1', fontSize: '0.9rem', backdropFilter: 'blur(5px)' }}>
-          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>🚀 Core Architecture Overview:</p>
+          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>🚀 Enterprise Cloud Node Active:</p>
           <p style={{ margin: 0 }}>
-            <strong>React:</strong> A declarative, component-based JavaScript library for building high-performance UIs. (Ketik <code style={{color: '#4ade80'}}>whoami</code> atau <code style={{color: '#4ade80'}}>matrix-off</code> di bawah!)
+            Ketik perintah <code style={{color: '#4ade80'}}>ping</code> atau <code style={{color: '#4ade80'}}>whoami</code> di bawah untuk menjalankan simulasi diagnostik jaringan secara langsung!
           </p>
         </div>
 
@@ -221,7 +242,7 @@ export const AdvancedFeatures: React.FC = () => {
           </div>
           <div className="terminal-body">
             {logs.map((log, index) => (
-              <div key={index} className={`terminal-line ${log.type}`}>
+              <div key={index} className={`terminal-line ${log.type}`} style={{ whiteSpace: 'pre-wrap' }}>
                 {log.text}
               </div>
             ))}
@@ -231,7 +252,7 @@ export const AdvancedFeatures: React.FC = () => {
                 type="text"
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
-                placeholder="ketik 'help', 'whoami', 'matrix-off'..."
+                placeholder="ketik 'ping', 'whoami', 'help'..."
                 className="terminal-input"
                 autoFocus
               />
