@@ -11,15 +11,14 @@ export const AdvancedFeatures: React.FC = () => {
   const [camActive, setCamActive] = useState<boolean>(false);
   
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
-    { type: 'system', text: 'Nexa Overlord Core v9.0.0 (Supreme Cyber God-Tier)' },
+    { type: 'system', text: 'Nexa Cosmic Core v10.0.0 (Global Neural & Synth-Speech)' },
     { type: 'system', text: 'Lead Architect & Owner: Maulana Rifa\'i' },
-    { type: 'system', text: 'Type "help", "cam", "run 5 + 5", "trace", "snake", or use voice command.' },
+    { type: 'system', text: 'Type "help", "chat <pesan>", "speak <teks>", "cam", or "run 25 * 4".' },
   ]);
   
   const terminalEndRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const asciiCanvasRef = useRef<HTMLCanvasElement | null>(null);
 
   // Live Clock & Ping Simulator
   useEffect(() => {
@@ -56,6 +55,18 @@ export const AdvancedFeatures: React.FC = () => {
     }
   };
 
+  // Web Speech Synthesis (Text-to-Speech Robot Voice)
+  const speakText = (text: string) => {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel(); // Stop previous speech
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'id-ID';
+      utterance.rate = 1.0;
+      utterance.pitch = 0.8; // Sedikit ngebass ala AI robot
+      window.speechSynthesis.speak(utterance);
+    }
+  };
+
   // Web Speech Recognition API Integration
   const startVoiceCommand = () => {
     const SpeechRecognition = window.SpeechRecognition || (window as unknown as { webkitSpeechRecognition: typeof window.SpeechRecognition }).webkitSpeechRecognition;
@@ -72,7 +83,7 @@ export const AdvancedFeatures: React.FC = () => {
 
     recognition.onstart = () => {
       setIsListening(true);
-      setLogs((prev) => [...prev, { type: 'system', text: '[🎙️] Mendengarkan suara... (contoh: "cam", "ping", "owner").' }]);
+      setLogs((prev) => [...prev, { type: 'system', text: '[🎙️] Mendengarkan suara... (contoh: "chat Halo dunia", "ping", "owner").' }]);
     };
 
     recognition.onresult = (event: SpeechRecognitionEvent) => {
@@ -173,17 +184,34 @@ export const AdvancedFeatures: React.FC = () => {
 
     const newLogs = [...logs, { type: 'input', text: `$ ${rawCmd}` }];
 
+    // Handle Neural Chat command: "chat <pesan>"
+    if (lowerCmd.startsWith('chat ')) {
+      const message = rawCmd.substring(5).trim();
+      const broadcastMsg = `[Neural Global Broadcast]: "${message}" -> Terkirim ke jaringan satelit Nexa Network. Dipantau oleh Maulana Rifa'i.`;
+      newLogs.push({ type: 'output', text: broadcastMsg });
+      speakText(message);
+      setLogs(newLogs);
+      return;
+    }
+
+    // Handle Text-to-Speech Synth-Speech: "speak <teks>"
+    if (lowerCmd.startsWith('speak ')) {
+      const speechText = rawCmd.substring(6).trim();
+      speakText(speechText);
+      newLogs.push({ type: 'output', text: `[AI Voice Synthesis]: Mengucapkan "${speechText}" lewat speaker perangkat.` });
+      setLogs(newLogs);
+      return;
+    }
+
     // Handle JS Code Sandbox Runner: "run <script>"
     if (lowerCmd.startsWith('run ')) {
       const codeSnippet = rawCmd.substring(4).trim();
       try {
-        // Safe evaluation simulation
         const result = Function(`'use strict'; return (${codeSnippet});`)();
         newLogs.push({ type: 'output', text: `[JS Sandbox Result] => ${String(result)}` });
       } catch (err: unknown) {
         const errorMessage = err instanceof Error ? err.message : String(err);
         try {
-          // Fallback if it's a statement like console.log or assignment
           const logsOutput: string[] = [];
           const customConsole = { log: (...args: unknown[]) => logsOutput.push(args.join(' ')) };
           const runFunc = new Function('console', `'use strict'; ${codeSnippet}`);
@@ -266,7 +294,7 @@ export const AdvancedFeatures: React.FC = () => {
       let codeSnippet = '';
 
       if (targetLang === 'react' || targetLang === 'tsx') {
-        codeSnippet = `// React Component Structure by Maulana Rifa'i\nimport React, { useState } from 'react';\n\nexport const App = () => {\n  const [count, setCount] = useState(0);\n  return (\n    <div className=\"p-4 bg-slate-900 text-white\">\n      <h1>Nexa Cloud UI</h1>\n      <button onClick={() => setCount(count + 1)}>Clicks: {count}</button>\n    </div>\n  );\n};`;
+        codeSnippet = `// React Component Structure by Maulana Rifa'i\nimport React, { useState } from 'react';\n\nexport const App = () => {\n  const [count, setCount] = useState(0);\n  return (\n    <div className="p-4 bg-slate-900 text-white">\n      <h1>Nexa Cloud UI</h1>\n      <button onClick={() => setCount(count + 1)}>Clicks: {count}</button>\n    </div>\n  );\n};`;
       } else if (targetLang === 'typescript' || targetLang === 'ts') {
         codeSnippet = `// TypeScript Enterprise Interface\ninterface CloudConfig {\n  nodeId: string;\n  region: string;\n  secure: boolean;\n}\n\nconst deployNode = (config: CloudConfig): void => {\n  console.log(\`Deploying to \${config.region}...\`);\n};`;
       } else if (targetLang === 'docker') {
@@ -291,6 +319,7 @@ export const AdvancedFeatures: React.FC = () => {
         aiResponse = '[Nexa AI Core]: Website dan terminal ini dikembangkan secara mandiri oleh Maulana Rifa\'i.';
       }
 
+      speakText(aiResponse);
       newLogs.push({ type: 'output', text: aiResponse });
       setLogs(newLogs);
       return;
@@ -300,7 +329,7 @@ export const AdvancedFeatures: React.FC = () => {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: cam, run <js_code>, trace, snake, attack-sim, sfx-on, sfx-off, code react, code typescript, code docker, ai <pesan>, decrypt, owner, status, ping, matrix-on, matrix-off, clear',
+          text: 'Commands: chat <pesan>, speak <teks>, cam, run <js_code>, trace, snake, attack-sim, sfx-on, sfx-off, code react, code typescript, code docker, ai <pesan>, decrypt, owner, status, ping, matrix-on, matrix-off, clear',
         });
         break;
       case 'owner':
@@ -319,7 +348,7 @@ export const AdvancedFeatures: React.FC = () => {
       case 'status':
         newLogs.push({
           type: 'output',
-          text: `Edge Status: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i | Overlord Core: SECURE`,
+          text: `Edge Status: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i | Cosmic Core: ACTIVE`,
         });
         break;
       case 'ping':
@@ -342,7 +371,7 @@ export const AdvancedFeatures: React.FC = () => {
       default:
         newLogs.push({
           type: 'error',
-          text: `command not found: ${rawCmd}. Ketik "cam", "run 10 * 5", atau "help".`,
+          text: `command not found: ${rawCmd}. Ketik "chat Halo", "speak Halo AI", atau "help".`,
         });
     }
 
@@ -426,19 +455,11 @@ export const AdvancedFeatures: React.FC = () => {
         {/* Hidden video stream element for webcam processing */}
         <video ref={videoRef} style={{ display: 'none' }} playsInline muted />
 
-        {/* Live Webcam ASCII Preview Box if Active */}
-        {camActive && (
-          <div style={{ marginBottom: '15px', background: 'rgba(3, 7, 18, 0.95)', border: '1px solid #22c55e', borderRadius: '8px', padding: '10px', textAlign: 'center' }}>
-            <p style={{ margin: '0 0 5px 0', color: '#4ade80', fontSize: '0.85rem', fontWeight: 'bold' }}>[LIVE MATRIX WEBCAM FEED STREAM ACTIVE]</p>
-            <canvas ref={asciiCanvasRef} style={{ width: '100%', maxWidth: '320px', height: '120px', background: '#000', borderRadius: '4px' }} />
-          </div>
-        )}
-
         {/* Info Card / Welcome Preview */}
         <div style={{ margin: '0 0 20px 0', background: 'rgba(15, 23, 42, 0.85)', border: '1px solid #1e293b', borderRadius: '8px', padding: '15px', color: '#cbd5e1', fontSize: '0.9rem', backdropFilter: 'blur(5px)' }}>
-          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>⚡ Supreme Overlord Terminal (Maulana Rifa'i):</p>
+          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>✨ Cosmic Neural Terminal (Maulana Rifa'i):</p>
           <p style={{ margin: 0 }}>
-            Ketik <code style={{color: '#4ade80'}}>run console.log("Halo Maulana!")</code> atau ketik <code style={{color: '#4ade80'}}>cam</code> untuk mengaktifkan Matrix Webcam!
+            Ketik <code style={{color: '#4ade80'}}>chat Halo Dunia!</code> atau <code style={{color: '#4ade80'}}>speak Halo Maulana Rifa'i</code> untuk mendengar suara robot AI!
           </p>
         </div>
 
@@ -448,7 +469,7 @@ export const AdvancedFeatures: React.FC = () => {
             <span className="dot red"></span>
             <span className="dot yellow"></span>
             <span className="dot green"></span>
-            <span className="terminal-title">maulana-rifai@overlord-terminal:~</span>
+            <span className="terminal-title">maulana-rifai@cosmic-terminal:~</span>
           </div>
           <div className="terminal-body">
             {logs.map((log, index) => (
@@ -462,7 +483,7 @@ export const AdvancedFeatures: React.FC = () => {
                 type="text"
                 value={inputVal}
                 onChange={handleInputChange}
-                placeholder="ketik 'run 5 + 5', 'cam', 'help'..."
+                placeholder="ketik 'chat Halo', 'speak Selamat datang', 'help'..."
                 className="terminal-input"
                 autoFocus
               />
