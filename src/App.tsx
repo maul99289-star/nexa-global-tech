@@ -1,4 +1,3 @@
-import { AdvancedFeatures } from './AdvancedFeatures';
 
 function App() {
   return (
