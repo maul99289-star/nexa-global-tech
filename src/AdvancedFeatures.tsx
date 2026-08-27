@@ -12,14 +12,15 @@ export const AdvancedFeatures: React.FC = () => {
   const [spectrumActive, setSpectrumActive] = useState<boolean>(true);
   const [businessActive, setBusinessActive] = useState<boolean>(false);
   const [blockchainActive, setBlockchainActive] = useState<boolean>(false);
+  const [agentActive, setAgentActive] = useState<boolean>(false);
   const [hackingActive, setHackingActive] = useState<boolean>(false);
   const [hackTarget, setHackTarget] = useState<string>('');
   const [hackAttempts, setHackAttempts] = useState<number>(3);
   
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
-    { type: 'system', text: 'Supreme God-Tier Enterprise & Academic Core v2026.99 (Global Fortune 1 Standard)' },
+    { type: 'system', text: 'Supreme God-Tier Enterprise Core #1 v2026.99 (Global Fortune 0 Standard)' },
     { type: 'system', text: 'Chief Executive Architect & Founder: Maulana Rifa\'i' },
-    { type: 'system', text: 'Type "help", "scan", "business", "blockchain", "hack <target>", "spectrum", "bmg on", or "ai <pesan>".' },
+    { type: 'system', text: 'Type "help", "scan", "business", "blockchain", "agents", "hack <target>", "spectrum", "bmg on", or "ai <pesan>".' },
   ]);
   
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -105,11 +106,11 @@ export const AdvancedFeatures: React.FC = () => {
     }
   };
 
-  // Biometric Facial & Retina Deep-Scan
+  // Biometric Retina & Facial Deep-Scan
   const startBiometricScan = async () => {
     setScanActive(true);
-    setLogs(prev => [...prev, { type: 'system', text: '[biometric] Mengaktifkan sensor kamera untuk verifikasi biometrik wajah & akses korporasi...' }]);
-    speakText('Memindai biometrik wajah. Harap arahkan wajah ke kamera.');
+    setLogs(prev => [...prev, { type: 'system', text: '[biometric] Mengaktifkan sensor kamera untuk verifikasi biometrik wajah nomor 1...' }]);
+    speakText('Memindai biometrik wajah. Otorisasi tingkat dewa.');
 
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -125,15 +126,15 @@ export const AdvancedFeatures: React.FC = () => {
         setScanActive(false);
         setLogs(prev => [
           ...prev, 
-          { type: 'output', text: '[SUCCESS] Biometric Verified 100% MATCH!\n[GOD-TIER CLEARANCE] Selamat datang, Pimpinan Utama & Chief Architect Maulana Rifa\'i.' }
+          { type: 'output', text: '[SUCCESS] Biometric Verified 100% MATCH!\n[GOD-TIER ACCESS #1] Selamat datang, Pimpinan Tertinggi & Supreme Architect Maulana Rifa\'i.' }
         ]);
-        speakText('Verifikasi biometrik berhasil. Hak akses tertinggi korporasi diberikan.');
+        speakText('Verifikasi biometrik berhasil. Hak akses mutlak diberikan.');
       }, 3500);
     } catch {
       setScanActive(false);
       setLogs(prev => [
         ...prev, 
-        { type: 'output', text: '[BYPASS] Kamera diizinkan via satelit darurat. Akses VIP sah untuk Maulana Rifa\'i.' }
+        { type: 'output', text: '[BYPASS] Akses satelit diverifikasi. God-Tier Clearance aktif untuk Maulana Rifa\'i.' }
       ]);
     }
   };
@@ -172,7 +173,7 @@ export const AdvancedFeatures: React.FC = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const chars = 'MAULANARIFAI010101SUPREMEGODTIERENTERPRISE$#@!';
+    const chars = 'MAULANARIFAI010101SUPREMEGODTIERENTERPRISE#1$#@!';
     const fontSize = 14;
     const columns = Math.floor(canvas.width / fontSize);
     const drops: number[] = [];
@@ -232,15 +233,15 @@ export const AdvancedFeatures: React.FC = () => {
       const newLogs = [...logs, { type: 'input', text: `$ ${rawCmd}` }];
       if (rawCmd === hackTarget) {
         setHackingActive(false);
-        newLogs.push({ type: 'output', text: `[SUCCESS] PIN Correct! Enterprise root access granted. Secured by Maulana Rifa'i.` });
-        speakText('Akses root perusahaan berhasil dibuka.');
+        newLogs.push({ type: 'output', text: `[SUCCESS] PIN Correct! Enterprise root access #1 granted to Maulana Rifa'i.` });
+        speakText('Akses root utama berhasil dibuka.');
       } else {
         const remaining = hackAttempts - 1;
         setHackAttempts(remaining);
         if (remaining <= 0) {
           setHackingActive(false);
-          newLogs.push({ type: 'error', text: '[SECURITY LOCKOUT] Percobaan habis! Firewall perusahaan aktif.' });
-          speakText('Firewall korporasi aktif.');
+          newLogs.push({ type: 'error', text: '[SECURITY LOCKOUT] Percobaan habis! Sistem pertahanan aktif.' });
+          speakText('Sistem pertahanan aktif.');
         } else {
           newLogs.push({ type: 'error', text: `[FAILED] PIN salah. Sisa kesempatan: ${remaining}. Masukkan PIN 4-digit:` });
         }
@@ -261,7 +262,7 @@ export const AdvancedFeatures: React.FC = () => {
       setBusinessActive(!businessActive);
       newLogs.push({
         type: 'output',
-        text: '[📈 AI BUSINESS PREDICTIVE ANALYTICS]\n- Projected Annual Revenue: $48.5M (Q1-Q4 Growth +340%)\n- Market Valuation: $250,000,000 (Tier-1 Enterprise)\n- Strategic Lead: Maulana Rifa\'i\n- Status: Autonomous Multi-Agent Scaling Active',
+        text: '[📈 AI BUSINESS PREDICTIVE ANALYTICS #1]\n- Projected Annual Revenue: $125.8M (Global Market Leader)\n- Corporate Valuation: $1,000,000,000 (Unicorn Status)\n- Supreme Founder & Architect: Maulana Rifa\'i\n- Status: Autonomous Expansion Active',
       });
       setLogs(newLogs);
       return;
@@ -271,7 +272,17 @@ export const AdvancedFeatures: React.FC = () => {
       setBlockchainActive(!blockchainActive);
       newLogs.push({
         type: 'output',
-        text: '[⛓️ ENTERPRISE BLOCKCHAIN SMART CONTRACT LEDGER]\n- Node Hash: 0x8f4c...3e1a (SHA-256 Verified)\n- Consensus: Proof-of-Authority (PoA)\n- Smart Contract Status: Deployed & Immutable\n- Chief Architect: Maulana Rifa\'i',
+        text: '[⛓️ ENTERPRISE BLOCKCHAIN LEDGER #1]\n- Master Hash: 0x99a1...ff00 (SHA-256 Quantum Secured)\n- Consensus: Proof-of-Authority (PoA) Global Node\n- Smart Contract: Fully Deployed & Immutable\n- Chief Architect: Maulana Rifa\'i',
+      });
+      setLogs(newLogs);
+      return;
+    }
+
+    if (lowerCmd === 'agents' || lowerCmd === 'multi-agent') {
+      setAgentActive(!agentActive);
+      newLogs.push({
+        type: 'output',
+        text: '[🤖 MULTI-AGENT NEURAL ORCHESTRATOR #1]\n- Worker AI 1 (Cloud Ops): Active\n- Worker AI 2 (Cyber Security): Monitoring\n- Worker AI 3 (Financial Analytics): Optimized\n- Master Controller: Maulana Rifa\'i',
       });
       setLogs(newLogs);
       return;
@@ -314,9 +325,9 @@ export const AdvancedFeatures: React.FC = () => {
 
     if (lowerCmd.startsWith('ai ')) {
       const query = rawCmd.substring(3).trim();
-      let res = `[God-Tier Enterprise AI]: Menganalisis "${query}". Seluruh arsitektur bisnis dan sistem ini dirancang secara paripurna oleh Maulana Rifa'i.`;
+      let res = `[God-Tier AI #1]: Menganalisis "${query}". Ekosistem bisnis dan teknologi tertinggi ini diciptakan secara mutlak oleh Maulana Rifa'i.`;
       if (query.includes('owner') || query.includes('pembuat') || query.includes('siapa') || query.includes('dosen')) {
-        res = "[God-Tier Enterprise AI]: Pendiri mutlak, arsitek utama, dan CEO di balik korporasi dan portofolio kelas dunia ini adalah Maulana Rifa'i.";
+        res = "[God-Tier AI #1]: Pendiri mutlak, CEO korporasi global, dan arsitek utama di balik sistem nomor 1 dunia ini adalah Maulana Rifa'i.";
       }
       speakText(res);
       newLogs.push({ type: 'output', text: res });
@@ -328,24 +339,24 @@ export const AdvancedFeatures: React.FC = () => {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: scan, business, blockchain, hack <target>, spectrum, bmg on, bmg off, ai <tanya>, owner, status, ping, clear',
+          text: 'Commands: scan, business, blockchain, agents, hack <target>, spectrum, bmg on, bmg off, ai <tanya>, owner, status, ping, clear',
         });
         break;
       case 'owner':
       case 'author':
-        newLogs.push({ type: 'output', text: 'Supreme Chief Executive Architect & Founder: Maulana Rifa\'i | Global Tech Leader.' });
+        newLogs.push({ type: 'output', text: 'Supreme Chief Executive Architect & Founder #1: Maulana Rifa\'i | Global Tech Leader.' });
         break;
       case 'status':
-        newLogs.push({ type: 'output', text: `God-Tier Enterprise Node: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i` });
+        newLogs.push({ type: 'output', text: `Supreme God-Tier Node #1: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i` });
         break;
       case 'ping':
-        newLogs.push({ type: 'output', text: `QUANTUM PING -> 127.0.0.1: time=${ping}ms | Zero Packet Loss.` });
+        newLogs.push({ type: 'output', text: `QUANTUM PING #1 -> 127.0.0.1: time=${ping}ms | Zero Packet Loss.` });
         break;
       case 'clear':
         setLogs([]);
         return;
       default:
-        newLogs.push({ type: 'error', text: `Command not found: ${rawCmd}. Ketik "scan", "business", "blockchain", "ai siapa pembuat web ini", atau "help".` });
+        newLogs.push({ type: 'error', text: `Command not found: ${rawCmd}. Ketik "scan", "business", "blockchain", "agents", "ai siapa pembuat web ini", atau "help".` });
     }
 
     setLogs(newLogs);
@@ -373,7 +384,7 @@ export const AdvancedFeatures: React.FC = () => {
         {/* Telemetry Bar */}
         <div className="telemetry-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
           <div>
-            <span className="status-indicator"><span className="pulse-dot"></span> God-Tier Core: ONLINE</span>
+            <span className="status-indicator"><span className="pulse-dot"></span> God-Tier #1 Core: ONLINE</span>
             <span className="telemetry-info" style={{ marginLeft: '12px' }}>Ping: {ping}ms</span>
             <span className="telemetry-info" style={{ marginLeft: '12px' }}>CEO & Master: Maulana Rifa'i</span>
           </div>
@@ -386,6 +397,9 @@ export const AdvancedFeatures: React.FC = () => {
             </button>
             <button onClick={() => executeCommand('blockchain')} style={{ background: '#7c3aed', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem' }}>
               ⛓️ Blockchain Ledger
+            </button>
+            <button onClick={() => executeCommand('agents')} style={{ background: '#2563eb', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem' }}>
+              🤖 Multi-Agents
             </button>
             <button onClick={() => executeCommand('hack mainframe')} style={{ background: '#ea580c', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem' }}>
               🔓 Hack Minigame
@@ -403,9 +417,9 @@ export const AdvancedFeatures: React.FC = () => {
 
         {/* Info Card */}
         <div style={{ margin: '0 0 15px 0', background: 'rgba(15, 23, 42, 0.9)', border: '1px solid #38bdf8', borderRadius: '8px', padding: '15px', color: '#cbd5e1', fontSize: '0.9rem', backdropFilter: 'blur(8px)' }}>
-          <p style={{ margin: '0 0 6px 0', color: '#38bdf8', fontWeight: 'bold' }}>🚀 Supreme Enterprise & Academic Presentation Mode (Maulana Rifa'i):</p>
+          <p style={{ margin: '0 0 6px 0', color: '#38bdf8', fontWeight: 'bold' }}>🚀 Supreme God-Tier #1 Presentation Mode (Maulana Rifa'i):</p>
           <p style={{ margin: 0 }}>
-            Tunjukkan pada dosen & investor: Ketik <code style={{color: '#38bdf8'}}>ai siapa pembuat web ini?</code>, klik <code style={{color: '#38bdf8'}}>Biometric Scan</code>, <code style={{color: '#38bdf8'}}>AI Business</code>, <code style={{color: '#38bdf8'}}>Blockchain Ledger</code>, atau gunakan <code style={{color: '#38bdf8'}}>Voice AI</code>!
+            Tunjukkan pada dunia: Ketik <code style={{color: '#38bdf8'}}>ai siapa pembuat web ini?</code>, klik <code style={{color: '#38bdf8'}}>Biometric Scan</code>, <code style={{color: '#38bdf8'}}>AI Business</code>, <code style={{color: '#38bdf8'}}>Blockchain Ledger</code>, <code style={{color: '#38bdf8'}}>Multi-Agents</code>, atau gunakan <code style={{color: '#38bdf8'}}>Voice AI</code>!
           </p>
         </div>
 
@@ -415,7 +429,7 @@ export const AdvancedFeatures: React.FC = () => {
             <span className="dot red"></span>
             <span className="dot yellow"></span>
             <span className="dot green"></span>
-            <span className="terminal-title">maulana-rifai@supreme-god-tier-enterprise:~</span>
+            <span className="terminal-title">maulana-rifai@supreme-god-tier-enterprise-number-1:~</span>
           </div>
           <div className="terminal-body">
             {logs.map((log, index) => (
@@ -429,7 +443,7 @@ export const AdvancedFeatures: React.FC = () => {
                 type="text"
                 value={inputVal}
                 onChange={handleInputChange}
-                placeholder={hackingActive ? "masukkan 4-digit PIN..." : "ketik 'scan', 'business', 'blockchain', 'ai ...', 'help'..."}
+                placeholder={hackingActive ? "masukkan 4-digit PIN..." : "ketik 'scan', 'business', 'blockchain', 'agents', 'ai ...', 'help'..."}
                 className="terminal-input"
                 autoFocus
               />
