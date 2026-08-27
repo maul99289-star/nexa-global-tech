@@ -8,9 +8,9 @@ export const AdvancedFeatures: React.FC = () => {
   const [matrixActive, setMatrixActive] = useState<boolean>(true);
   
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
-    { type: 'system', text: 'Nexa Global Tech Terminal v4.0.0 (Autonomous Core)' },
+    { type: 'system', text: 'Nexa Global Cloud IDE v5.0.0 (Advanced Code Runner)' },
     { type: 'system', text: 'Lead Architect & Owner: Maulana Rifa\'i' },
-    { type: 'system', text: 'Type "help", "ai <pesan>", "decrypt", "ping", or "whoami".' },
+    { type: 'system', text: 'Type "help", "code react", "code typescript", "ai <pesan>", or "decrypt".' },
   ]);
   
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -82,17 +82,35 @@ export const AdvancedFeatures: React.FC = () => {
 
     const newLogs = [...logs, { type: 'input', text: `$ ${rawCmd}` }];
 
+    // Handle Code Snippet command: "code <lang>"
+    if (lowerCmd.startsWith('code ')) {
+      const targetLang = lowerCmd.substring(5).trim();
+      let codeSnippet = '';
+
+      if (targetLang === 'react' || targetLang === 'tsx') {
+        codeSnippet = `// React Component Structure by Maulana Rifa'i\nimport React, { useState } from 'react';\n\nexport const App = () => {\n  const [count, setCount] = useState(0);\n  return (\n    <div className=\"p-4 bg-slate-900 text-white\">\n      <h1>Nexa Cloud UI</h1>\n      <button onClick={() => setCount(count + 1)}>Clicks: {count}</button>\n    </div>\n  );\n};`;
+      } else if (targetLang === 'typescript' || targetLang === 'ts') {
+        codeSnippet = `// TypeScript Enterprise Interface\ninterface CloudConfig {\n  nodeId: string;\n  region: string;\n  secure: boolean;\n}\n\nconst deployNode = (config: CloudConfig): void => {\n  console.log(\`Deploying to \${config.region}...\`);\n};`;
+      } else if (targetLang === 'docker') {
+        codeSnippet = `# Dockerfile for Edge Deployment\nFROM node:18-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nEXPOSE 3000\nCMD ["npm", "run", "dev"]`;
+      } else {
+        codeSnippet = `// General Code Snippet\nconst systemOwner = "Maulana Rifa'i";\nconsole.log(\`System initialized by \${systemOwner}\`);`;
+      }
+
+      newLogs.push({ type: 'output', text: codeSnippet });
+      setLogs(newLogs);
+      return;
+    }
+
     // Handle AI Assistant prefix command: "ai ..."
     if (lowerCmd.startsWith('ai ')) {
       const query = rawCmd.substring(3).trim();
-      let aiResponse = `[Nexa AI Core]: Halo! Saya asisten AI buatan Maulana Rifa'i. Menerima query "${query}". Sistem beroperasi optimal pada stack React & TypeScript.`;
+      let aiResponse = `[Nexa AI Core]: Halo! Saya asisten AI buatan Maulana Rifa'i. Menerima query "${query}".`;
       
       if (query.includes('react')) {
-        aiResponse = '[Nexa AI Core]: React adalah pustaka UI berbasis komponen deklaratif yang dirancang oleh Maulana Rifa\'i untuk performa tinggi.';
-      } else if (query.includes('owner') || query.includes('pembuat') || query.includes('siapa')) {
-        aiResponse = '[Nexa AI Core]: Website dan infrastruktur terminal ini dimiliki dan dikembangkan sepenuhnya oleh Maulana Rifa\'i.';
-      } else if (query.includes('halo') || query.includes('hai')) {
-        aiResponse = '[Nexa AI Core]: Halo! Selamat datang di terminal cloud milik Maulana Rifa\'i.';
+        aiResponse = '[Nexa AI Core]: React adalah pustaka UI komponen deklaratif berperforma tinggi buatan Maulana Rifa\'i.';
+      } else if (query.includes('owner') || query.includes('pembuat')) {
+        aiResponse = '[Nexa AI Core]: Website dan terminal ini dikembangkan secara mandiri oleh Maulana Rifa\'i.';
       }
 
       newLogs.push({ type: 'output', text: aiResponse });
@@ -104,7 +122,7 @@ export const AdvancedFeatures: React.FC = () => {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: ai <pesan>, decrypt, about, owner, skills, status, hire, whoami, ping, matrix-on, matrix-off, clear, react, typescript, vite, tailwind, docker',
+          text: 'Commands: code react, code typescript, code docker, ai <pesan>, decrypt, owner, skills, status, ping, matrix-on, matrix-off, clear',
         });
         break;
       case 'owner':
@@ -117,37 +135,19 @@ export const AdvancedFeatures: React.FC = () => {
       case 'decrypt':
         newLogs.push({
           type: 'output',
-          text: '[!] Bypassing firewall... Decrypting root keys...\n[SUCCESS] Access Granted. Owner & Master Controller: Maulana Rifa\'i.',
-        });
-        break;
-      case 'about':
-        newLogs.push({
-          type: 'output',
-          text: 'Nexa Global Tech: Enterprise Cloud Infrastructure & Autonomous AI Solutions by Maulana Rifa\'i.',
-        });
-        break;
-      case 'skills':
-        newLogs.push({
-          type: 'output',
-          text: 'Core Stack: React, TypeScript, Vite, Tailwind, Vercel Edge, Docker, CI/CD.',
+          text: '[!] Bypassing firewall... Decrypting root keys...\n[SUCCESS] Master Controller & Creator: Maulana Rifa\'i.',
         });
         break;
       case 'status':
         newLogs.push({
           type: 'output',
-          text: `Edge Status: ONLINE | Latency: ${ping}ms | Controller: Maulana Rifa'i | Security: SECURE`,
+          text: `Edge Status: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i | Security: SECURE`,
         });
         break;
       case 'ping':
         newLogs.push({
           type: 'output',
-          text: `PING nexaglobal.tech (127.0.0.1) -> 64 bytes: icmp_seq=1 time=${ping}ms | 0% packet loss.`,
-        });
-        break;
-      case 'whoami':
-        newLogs.push({
-          type: 'output',
-          text: 'Access Granted. User: Maulana Rifa\'i | Clearance: Level 5 Root Admin.',
+          text: `PING nexaglobal.tech (127.0.0.1) -> 64 bytes: time=${ping}ms | 0% packet loss.`,
         });
         break;
       case 'matrix-on':
@@ -158,49 +158,13 @@ export const AdvancedFeatures: React.FC = () => {
         setMatrixActive(false);
         newLogs.push({ type: 'output', text: 'Matrix rain background effect deactivated.' });
         break;
-      case 'hire':
-        newLogs.push({
-          type: 'output',
-          text: 'Send partnership proposals to Maulana Rifa\'i via email: contact@nexaglobal.tech',
-        });
-        break;
-      case 'react':
-        newLogs.push({
-          type: 'output',
-          text: 'React: A declarative, component-based JavaScript library for building high-performance UIs.',
-        });
-        break;
-      case 'typescript':
-        newLogs.push({
-          type: 'output',
-          text: 'TypeScript: Typed JavaScript at scale that adds static type definitions to prevent runtime errors.',
-        });
-        break;
-      case 'vite':
-        newLogs.push({
-          type: 'output',
-          text: 'Vite: Next-generation frontend build tool offering lightning-fast HMR and optimized bundles.',
-        });
-        break;
-      case 'tailwind':
-        newLogs.push({
-          type: 'output',
-          text: 'Tailwind CSS: A utility-first CSS framework for rapidly building custom modern user interfaces.',
-        });
-        break;
-      case 'docker':
-        newLogs.push({
-          type: 'output',
-          text: 'Docker: Containerization platform enabling seamless code consistency across cloud environments.',
-        });
-        break;
       case 'clear':
         setLogs([]);
         return;
       default:
         newLogs.push({
           type: 'error',
-          text: `command not found: ${rawCmd}. Ketik "owner", "ai halo", atau "help" untuk opsi.`,
+          text: `command not found: ${rawCmd}. Ketik "code react", "owner", atau "help".`,
         });
     }
 
@@ -244,9 +208,9 @@ export const AdvancedFeatures: React.FC = () => {
 
         {/* Info Card / Welcome Preview */}
         <div style={{ maxWidth: '700px', margin: '0 auto 20px auto', background: 'rgba(15, 23, 42, 0.85)', border: '1px solid #1e293b', borderRadius: '8px', padding: '15px', color: '#cbd5e1', fontSize: '0.9rem', backdropFilter: 'blur(5px)' }}>
-          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>⚡ Developed & Architected by Maulana Rifa'i:</p>
+          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>💻 Cloud Code Runner Active (Maulana Rifa'i):</p>
           <p style={{ margin: 0 }}>
-            Ketik perintah <code style={{color: '#4ade80'}}>owner</code>, <code style={{color: '#4ade80'}}>whoami</code>, atau <code style={{color: '#4ade80'}}>ai halo</code> di bawah untuk berinteraksi dengan sistem!
+            Ketik perintah <code style={{color: '#4ade80'}}>code react</code>, <code style={{color: '#4ade80'}}>code typescript</code>, atau <code style={{color: '#4ade80'}}>code docker</code> di bawah untuk melihat cuplikan kodenya!
           </p>
         </div>
 
@@ -256,7 +220,7 @@ export const AdvancedFeatures: React.FC = () => {
             <span className="dot red"></span>
             <span className="dot yellow"></span>
             <span className="dot green"></span>
-            <span className="terminal-title">maulana-rifai@nexa-terminal:~</span>
+            <span className="terminal-title">maulana-rifai@nexa-cloud-ide:~</span>
           </div>
           <div className="terminal-body">
             {logs.map((log, index) => (
@@ -270,7 +234,7 @@ export const AdvancedFeatures: React.FC = () => {
                 type="text"
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
-                placeholder="ketik 'owner', 'ai siapa pembuatnya', 'help'..."
+                placeholder="ketik 'code react', 'owner', 'help'..."
                 className="terminal-input"
                 autoFocus
               />
