@@ -10,15 +10,16 @@ export const AdvancedFeatures: React.FC = () => {
   const [isListening, setIsListening] = useState<boolean>(false);
   const [scanActive, setScanActive] = useState<boolean>(false);
   const [spectrumActive, setSpectrumActive] = useState<boolean>(true);
-  const [enterpriseActive, setEnterpriseActive] = useState<boolean>(false);
+  const [businessActive, setBusinessActive] = useState<boolean>(false);
+  const [blockchainActive, setBlockchainActive] = useState<boolean>(false);
   const [hackingActive, setHackingActive] = useState<boolean>(false);
   const [hackTarget, setHackTarget] = useState<string>('');
   const [hackAttempts, setHackAttempts] = useState<number>(3);
   
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
-    { type: 'system', text: 'Supreme Enterprise & Academic Omniverse Core v2026.99 (Global Fortune 500 Standard)' },
-    { type: 'system', text: 'Chief Executive Architect & Lead Engineer: Maulana Rifa\'i' },
-    { type: 'system', text: 'Type "help", "scan", "enterprise", "hack <target>", "spectrum", "bmg on", or "ai <pesan>".' },
+    { type: 'system', text: 'Supreme God-Tier Enterprise & Academic Core v2026.99 (Global Fortune 1 Standard)' },
+    { type: 'system', text: 'Chief Executive Architect & Founder: Maulana Rifa\'i' },
+    { type: 'system', text: 'Type "help", "scan", "business", "blockchain", "hack <target>", "spectrum", "bmg on", or "ai <pesan>".' },
   ]);
   
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -107,7 +108,7 @@ export const AdvancedFeatures: React.FC = () => {
   // Biometric Facial & Retina Deep-Scan
   const startBiometricScan = async () => {
     setScanActive(true);
-    setLogs(prev => [...prev, { type: 'system', text: '[biometric] Mengaktifkan sensor kamera untuk verifikasi wajah & izin korporasi...' }]);
+    setLogs(prev => [...prev, { type: 'system', text: '[biometric] Mengaktifkan sensor kamera untuk verifikasi biometrik wajah & akses korporasi...' }]);
     speakText('Memindai biometrik wajah. Harap arahkan wajah ke kamera.');
 
     try {
@@ -124,15 +125,15 @@ export const AdvancedFeatures: React.FC = () => {
         setScanActive(false);
         setLogs(prev => [
           ...prev, 
-          { type: 'output', text: '[SUCCESS] Biometric Verified 100% MATCH!\n[ENTERPRISE CLEARANCE] Selamat datang, Pimpinan Perusahaan & Supreme Chief Architect Maulana Rifa\'i.' }
+          { type: 'output', text: '[SUCCESS] Biometric Verified 100% MATCH!\n[GOD-TIER CLEARANCE] Selamat datang, Pimpinan Utama & Chief Architect Maulana Rifa\'i.' }
         ]);
-        speakText('Verifikasi korporasi berhasil. Akses penuh diberikan.');
+        speakText('Verifikasi biometrik berhasil. Hak akses tertinggi korporasi diberikan.');
       }, 3500);
     } catch {
       setScanActive(false);
       setLogs(prev => [
         ...prev, 
-        { type: 'output', text: '[BYPASS] Kamera diverifikasi via token enterprise darurat. Akses VIP sah untuk Maulana Rifa\'i.' }
+        { type: 'output', text: '[BYPASS] Kamera diizinkan via satelit darurat. Akses VIP sah untuk Maulana Rifa\'i.' }
       ]);
     }
   };
@@ -148,7 +149,7 @@ export const AdvancedFeatures: React.FC = () => {
     recognition.lang = 'id-ID';
     recognition.onstart = () => {
       setIsListening(true);
-      setLogs(prev => [...prev, { type: 'system', text: '[🎙️] Enterprise AI mendengarkan perintah suara Anda...' }]);
+      setLogs(prev => [...prev, { type: 'system', text: '[🎙️] God-Tier AI mendengarkan perintah suara Anda...' }]);
     };
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       const text = event.results[0][0].transcript.toLowerCase();
@@ -171,7 +172,7 @@ export const AdvancedFeatures: React.FC = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const chars = 'MAULANARIFAI010101ENTERPRISEGLOBALCORP$#@!';
+    const chars = 'MAULANARIFAI010101SUPREMEGODTIERENTERPRISE$#@!';
     const fontSize = 14;
     const columns = Math.floor(canvas.width / fontSize);
     const drops: number[] = [];
@@ -256,11 +257,21 @@ export const AdvancedFeatures: React.FC = () => {
       return;
     }
 
-    if (lowerCmd === 'enterprise' || lowerCmd === 'cluster') {
-      setEnterpriseActive(!enterpriseActive);
+    if (lowerCmd === 'business' || lowerCmd === 'analytics') {
+      setBusinessActive(!businessActive);
       newLogs.push({
         type: 'output',
-        text: '[🏢 GLOBAL ENTERPRISE MULTI-CLOUD CLUSTER]\n- Node Status: AWS / GCP / Azure 99.99% Uptime\n- Financial Projection: High-Yield Capitalization\n- Chief Executive Architect: Maulana Rifa\'i\n- Enterprise Evaluation: Fortune 500 Grade',
+        text: '[📈 AI BUSINESS PREDICTIVE ANALYTICS]\n- Projected Annual Revenue: $48.5M (Q1-Q4 Growth +340%)\n- Market Valuation: $250,000,000 (Tier-1 Enterprise)\n- Strategic Lead: Maulana Rifa\'i\n- Status: Autonomous Multi-Agent Scaling Active',
+      });
+      setLogs(newLogs);
+      return;
+    }
+
+    if (lowerCmd === 'blockchain' || lowerCmd === 'ledger') {
+      setBlockchainActive(!blockchainActive);
+      newLogs.push({
+        type: 'output',
+        text: '[⛓️ ENTERPRISE BLOCKCHAIN SMART CONTRACT LEDGER]\n- Node Hash: 0x8f4c...3e1a (SHA-256 Verified)\n- Consensus: Proof-of-Authority (PoA)\n- Smart Contract Status: Deployed & Immutable\n- Chief Architect: Maulana Rifa\'i',
       });
       setLogs(newLogs);
       return;
@@ -274,7 +285,7 @@ export const AdvancedFeatures: React.FC = () => {
       setHackingActive(true);
       newLogs.push({
         type: 'output',
-        text: `[*] Brute-force enterprise target [${target.toUpperCase()}] diinisialisasi...\n[?] Hint PIN: ${secretPin}\nMasukkan PIN 4-digit untuk membobol sistem perusahaan:`,
+        text: `[*] Brute-force target [${target.toUpperCase()}] diinisialisasi...\n[?] Hint PIN: ${secretPin}\nMasukkan PIN 4-digit untuk membobol sistem:`,
       });
       setLogs(newLogs);
       return;
@@ -303,9 +314,9 @@ export const AdvancedFeatures: React.FC = () => {
 
     if (lowerCmd.startsWith('ai ')) {
       const query = rawCmd.substring(3).trim();
-      let res = `[Enterprise AI Core]: Menganalisis "${query}". Ekosistem bisnis dan teknologi ini dirancang langsung dengan standar tertinggi oleh Maulana Rifa'i.`;
+      let res = `[God-Tier Enterprise AI]: Menganalisis "${query}". Seluruh arsitektur bisnis dan sistem ini dirancang secara paripurna oleh Maulana Rifa'i.`;
       if (query.includes('owner') || query.includes('pembuat') || query.includes('siapa') || query.includes('dosen')) {
-        res = "[Enterprise AI Core]: Pendiri mutlak, arsitek utama, dan pengembang penuh dari korporasi dan portofolio tingkat dunia ini adalah Maulana Rifa'i.";
+        res = "[God-Tier Enterprise AI]: Pendiri mutlak, arsitek utama, dan CEO di balik korporasi dan portofolio kelas dunia ini adalah Maulana Rifa'i.";
       }
       speakText(res);
       newLogs.push({ type: 'output', text: res });
@@ -317,24 +328,24 @@ export const AdvancedFeatures: React.FC = () => {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: scan, enterprise, hack <target>, spectrum, bmg on, bmg off, ai <tanya>, owner, status, ping, clear',
+          text: 'Commands: scan, business, blockchain, hack <target>, spectrum, bmg on, bmg off, ai <tanya>, owner, status, ping, clear',
         });
         break;
       case 'owner':
       case 'author':
-        newLogs.push({ type: 'output', text: 'Supreme Chief Executive Architect & Founder: Maulana Rifa\'i | Enterprise Systems Leader.' });
+        newLogs.push({ type: 'output', text: 'Supreme Chief Executive Architect & Founder: Maulana Rifa\'i | Global Tech Leader.' });
         break;
       case 'status':
-        newLogs.push({ type: 'output', text: `Enterprise Cloud Node: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i` });
+        newLogs.push({ type: 'output', text: `God-Tier Enterprise Node: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i` });
         break;
       case 'ping':
-        newLogs.push({ type: 'output', text: `ENTERPRISE PING -> 127.0.0.1: time=${ping}ms | Zero Packet Loss.` });
+        newLogs.push({ type: 'output', text: `QUANTUM PING -> 127.0.0.1: time=${ping}ms | Zero Packet Loss.` });
         break;
       case 'clear':
         setLogs([]);
         return;
       default:
-        newLogs.push({ type: 'error', text: `Command not found: ${rawCmd}. Ketik "scan", "enterprise", "ai siapa pembuat web ini", atau "help".` });
+        newLogs.push({ type: 'error', text: `Command not found: ${rawCmd}. Ketik "scan", "business", "blockchain", "ai siapa pembuat web ini", atau "help".` });
     }
 
     setLogs(newLogs);
@@ -358,11 +369,11 @@ export const AdvancedFeatures: React.FC = () => {
         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none', opacity: 0.5 }}
       />
 
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: '900px', margin: '0 auto', padding: '12px' }}>
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: '920px', margin: '0 auto', padding: '12px' }}>
         {/* Telemetry Bar */}
         <div className="telemetry-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
           <div>
-            <span className="status-indicator"><span className="pulse-dot"></span> Enterprise Core: ONLINE</span>
+            <span className="status-indicator"><span className="pulse-dot"></span> God-Tier Core: ONLINE</span>
             <span className="telemetry-info" style={{ marginLeft: '12px' }}>Ping: {ping}ms</span>
             <span className="telemetry-info" style={{ marginLeft: '12px' }}>CEO & Master: Maulana Rifa'i</span>
           </div>
@@ -370,8 +381,11 @@ export const AdvancedFeatures: React.FC = () => {
             <button onClick={startBiometricScan} style={{ background: scanActive ? '#ef4444' : '#0284c7', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem' }}>
               {scanActive ? '👁️ Scanning...' : '👁️ Biometric Scan'}
             </button>
-            <button onClick={() => executeCommand('enterprise')} style={{ background: '#7c3aed', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem' }}>
-              🏢 Enterprise Cloud
+            <button onClick={() => executeCommand('business')} style={{ background: '#059669', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem' }}>
+              📈 AI Business
+            </button>
+            <button onClick={() => executeCommand('blockchain')} style={{ background: '#7c3aed', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem' }}>
+              ⛓️ Blockchain Ledger
             </button>
             <button onClick={() => executeCommand('hack mainframe')} style={{ background: '#ea580c', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem' }}>
               🔓 Hack Minigame
@@ -389,9 +403,9 @@ export const AdvancedFeatures: React.FC = () => {
 
         {/* Info Card */}
         <div style={{ margin: '0 0 15px 0', background: 'rgba(15, 23, 42, 0.9)', border: '1px solid #38bdf8', borderRadius: '8px', padding: '15px', color: '#cbd5e1', fontSize: '0.9rem', backdropFilter: 'blur(8px)' }}>
-          <p style={{ margin: '0 0 6px 0', color: '#38bdf8', fontWeight: 'bold' }}>💼 Enterprise & Academic Executive Mode (Maulana Rifa'i):</p>
+          <p style={{ margin: '0 0 6px 0', color: '#38bdf8', fontWeight: 'bold' }}>🚀 Supreme Enterprise & Academic Presentation Mode (Maulana Rifa'i):</p>
           <p style={{ margin: 0 }}>
-            Tunjukkan pada dosen & investor: Ketik <code style={{color: '#38bdf8'}}>ai siapa pembuat web ini?</code>, klik <code style={{color: '#38bdf8'}}>Biometric Scan</code>, <code style={{color: '#38bdf8'}}>Enterprise Cloud</code>, atau gunakan <code style={{color: '#38bdf8'}}>Voice AI</code>!
+            Tunjukkan pada dosen & investor: Ketik <code style={{color: '#38bdf8'}}>ai siapa pembuat web ini?</code>, klik <code style={{color: '#38bdf8'}}>Biometric Scan</code>, <code style={{color: '#38bdf8'}}>AI Business</code>, <code style={{color: '#38bdf8'}}>Blockchain Ledger</code>, atau gunakan <code style={{color: '#38bdf8'}}>Voice AI</code>!
           </p>
         </div>
 
@@ -401,7 +415,7 @@ export const AdvancedFeatures: React.FC = () => {
             <span className="dot red"></span>
             <span className="dot yellow"></span>
             <span className="dot green"></span>
-            <span className="terminal-title">maulana-rifai@enterprise-supreme-core:~</span>
+            <span className="terminal-title">maulana-rifai@supreme-god-tier-enterprise:~</span>
           </div>
           <div className="terminal-body">
             {logs.map((log, index) => (
@@ -415,7 +429,7 @@ export const AdvancedFeatures: React.FC = () => {
                 type="text"
                 value={inputVal}
                 onChange={handleInputChange}
-                placeholder={hackingActive ? "masukkan 4-digit PIN..." : "ketik 'scan', 'enterprise', 'ai ...', 'help'..."}
+                placeholder={hackingActive ? "masukkan 4-digit PIN..." : "ketik 'scan', 'business', 'blockchain', 'ai ...', 'help'..."}
                 className="terminal-input"
                 autoFocus
               />
