@@ -10,15 +10,15 @@ export const AdvancedFeatures: React.FC = () => {
   const [isListening, setIsListening] = useState<boolean>(false);
   const [scanActive, setScanActive] = useState<boolean>(false);
   const [spectrumActive, setSpectrumActive] = useState<boolean>(true);
-  const [satelliteActive, setSatelliteActive] = useState<boolean>(false);
+  const [enterpriseActive, setEnterpriseActive] = useState<boolean>(false);
   const [hackingActive, setHackingActive] = useState<boolean>(false);
   const [hackTarget, setHackTarget] = useState<string>('');
   const [hackAttempts, setHackAttempts] = useState<number>(3);
   
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
-    { type: 'system', text: 'Informatics IF God-Tier Omniverse Core v2026.99 (Absolute Top-1 World Standard)' },
-    { type: 'system', text: 'Supreme Chief Architect & Lead Engineer: Maulana Rifa\'i' },
-    { type: 'system', text: 'Type "help", "scan", "satellite", "hack <target>", "spectrum", "bmg on", or "ai <pesan>".' },
+    { type: 'system', text: 'Supreme Enterprise & Academic Omniverse Core v2026.99 (Global Fortune 500 Standard)' },
+    { type: 'system', text: 'Chief Executive Architect & Lead Engineer: Maulana Rifa\'i' },
+    { type: 'system', text: 'Type "help", "scan", "enterprise", "hack <target>", "spectrum", "bmg on", or "ai <pesan>".' },
   ]);
   
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -107,7 +107,7 @@ export const AdvancedFeatures: React.FC = () => {
   // Biometric Facial & Retina Deep-Scan
   const startBiometricScan = async () => {
     setScanActive(true);
-    setLogs(prev => [...prev, { type: 'system', text: '[biometric] Mengaktifkan sensor kamera depan untuk pemindaian biometrik wajah & retina...' }]);
+    setLogs(prev => [...prev, { type: 'system', text: '[biometric] Mengaktifkan sensor kamera untuk verifikasi wajah & izin korporasi...' }]);
     speakText('Memindai biometrik wajah. Harap arahkan wajah ke kamera.');
 
     try {
@@ -124,15 +124,15 @@ export const AdvancedFeatures: React.FC = () => {
         setScanActive(false);
         setLogs(prev => [
           ...prev, 
-          { type: 'output', text: '[SUCCESS] Biometric Verified 100% MATCH!\n[ACADEMIC HIGHEST CLEARANCE] Selamat datang, Dosen Penguji & Supreme Creator Maulana Rifa\'i.' }
+          { type: 'output', text: '[SUCCESS] Biometric Verified 100% MATCH!\n[ENTERPRISE CLEARANCE] Selamat datang, Pimpinan Perusahaan & Supreme Chief Architect Maulana Rifa\'i.' }
         ]);
-        speakText('Verifikasi biometrik berhasil. Nilai tertinggi diberikan.');
+        speakText('Verifikasi korporasi berhasil. Akses penuh diberikan.');
       }, 3500);
     } catch {
       setScanActive(false);
       setLogs(prev => [
         ...prev, 
-        { type: 'output', text: '[BYPASS] Kamera diizinkan via token satelit darurat. Akses VIP diverifikasi untuk Maulana Rifa\'i.' }
+        { type: 'output', text: '[BYPASS] Kamera diverifikasi via token enterprise darurat. Akses VIP sah untuk Maulana Rifa\'i.' }
       ]);
     }
   };
@@ -148,7 +148,7 @@ export const AdvancedFeatures: React.FC = () => {
     recognition.lang = 'id-ID';
     recognition.onstart = () => {
       setIsListening(true);
-      setLogs(prev => [...prev, { type: 'system', text: '[🎙️] AI Quantum mendengarkan perintah suara Anda...' }]);
+      setLogs(prev => [...prev, { type: 'system', text: '[🎙️] Enterprise AI mendengarkan perintah suara Anda...' }]);
     };
     recognition.onresult = (event: SpeechRecognitionEvent) => {
       const text = event.results[0][0].transcript.toLowerCase();
@@ -171,7 +171,7 @@ export const AdvancedFeatures: React.FC = () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const chars = 'MAULANARIFAI010101INFORMATIKAIFTOPONE$#@!';
+    const chars = 'MAULANARIFAI010101ENTERPRISEGLOBALCORP$#@!';
     const fontSize = 14;
     const columns = Math.floor(canvas.width / fontSize);
     const drops: number[] = [];
@@ -231,15 +231,15 @@ export const AdvancedFeatures: React.FC = () => {
       const newLogs = [...logs, { type: 'input', text: `$ ${rawCmd}` }];
       if (rawCmd === hackTarget) {
         setHackingActive(false);
-        newLogs.push({ type: 'output', text: `[SUCCESS] PIN Correct! Root access granted. Secured by Maulana Rifa'i.` });
-        speakText('Akses root berhasil dibuka.');
+        newLogs.push({ type: 'output', text: `[SUCCESS] PIN Correct! Enterprise root access granted. Secured by Maulana Rifa'i.` });
+        speakText('Akses root perusahaan berhasil dibuka.');
       } else {
         const remaining = hackAttempts - 1;
         setHackAttempts(remaining);
         if (remaining <= 0) {
           setHackingActive(false);
-          newLogs.push({ type: 'error', text: '[SECURITY LOCKOUT] Percobaan habis! Sistem terkunci.' });
-          speakText('Sistem terkunci.');
+          newLogs.push({ type: 'error', text: '[SECURITY LOCKOUT] Percobaan habis! Firewall perusahaan aktif.' });
+          speakText('Firewall korporasi aktif.');
         } else {
           newLogs.push({ type: 'error', text: `[FAILED] PIN salah. Sisa kesempatan: ${remaining}. Masukkan PIN 4-digit:` });
         }
@@ -256,11 +256,11 @@ export const AdvancedFeatures: React.FC = () => {
       return;
     }
 
-    if (lowerCmd === 'satellite' || lowerCmd === 'orbit') {
-      setSatelliteActive(!satelliteActive);
+    if (lowerCmd === 'enterprise' || lowerCmd === 'cluster') {
+      setEnterpriseActive(!enterpriseActive);
       newLogs.push({
         type: 'output',
-        text: '[🌍 INFORMATIKA GLOBAL SATELLITE LINK]\n- Status: Connected to LEO Orbit\n- Encryption: Quantum AES-1024\n- Lead Systems Architect: Maulana Rifa\'i\n- Academic Evaluation Grade: A+ (Top 1 Global)',
+        text: '[🏢 GLOBAL ENTERPRISE MULTI-CLOUD CLUSTER]\n- Node Status: AWS / GCP / Azure 99.99% Uptime\n- Financial Projection: High-Yield Capitalization\n- Chief Executive Architect: Maulana Rifa\'i\n- Enterprise Evaluation: Fortune 500 Grade',
       });
       setLogs(newLogs);
       return;
@@ -274,7 +274,7 @@ export const AdvancedFeatures: React.FC = () => {
       setHackingActive(true);
       newLogs.push({
         type: 'output',
-        text: `[*] Brute-force target [${target.toUpperCase()}] diinisialisasi...\n[?] Hint PIN Kunci: ${secretPin}\nMasukkan PIN 4-digit untuk membobol sistem:`,
+        text: `[*] Brute-force enterprise target [${target.toUpperCase()}] diinisialisasi...\n[?] Hint PIN: ${secretPin}\nMasukkan PIN 4-digit untuk membobol sistem perusahaan:`,
       });
       setLogs(newLogs);
       return;
@@ -303,9 +303,9 @@ export const AdvancedFeatures: React.FC = () => {
 
     if (lowerCmd.startsWith('ai ')) {
       const query = rawCmd.substring(3).trim();
-      let res = `[Informatics AI Core]: Menganalisis "${query}". Sistem portofolio ini dibangun dengan standar rekayasa informatika tingkat tertinggi oleh Maulana Rifa'i.`;
+      let res = `[Enterprise AI Core]: Menganalisis "${query}". Ekosistem bisnis dan teknologi ini dirancang langsung dengan standar tertinggi oleh Maulana Rifa'i.`;
       if (query.includes('owner') || query.includes('pembuat') || query.includes('siapa') || query.includes('dosen')) {
-        res = "[Informatics AI Core]: Arsitek utama, pembuat mutlak, dan pengembang penuh dari sistem web kelas dunia ini adalah Maulana Rifa'i.";
+        res = "[Enterprise AI Core]: Pendiri mutlak, arsitek utama, dan pengembang penuh dari korporasi dan portofolio tingkat dunia ini adalah Maulana Rifa'i.";
       }
       speakText(res);
       newLogs.push({ type: 'output', text: res });
@@ -317,24 +317,24 @@ export const AdvancedFeatures: React.FC = () => {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: scan, satellite, hack <target>, spectrum, bmg on, bmg off, ai <tanya>, owner, status, ping, clear',
+          text: 'Commands: scan, enterprise, hack <target>, spectrum, bmg on, bmg off, ai <tanya>, owner, status, ping, clear',
         });
         break;
       case 'owner':
       case 'author':
-        newLogs.push({ type: 'output', text: 'Supreme Chief Architect & Founder: Maulana Rifa\'i | Elite Full-Stack Systems Engineer.' });
+        newLogs.push({ type: 'output', text: 'Supreme Chief Executive Architect & Founder: Maulana Rifa\'i | Enterprise Systems Leader.' });
         break;
       case 'status':
-        newLogs.push({ type: 'output', text: `Informatics IF Node: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i` });
+        newLogs.push({ type: 'output', text: `Enterprise Cloud Node: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i` });
         break;
       case 'ping':
-        newLogs.push({ type: 'output', text: `INFORMATIKA PING -> 127.0.0.1: time=${ping}ms | Zero Packet Loss.` });
+        newLogs.push({ type: 'output', text: `ENTERPRISE PING -> 127.0.0.1: time=${ping}ms | Zero Packet Loss.` });
         break;
       case 'clear':
         setLogs([]);
         return;
       default:
-        newLogs.push({ type: 'error', text: `Command not found: ${rawCmd}. Ketik "scan", "satellite", "ai siapa pembuat web ini", atau "help".` });
+        newLogs.push({ type: 'error', text: `Command not found: ${rawCmd}. Ketik "scan", "enterprise", "ai siapa pembuat web ini", atau "help".` });
     }
 
     setLogs(newLogs);
@@ -362,16 +362,16 @@ export const AdvancedFeatures: React.FC = () => {
         {/* Telemetry Bar */}
         <div className="telemetry-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
           <div>
-            <span className="status-indicator"><span className="pulse-dot"></span> IF Core: ONLINE</span>
+            <span className="status-indicator"><span className="pulse-dot"></span> Enterprise Core: ONLINE</span>
             <span className="telemetry-info" style={{ marginLeft: '12px' }}>Ping: {ping}ms</span>
-            <span className="telemetry-info" style={{ marginLeft: '12px' }}>Master: Maulana Rifa'i</span>
+            <span className="telemetry-info" style={{ marginLeft: '12px' }}>CEO & Master: Maulana Rifa'i</span>
           </div>
           <div style={{ display: 'flex', gap: '5px', flexWrap: 'wrap' }}>
             <button onClick={startBiometricScan} style={{ background: scanActive ? '#ef4444' : '#0284c7', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem' }}>
               {scanActive ? '👁️ Scanning...' : '👁️ Biometric Scan'}
             </button>
-            <button onClick={() => executeCommand('satellite')} style={{ background: '#7c3aed', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem' }}>
-              🌍 Satellite Grid
+            <button onClick={() => executeCommand('enterprise')} style={{ background: '#7c3aed', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem' }}>
+              🏢 Enterprise Cloud
             </button>
             <button onClick={() => executeCommand('hack mainframe')} style={{ background: '#ea580c', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem' }}>
               🔓 Hack Minigame
@@ -389,9 +389,9 @@ export const AdvancedFeatures: React.FC = () => {
 
         {/* Info Card */}
         <div style={{ margin: '0 0 15px 0', background: 'rgba(15, 23, 42, 0.9)', border: '1px solid #38bdf8', borderRadius: '8px', padding: '15px', color: '#cbd5e1', fontSize: '0.9rem', backdropFilter: 'blur(8px)' }}>
-          <p style={{ margin: '0 0 6px 0', color: '#38bdf8', fontWeight: 'bold' }}>🎓 Kuliah Informatika - Presentation Mode (Maulana Rifa'i):</p>
+          <p style={{ margin: '0 0 6px 0', color: '#38bdf8', fontWeight: 'bold' }}>💼 Enterprise & Academic Executive Mode (Maulana Rifa'i):</p>
           <p style={{ margin: 0 }}>
-            Tunjukkan pada dosen penguji: Ketik <code style={{color: '#38bdf8'}}>ai siapa pembuat web ini?</code>, klik <code style={{color: '#38bdf8'}}>Biometric Scan</code>, <code style={{color: '#38bdf8'}}>Satellite Grid</code>, atau gunakan <code style={{color: '#38bdf8'}}>Voice AI</code>!
+            Tunjukkan pada dosen & investor: Ketik <code style={{color: '#38bdf8'}}>ai siapa pembuat web ini?</code>, klik <code style={{color: '#38bdf8'}}>Biometric Scan</code>, <code style={{color: '#38bdf8'}}>Enterprise Cloud</code>, atau gunakan <code style={{color: '#38bdf8'}}>Voice AI</code>!
           </p>
         </div>
 
@@ -401,7 +401,7 @@ export const AdvancedFeatures: React.FC = () => {
             <span className="dot red"></span>
             <span className="dot yellow"></span>
             <span className="dot green"></span>
-            <span className="terminal-title">maulana-rifai@informatika-god-tier:~</span>
+            <span className="terminal-title">maulana-rifai@enterprise-supreme-core:~</span>
           </div>
           <div className="terminal-body">
             {logs.map((log, index) => (
@@ -415,7 +415,7 @@ export const AdvancedFeatures: React.FC = () => {
                 type="text"
                 value={inputVal}
                 onChange={handleInputChange}
-                placeholder={hackingActive ? "masukkan 4-digit PIN..." : "ketik 'scan', 'satellite', 'ai ...', 'help'..."}
+                placeholder={hackingActive ? "masukkan 4-digit PIN..." : "ketik 'scan', 'enterprise', 'ai ...', 'help'..."}
                 className="terminal-input"
                 autoFocus
               />
