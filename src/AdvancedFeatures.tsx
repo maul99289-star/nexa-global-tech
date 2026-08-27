@@ -7,11 +7,12 @@ export const AdvancedFeatures: React.FC = () => {
   const [inputVal, setInputVal] = useState<string>('');
   const [matrixActive, setMatrixActive] = useState<boolean>(true);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
+  const [isListening, setIsListening] = useState<boolean>(false);
   
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
-    { type: 'system', text: 'Nexa Supreme Terminal v7.0.0 (Audio & Game Engine)' },
+    { type: 'system', text: 'Nexa Voice & Neural Core v8.0.0 (Supreme Edition)' },
     { type: 'system', text: 'Lead Architect & Owner: Maulana Rifa\'i' },
-    { type: 'system', text: 'Type "help", "snake", "attack-sim", "sfx-off", or "code react".' },
+    { type: 'system', text: 'Type "help", "voice-on", "trace", "snake", or use voice command.' },
   ]);
   
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -37,7 +38,6 @@ export const AdvancedFeatures: React.FC = () => {
       const gain = ctx.createGain();
 
       osc.type = 'triangle';
-      // Random pitch tipis untuk efek mekanik natural
       osc.frequency.setValueAtTime(120 + Math.random() * 80, ctx.currentTime);
       
       gain.gain.setValueAtTime(0.03, ctx.currentTime);
@@ -51,6 +51,43 @@ export const AdvancedFeatures: React.FC = () => {
     } catch {
       // Ignore audio context errors if blocked by browser policy
     }
+  };
+
+  // Web Speech Recognition API Integration
+  const startVoiceCommand = () => {
+    const SpeechRecognition = window.SpeechRecognition || (window as unknown as { webkitSpeechRecognition: typeof window.SpeechRecognition }).webkitSpeechRecognition;
+    
+    if (!SpeechRecognition) {
+      alert('Maaf, browser Anda tidak mendukung fitur Voice Recognition.');
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'id-ID'; // Bisa bahasa Indonesia atau Inggris
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsListening(true);
+      setLogs((prev) => [...prev, { type: 'system', text: '[🎙️] Mendengarkan suara... Silakan bicara (contoh: "ping", "owner", "matrix").' }]);
+    };
+
+    recognition.onresult = (event: SpeechRecognitionEvent) => {
+      const speechToText = event.results[0][0].transcript.toLowerCase();
+      setInputVal(speechToText);
+      executeCommand(speechToText);
+    };
+
+    recognition.onerror = () => {
+      setIsListening(false);
+      setLogs((prev) => [...prev, { type: 'error', text: '[!] Gagal mendengarkan suara. Coba ketik secara manual.' }]);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
   };
 
   // Matrix Rain Canvas Animation Effect
@@ -109,11 +146,21 @@ export const AdvancedFeatures: React.FC = () => {
 
     const newLogs = [...logs, { type: 'input', text: `$ ${rawCmd}` }];
 
+    // Trace Route Simulation
+    if (lowerCmd === 'trace' || lowerCmd === 'traceroute') {
+      newLogs.push({
+        type: 'output',
+        text: 'Tracing route to nexaglobal.tech [127.0.0.1]\n 1. Edge-Gateway (10.0.0.1) - 2ms\n 2. Cloud-Proxy-SG (192.168.1.1) - 5ms\n 3. Master-Server-Root (127.0.0.1) - 8ms\nTrace complete. Secured by Maulana Rifa\'i.',
+      });
+      setLogs(newLogs);
+      return;
+    }
+
     // Game Snake Simulation text-based
     if (lowerCmd === 'snake' || lowerCmd === 'game') {
       newLogs.push({
         type: 'output',
-        text: '🎮 [NEXA ARCADE SNAKE]\n+--------------------+\n| . . . . . . . . .  |\n| . . O O O . . . .  |\n| . . . . O . . . .  |\n| . . . . # (food) . |\n+--------------------+\nScore: 30 | Status: RUNNING!\n(Gunakan tombol panah atau nikmati arcade mode buatan Maulana Rifa\'i ini!)',
+        text: '🎮 [NEXA ARCADE SNAKE]\n+--------------------+\n| . . . . . . . . .  |\n| . . O O O . . . .  |\n| . . . . O . . . .  |\n| . . . . # (food) . |\n+--------------------+\nScore: 30 | Status: RUNNING!\n(Arcade mode buatan Maulana Rifa\'i!)',
       });
       setLogs(newLogs);
       return;
@@ -194,7 +241,7 @@ export const AdvancedFeatures: React.FC = () => {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: snake, attack-sim, sfx-on, sfx-off, code react, code typescript, code docker, ai <pesan>, decrypt, owner, status, ping, matrix-on, matrix-off, clear',
+          text: 'Commands: trace, snake, attack-sim, sfx-on, sfx-off, code react, code typescript, code docker, ai <pesan>, decrypt, owner, status, ping, matrix-on, matrix-off, clear',
         });
         break;
       case 'owner':
@@ -213,7 +260,7 @@ export const AdvancedFeatures: React.FC = () => {
       case 'status':
         newLogs.push({
           type: 'output',
-          text: `Edge Status: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i | Audio SFX: ${soundEnabled ? 'ON' : 'OFF'}`,
+          text: `Edge Status: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i | Voice Engine: ACTIVE`,
         });
         break;
       case 'ping':
@@ -236,7 +283,7 @@ export const AdvancedFeatures: React.FC = () => {
       default:
         newLogs.push({
           type: 'error',
-          text: `command not found: ${rawCmd}. Ketik "snake", "attack-sim", atau "help".`,
+          text: `command not found: ${rawCmd}. Ketik "trace", "snake", atau "help".`,
         });
     }
 
@@ -275,19 +322,39 @@ export const AdvancedFeatures: React.FC = () => {
 
       <div style={{ position: 'relative', zIndex: 1 }}>
         {/* Telemetry Bar */}
-        <div className="telemetry-bar">
-          <span className="status-indicator">
-            <span className="pulse-dot"></span> Vercel Edge: ONLINE
-          </span>
-          <span className="telemetry-info">Ping: {ping}ms</span>
-          <span className="telemetry-info">Owner: Maulana Rifa'i</span>
+        <div className="telemetry-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
+          <div>
+            <span className="status-indicator">
+              <span className="pulse-dot"></span> Vercel Edge: ONLINE
+            </span>
+            <span className="telemetry-info" style={{ marginLeft: '12px' }}>Ping: {ping}ms</span>
+            <span className="telemetry-info" style={{ marginLeft: '12px' }}>Owner: Maulana Rifa'i</span>
+          </div>
+          <div>
+            <button
+              onClick={startVoiceCommand}
+              style={{
+                background: isListening ? '#ef4444' : '#22c55e',
+                color: '#fff',
+                border: 'none',
+                padding: '5px 12px',
+                borderRadius: '4px',
+                cursor: 'pointer',
+                fontWeight: 'bold',
+                fontSize: '0.8rem',
+                boxShadow: '0 0 10px rgba(0,255,100,0.3)',
+              }}
+            >
+              {isListening ? '🎙️ Mendengarkan...' : '🎙️ Voice Command'}
+            </button>
+          </div>
         </div>
 
         {/* Info Card / Welcome Preview */}
         <div style={{ maxWidth: '700px', margin: '0 auto 20px auto', background: 'rgba(15, 23, 42, 0.85)', border: '1px solid #1e293b', borderRadius: '8px', padding: '15px', color: '#cbd5e1', fontSize: '0.9rem', backdropFilter: 'blur(5px)' }}>
-          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>🎮 Supreme God-Tier Terminal (Maulana Rifa'i):</p>
+          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>🎙️ Supreme Voice & Neural Terminal (Maulana Rifa'i):</p>
           <p style={{ margin: 0 }}>
-            Ketik perintah <code style={{color: '#4ade80'}}>snake</code> untuk bermain game arcade atau <code style={{color: '#4ade80'}}>sfx-on</code> / <code style={{color: '#4ade80'}}>sfx-off</code> untuk audio ketikan!
+            Klik tombol hijau <code style={{color: '#4ade80'}}>Voice Command</code> di atas atau ketik <code style={{color: '#4ade80'}}>trace</code> dan <code style={{color: '#4ade80'}}>snake</code> untuk mencoba fitur futuristik ini!
           </p>
         </div>
 
@@ -297,7 +364,7 @@ export const AdvancedFeatures: React.FC = () => {
             <span className="dot red"></span>
             <span className="dot yellow"></span>
             <span className="dot green"></span>
-            <span className="terminal-title">maulana-rifai@supreme-terminal:~</span>
+            <span className="terminal-title">maulana-rifai@neural-terminal:~</span>
           </div>
           <div className="terminal-body">
             {logs.map((log, index) => (
@@ -311,7 +378,7 @@ export const AdvancedFeatures: React.FC = () => {
                 type="text"
                 value={inputVal}
                 onChange={handleInputChange}
-                placeholder="ketik 'snake', 'attack-sim', 'help'..."
+                placeholder="ketik 'trace', 'owner', atau klik tombol voice..."
                 className="terminal-input"
                 autoFocus
               />
