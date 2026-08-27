@@ -13,6 +13,7 @@ export const AdvancedFeatures: React.FC = () => {
   const [businessActive, setBusinessActive] = useState<boolean>(false);
   const [blockchainActive, setBlockchainActive] = useState<boolean>(false);
   const [agentActive, setAgentActive] = useState<boolean>(false);
+  const [firewallActive, setFirewallActive] = useState<boolean>(true);
   const [hackingActive, setHackingActive] = useState<boolean>(false);
   const [hackTarget, setHackTarget] = useState<string>('');
   const [hackAttempts, setHackAttempts] = useState<number>(3);
@@ -20,7 +21,7 @@ export const AdvancedFeatures: React.FC = () => {
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
     { type: 'system', text: 'Supreme God-Tier Enterprise Core #1 v2026.99 (Global Fortune 0 Standard)' },
     { type: 'system', text: 'Chief Executive Architect & Founder: Maulana Rifa\'i' },
-    { type: 'system', text: 'Type "help", "scan", "business", "blockchain", "agents", "hack <target>", "spectrum", "bmg on", or "ai <pesan>".' },
+    { type: 'system', text: 'Type "help", "scan", "business", "blockchain", "agents", "firewall", "hack <target>", "spectrum", "bmg on", or "ai <pesan>".' },
   ]);
   
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -288,6 +289,16 @@ export const AdvancedFeatures: React.FC = () => {
       return;
     }
 
+    if (lowerCmd === 'firewall' || lowerCmd === 'ddos') {
+      setFirewallActive(!firewallActive);
+      newLogs.push({
+        type: 'output',
+        text: `[🛡️ CYBER-SECURITY FIREWALL & DDOS DEFENSE #1]: Status diubah ke ${!firewallActive ? 'AKTIF (Secure)' : 'STANDBY'}.`,
+      });
+      setLogs(newLogs);
+      return;
+    }
+
     if (lowerCmd.startsWith('hack ')) {
       const target = rawCmd.substring(5).trim() || 'mainframe';
       const secretPin = Math.floor(1000 + Math.random() * 9000).toString();
@@ -339,7 +350,7 @@ export const AdvancedFeatures: React.FC = () => {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: scan, business, blockchain, agents, hack <target>, spectrum, bmg on, bmg off, ai <tanya>, owner, status, ping, clear',
+          text: 'Commands: scan, business, blockchain, agents, firewall, hack <target>, spectrum, bmg on, bmg off, ai <tanya>, owner, status, ping, clear',
         });
         break;
       case 'owner':
@@ -356,7 +367,7 @@ export const AdvancedFeatures: React.FC = () => {
         setLogs([]);
         return;
       default:
-        newLogs.push({ type: 'error', text: `Command not found: ${rawCmd}. Ketik "scan", "business", "blockchain", "agents", "ai siapa pembuat web ini", atau "help".` });
+        newLogs.push({ type: 'error', text: `Command not found: ${rawCmd}. Ketik "scan", "business", "blockchain", "agents", "firewall", "ai siapa pembuat web ini", atau "help".` });
     }
 
     setLogs(newLogs);
@@ -380,7 +391,7 @@ export const AdvancedFeatures: React.FC = () => {
         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none', opacity: 0.5 }}
       />
 
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: '920px', margin: '0 auto', padding: '12px' }}>
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: '960px', margin: '0 auto', padding: '12px' }}>
         {/* Telemetry Bar */}
         <div className="telemetry-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
           <div>
@@ -401,6 +412,9 @@ export const AdvancedFeatures: React.FC = () => {
             <button onClick={() => executeCommand('agents')} style={{ background: '#2563eb', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem' }}>
               🤖 Multi-Agents
             </button>
+            <button onClick={() => executeCommand('firewall')} style={{ background: firewallActive ? '#16a34a' : '#dc2626', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem' }}>
+              🛡️ Firewall
+            </button>
             <button onClick={() => executeCommand('hack mainframe')} style={{ background: '#ea580c', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.75rem' }}>
               🔓 Hack Minigame
             </button>
@@ -417,9 +431,9 @@ export const AdvancedFeatures: React.FC = () => {
 
         {/* Info Card */}
         <div style={{ margin: '0 0 15px 0', background: 'rgba(15, 23, 42, 0.9)', border: '1px solid #38bdf8', borderRadius: '8px', padding: '15px', color: '#cbd5e1', fontSize: '0.9rem', backdropFilter: 'blur(8px)' }}>
-          <p style={{ margin: '0 0 6px 0', color: '#38bdf8', fontWeight: 'bold' }}>🚀 Supreme God-Tier #1 Presentation Mode (Maulana Rifa'i):</p>
+          <p style={{ margin: '0 0 6px 0', color: '#38bdf8', fontWeight: 'bold' }}>🚀 Supreme God-Tier #1 Global Mode (Maulana Rifa'i):</p>
           <p style={{ margin: 0 }}>
-            Tunjukkan pada dunia: Ketik <code style={{color: '#38bdf8'}}>ai siapa pembuat web ini?</code>, klik <code style={{color: '#38bdf8'}}>Biometric Scan</code>, <code style={{color: '#38bdf8'}}>AI Business</code>, <code style={{color: '#38bdf8'}}>Blockchain Ledger</code>, <code style={{color: '#38bdf8'}}>Multi-Agents</code>, atau gunakan <code style={{color: '#38bdf8'}}>Voice AI</code>!
+            Ketik <code style={{color: '#38bdf8'}}>ai siapa pembuat web ini?</code>, klik <code style={{color: '#38bdf8'}}>Biometric Scan</code>, <code style={{color: '#38bdf8'}}>AI Business</code>, <code style={{color: '#38bdf8'}}>Blockchain Ledger</code>, <code style={{color: '#38bdf8'}}>Multi-Agents</code>, <code style={{color: '#38bdf8'}}>Firewall</code>, atau gunakan <code style={{color: '#38bdf8'}}>Voice AI</code>!
           </p>
         </div>
 
@@ -443,7 +457,7 @@ export const AdvancedFeatures: React.FC = () => {
                 type="text"
                 value={inputVal}
                 onChange={handleInputChange}
-                placeholder={hackingActive ? "masukkan 4-digit PIN..." : "ketik 'scan', 'business', 'blockchain', 'agents', 'ai ...', 'help'..."}
+                placeholder={hackingActive ? "masukkan 4-digit PIN..." : "ketik 'scan', 'business', 'blockchain', 'agents', 'firewall', 'ai ...', 'help'..."}
                 className="terminal-input"
                 autoFocus
               />
