@@ -2,14 +2,14 @@ import React, { useState, useEffect, useRef } from 'react';
 import './AdvancedFeatures.css';
 
 export const AdvancedFeatures: React.FC = () => {
-  const [ping, setPing] = useState<number>(12);
+  const [ping, setPing] = useState<number>(10);
   const [currentTime, setCurrentTime] = useState<string>('');
   const [inputVal, setInputVal] = useState<string>('');
   const [matrixActive, setMatrixActive] = useState<boolean>(true);
   
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
-    { type: 'system', text: 'Nexa Global Tech Terminal v3.0.0 (Enterprise Cloud Core)' },
-    { type: 'system', text: 'Type "help" for commands, or try "ping", "logs-on", "whoami".' },
+    { type: 'system', text: 'Nexa Global Tech Terminal v4.0.0 (AI Autonomous Core)' },
+    { type: 'system', text: 'Type "help", "ai <pesan>", "decrypt", "ping", or "whoami".' },
   ]);
   
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -20,24 +20,9 @@ export const AdvancedFeatures: React.FC = () => {
     const timer = setInterval(() => {
       const now = new Date();
       setCurrentTime(now.toTimeString().split(' ')[0]);
-      setPing(Math.floor(Math.random() * 6) + 8);
+      setPing(Math.floor(Math.random() * 5) + 8);
     }, 1000);
     return () => clearInterval(timer);
-  }, []);
-
-  // Background Live Server Log Streamer Simulation
-  useEffect(() => {
-    const logInterval = setInterval(() => {
-      const actions = [
-        '[INFO] Edge node cache revalidated successfully.',
-        '[SECURITY] SSL Handshake verified from TLS 1.3 protocol.',
-        '[SUCCESS] Container microservice health-check: 200 OK.',
-        '[METRICS] Ingress traffic spike absorbed by Vercel CDN.',
-      ];
-      const randomLog = actions[Math.floor(Math.random() * actions.length)];
-      // Kita masukkan ke background logs secara berkala tanpa mengganggu input utama
-    }, 7000);
-    return () => clearInterval(logInterval);
   }, []);
 
   // Matrix Rain Canvas Animation Effect
@@ -90,16 +75,41 @@ export const AdvancedFeatures: React.FC = () => {
   }, [logs]);
 
   const executeCommand = (cmdText: string) => {
-    const cmd = cmdText.trim().toLowerCase();
-    if (!cmd) return;
+    const rawCmd = cmdText.trim();
+    const lowerCmd = rawCmd.toLowerCase();
+    if (!rawCmd) return;
 
-    const newLogs = [...logs, { type: 'input', text: `$ ${cmdText}` }];
+    const newLogs = [...logs, { type: 'input', text: `$ ${rawCmd}` }];
 
-    switch (cmd) {
+    // Handle AI Assistant prefix command: "ai ..."
+    if (lowerCmd.startsWith('ai ')) {
+      const query = rawCmd.substring(3).trim();
+      let aiResponse = `[Nexa AI Core]: Menerima query "${query}". Sistem beroperasi optimal pada stack React, TypeScript, Vite, dan Vercel Edge.`;
+      
+      if (query.includes('react')) {
+        aiResponse = '[Nexa AI Core]: React adalah pustaka UI berbasis komponen deklaratif berkinerja sangat tinggi.';
+      } else if (query.includes('docker') || query.includes('cicd')) {
+        aiResponse = '[Nexa AI Core]: CI/CD Pipeline & Docker memastikan konsistensi deployment otomatis dari repository git ke production.';
+      } else if (query.includes('halo') || query.includes('hai')) {
+        aiResponse = '[Nexa AI Core]: Halo, Engineer! Ada infrastruktur cloud atau kode yang ingin kita optimalkan hari ini?';
+      }
+
+      newLogs.push({ type: 'output', text: aiResponse });
+      setLogs(newLogs);
+      return;
+    }
+
+    switch (lowerCmd) {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: about, skills, status, hire, whoami, ping, matrix-on, matrix-off, clear, react, typescript, vite, tailwind, docker',
+          text: 'Commands: ai <pesan>, decrypt, about, skills, status, hire, whoami, ping, matrix-on, matrix-off, clear, react, typescript, vite, tailwind, docker',
+        });
+        break;
+      case 'decrypt':
+        newLogs.push({
+          type: 'output',
+          text: '[!] Bypassing firewall... Decrypting root keys...\n[SUCCESS] Access Granted. Classified Data: Nexa Autonomous Cloud v4 is Fully Operational.',
         });
         break;
       case 'about':
@@ -117,19 +127,19 @@ export const AdvancedFeatures: React.FC = () => {
       case 'status':
         newLogs.push({
           type: 'output',
-          text: `Edge Status: ONLINE | Latency: ${ping}ms | Region: ap-southeast-1 | Uptime: 99.99%`,
+          text: `Edge Status: ONLINE | Latency: ${ping}ms | Region: ap-southeast-1 | Security: SECURE`,
         });
         break;
       case 'ping':
         newLogs.push({
           type: 'output',
-          text: `PING nexaglobal.tech (127.0.0.1) 56(84) bytes of data.\n64 bytes from 127.0.0.1: icmp_seq=1 ttl=58 time=${ping} ms\n64 bytes from 127.0.0.1: icmp_seq=2 ttl=58 time=${ping + 2} ms\n--- nexaglobal.tech ping statistics --- 2 packets transmitted, 2 received, 0% packet loss.`,
+          text: `PING nexaglobal.tech (127.0.0.1) -> 64 bytes: icmp_seq=1 time=${ping}ms | 0% packet loss.`,
         });
         break;
       case 'whoami':
         newLogs.push({
           type: 'output',
-          text: 'Access Granted. Target IP: 127.0.0.1 | Role: Enterprise System Architect | Security Level: Root',
+          text: 'Access Granted. User: Elite System Architect | Clearance: Level 5 Root.',
         });
         break;
       case 'matrix-on':
@@ -182,7 +192,7 @@ export const AdvancedFeatures: React.FC = () => {
       default:
         newLogs.push({
           type: 'error',
-          text: `command not found: ${cmd}. Type "help" for available options.`,
+          text: `command not found: ${rawCmd}. Ketik "ai halo" atau "help" untuk opsi.`,
         });
     }
 
@@ -226,9 +236,9 @@ export const AdvancedFeatures: React.FC = () => {
 
         {/* Info Card / Welcome Preview */}
         <div style={{ maxWidth: '700px', margin: '0 auto 20px auto', background: 'rgba(15, 23, 42, 0.85)', border: '1px solid #1e293b', borderRadius: '8px', padding: '15px', color: '#cbd5e1', fontSize: '0.9rem', backdropFilter: 'blur(5px)' }}>
-          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>🚀 Enterprise Cloud Node Active:</p>
+          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>⚡ Nexa AI Terminal v4.0 Active:</p>
           <p style={{ margin: 0 }}>
-            Ketik perintah <code style={{color: '#4ade80'}}>ping</code> atau <code style={{color: '#4ade80'}}>whoami</code> di bawah untuk menjalankan simulasi diagnostik jaringan secara langsung!
+            Coba ketik perintah <code style={{color: '#4ade80'}}>ai halo</code> atau <code style={{color: '#4ade80'}}>decrypt</code> di bawah untuk menguji sistem kecerdasan buatan terminal!
           </p>
         </div>
 
@@ -252,7 +262,7 @@ export const AdvancedFeatures: React.FC = () => {
                 type="text"
                 value={inputVal}
                 onChange={(e) => setInputVal(e.target.value)}
-                placeholder="ketik 'ping', 'whoami', 'help'..."
+                placeholder="ketik 'ai apa itu react', 'decrypt', 'help'..."
                 className="terminal-input"
                 autoFocus
               />
