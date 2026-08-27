@@ -2,35 +2,69 @@ import React, { useState, useEffect, useRef } from 'react';
 import './AdvancedFeatures.css';
 
 export const AdvancedFeatures: React.FC = () => {
-  const [ping, setPing] = useState<number>(10);
-  const [currentTime, setCurrentTime] = useState<string>('');
+  const [ping, setPing] = useState<number>(7);
   const [inputVal, setInputVal] = useState<string>('');
   const [matrixActive, setMatrixActive] = useState<boolean>(true);
   const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
-  const [isListening, setIsListening] = useState<boolean>(false);
-  const [camActive, setCamActive] = useState<boolean>(false);
+  const [bmgActive, setBmgActive] = useState<boolean>(false);
+  const [quantumMode, setQuantumMode] = useState<boolean>(true);
   
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
-    { type: 'system', text: 'Nexa Cosmic Core v10.0.0 (Global Neural & Synth-Speech)' },
-    { type: 'system', text: 'Lead Architect & Owner: Maulana Rifa\'i' },
-    { type: 'system', text: 'Type "help", "chat <pesan>", "speak <teks>", "cam", or "run 25 * 4".' },
+    { type: 'system', text: 'Nexa Quantum Singularity Core v12.5.0 (Global Supreme God-Tier)' },
+    { type: 'system', text: 'Supreme Architect & Master Owner: Maulana Rifa\'i' },
+    { type: 'system', text: 'Type "help", "ai <pertanyaan>", "matrix-3d", "bmg on", or "hack".' },
   ]);
   
   const terminalEndRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const bmgIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Live Clock & Ping Simulator
+  // Live Quantum Ping Fluctuation
   useEffect(() => {
     const timer = setInterval(() => {
-      const now = new Date();
-      setCurrentTime(now.toTimeString().split(' ')[0]);
-      setPing(Math.floor(Math.random() * 5) + 8);
+      setPing(Math.floor(Math.random() * 3) + 6);
     }, 1000);
     return () => clearInterval(timer);
   }, []);
 
-  // Web Audio API Mechanical Click Sound Generator
+  // Cyberpunk Ambient Synth Generator
+  useEffect(() => {
+    if (!bmgActive) {
+      if (bmgIntervalRef.current) clearInterval(bmgIntervalRef.current);
+      return;
+    }
+
+    const frequencies = [110, 146.83, 220, 293.66, 329.63];
+    const playCosmicTone = () => {
+      try {
+        const AudioContext = window.AudioContext || (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
+        const ctx = new AudioContext();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(frequencies[Math.floor(Math.random() * frequencies.length)], ctx.currentTime);
+
+        gain.gain.setValueAtTime(0.01, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + 0.8);
+
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+
+        osc.start();
+        osc.stop(ctx.currentTime + 0.8);
+      } catch {
+        // Audio policy fallback
+      }
+    };
+
+    bmgIntervalRef.current = setInterval(playCosmicTone, 500);
+    return () => {
+      if (bmgIntervalRef.current) clearInterval(bmgIntervalRef.current);
+    };
+  }, [bmgActive]);
+
+  // Mechanical Click Audio
   const playKeySound = () => {
     if (!soundEnabled) return;
     try {
@@ -40,71 +74,32 @@ export const AdvancedFeatures: React.FC = () => {
       const gain = ctx.createGain();
 
       osc.type = 'triangle';
-      osc.frequency.setValueAtTime(120 + Math.random() * 80, ctx.currentTime);
-      
-      gain.gain.setValueAtTime(0.03, ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+      osc.frequency.setValueAtTime(150 + Math.random() * 50, ctx.currentTime);
+      gain.gain.setValueAtTime(0.02, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.03);
 
       osc.connect(gain);
       gain.connect(ctx.destination);
-
       osc.start();
-      osc.stop(ctx.currentTime + 0.04);
+      osc.stop(ctx.currentTime + 0.03);
     } catch {
-      // Ignore audio context errors if blocked by browser policy
+      // Ignore
     }
   };
 
-  // Web Speech Synthesis (Text-to-Speech Robot Voice)
+  // Text-to-Speech Synth
   const speakText = (text: string) => {
     if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel(); // Stop previous speech
+      window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = 'id-ID';
       utterance.rate = 1.0;
-      utterance.pitch = 0.8; // Sedikit ngebass ala AI robot
+      utterance.pitch = 0.85;
       window.speechSynthesis.speak(utterance);
     }
   };
 
-  // Web Speech Recognition API Integration
-  const startVoiceCommand = () => {
-    const SpeechRecognition = window.SpeechRecognition || (window as unknown as { webkitSpeechRecognition: typeof window.SpeechRecognition }).webkitSpeechRecognition;
-    
-    if (!SpeechRecognition) {
-      alert('Maaf, browser Anda tidak mendukung fitur Voice Recognition.');
-      return;
-    }
-
-    const recognition = new SpeechRecognition();
-    recognition.lang = 'id-ID';
-    recognition.interimResults = false;
-    recognition.maxAlternatives = 1;
-
-    recognition.onstart = () => {
-      setIsListening(true);
-      setLogs((prev) => [...prev, { type: 'system', text: '[🎙️] Mendengarkan suara... (contoh: "chat Halo dunia", "ping", "owner").' }]);
-    };
-
-    recognition.onresult = (event: SpeechRecognitionEvent) => {
-      const speechToText = event.results[0][0].transcript.toLowerCase();
-      setInputVal(speechToText);
-      executeCommand(speechToText);
-    };
-
-    recognition.onerror = () => {
-      setIsListening(false);
-      setLogs((prev) => [...prev, { type: 'error', text: '[!] Gagal mendengarkan suara. Coba ketik secara manual.' }]);
-    };
-
-    recognition.onend = () => {
-      setIsListening(false);
-    };
-
-    recognition.start();
-  };
-
-  // Matrix Rain Canvas Animation Effect
+  // Quantum 3D Constellation & Matrix Rain Canvas Engine
   useEffect(() => {
     if (!matrixActive) return;
     const canvas = canvasRef.current;
@@ -112,70 +107,55 @@ export const AdvancedFeatures: React.FC = () => {
     const ctx = canvas.getContext('2d');
     if (!ctx) return;
 
+    let animationFrameId: number;
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
-    const katakana = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッン';
-    const latin = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*+-_';
-    const alphabet = katakana + latin;
-
-    const fontSize = 16;
+    const chars = 'MAULANARIFAI010101XYZΩΨΔ';
+    const fontSize = 14;
     const columns = Math.floor(canvas.width / fontSize);
-    const rainDrops: number[] = [];
+    const drops: number[] = [];
 
-    for (let x = 0; x < columns; x++) {
-      rainDrops[x] = 1;
+    for (let i = 0; i < columns; i++) {
+      drops[i] = 1;
     }
 
     const render = () => {
-      ctx.fillStyle = 'rgba(3, 7, 18, 0.05)';
+      ctx.fillStyle = 'rgba(2, 6, 23, 0.1)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      ctx.fillStyle = '#00ff66';
+      ctx.fillStyle = quantumMode ? '#38bdf8' : '#00ff66';
       ctx.font = `${fontSize}px monospace`;
 
-      for (let i = 0; i < rainDrops.length; i++) {
-        const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-        ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
 
-        if (rainDrops[i] * fontSize > canvas.height && Math.random() > 0.975) {
-          rainDrops[i] = 0;
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.98) {
+          drops[i] = 0;
         }
-        rainDrops[i]++;
+        drops[i]++;
       }
+      animationFrameId = requestAnimationFrame(render);
     };
 
-    const interval = setInterval(render, 30);
-    return () => clearInterval(interval);
-  }, [matrixActive]);
+    render();
+
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener('resize', handleResize);
+    };
+  }, [matrixActive, quantumMode]);
 
   useEffect(() => {
     terminalEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, [logs]);
-
-  // Webcam ASCII Stream Handler
-  const toggleCamStream = async () => {
-    if (camActive) {
-      if (videoRef.current && videoRef.current.srcObject) {
-        const stream = videoRef.current.srcObject as MediaStream;
-        stream.getTracks().forEach(track => track.stop());
-      }
-      setCamActive(false);
-      setLogs(prev => [...prev, { type: 'system', text: '[cam] Matrix Webcam Stream stopped.' }]);
-    } else {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { width: 160, height: 120 } });
-        if (videoRef.current) {
-          videoRef.current.srcObject = stream;
-          videoRef.current.play();
-        }
-        setCamActive(true);
-        setLogs(prev => [...prev, { type: 'system', text: '[cam] Matrix ASCII Webcam Stream active! Wajah Anda dipetakan ke terminal.' }]);
-      } catch {
-        setLogs(prev => [...prev, { type: 'error', text: '[!] Akses kamera ditolak atau tidak tersedia.' }]);
-      }
-    }
-  };
 
   const executeCommand = (cmdText: string) => {
     const rawCmd = cmdText.trim();
@@ -184,143 +164,39 @@ export const AdvancedFeatures: React.FC = () => {
 
     const newLogs = [...logs, { type: 'input', text: `$ ${rawCmd}` }];
 
-    // Handle Neural Chat command: "chat <pesan>"
-    if (lowerCmd.startsWith('chat ')) {
-      const message = rawCmd.substring(5).trim();
-      const broadcastMsg = `[Neural Global Broadcast]: "${message}" -> Terkirim ke jaringan satelit Nexa Network. Dipantau oleh Maulana Rifa'i.`;
-      newLogs.push({ type: 'output', text: broadcastMsg });
-      speakText(message);
-      setLogs(newLogs);
-      return;
-    }
-
-    // Handle Text-to-Speech Synth-Speech: "speak <teks>"
-    if (lowerCmd.startsWith('speak ')) {
-      const speechText = rawCmd.substring(6).trim();
-      speakText(speechText);
-      newLogs.push({ type: 'output', text: `[AI Voice Synthesis]: Mengucapkan "${speechText}" lewat speaker perangkat.` });
-      setLogs(newLogs);
-      return;
-    }
-
-    // Handle JS Code Sandbox Runner: "run <script>"
-    if (lowerCmd.startsWith('run ')) {
-      const codeSnippet = rawCmd.substring(4).trim();
-      try {
-        const result = Function(`'use strict'; return (${codeSnippet});`)();
-        newLogs.push({ type: 'output', text: `[JS Sandbox Result] => ${String(result)}` });
-      } catch (err: unknown) {
-        const errorMessage = err instanceof Error ? err.message : String(err);
-        try {
-          const logsOutput: string[] = [];
-          const customConsole = { log: (...args: unknown[]) => logsOutput.push(args.join(' ')) };
-          const runFunc = new Function('console', `'use strict'; ${codeSnippet}`);
-          runFunc(customConsole);
-          newLogs.push({ type: 'output', text: `[JS Output] => ${logsOutput.join('\n') || 'Executed successfully.'}` });
-        } catch (innerErr: unknown) {
-          const innerMessage = innerErr instanceof Error ? innerErr.message : String(innerErr);
-          newLogs.push({ type: 'error', text: `[JS Error] => ${errorMessage || innerMessage}` });
-        }
-      }
-      setLogs(newLogs);
-      return;
-    }
-
-    // Webcam Command
-    if (lowerCmd === 'cam' || lowerCmd === 'webcam') {
-      toggleCamStream();
-      setLogs(newLogs);
-      return;
-    }
-
-    // Trace Route Simulation
-    if (lowerCmd === 'trace' || lowerCmd === 'traceroute') {
-      newLogs.push({
-        type: 'output',
-        text: 'Tracing route to nexaglobal.tech [127.0.0.1]\n 1. Edge-Gateway (10.0.0.1) - 2ms\n 2. Cloud-Proxy-SG (192.168.1.1) - 5ms\n 3. Master-Server-Root (127.0.0.1) - 8ms\nTrace complete. Secured by Maulana Rifa\'i.',
-      });
-      setLogs(newLogs);
-      return;
-    }
-
-    // Game Snake Simulation text-based
-    if (lowerCmd === 'snake' || lowerCmd === 'game') {
-      newLogs.push({
-        type: 'output',
-        text: '🎮 [NEXA ARCADE SNAKE]\n+--------------------+\n| . . . . . . . . .  |\n| . . O O O . . . .  |\n| . . . . O . . . .  |\n| . . . . # (food) . |\n+--------------------+\nScore: 30 | Status: RUNNING!\n(Arcade mode buatan Maulana Rifa\'i!)',
-      });
-      setLogs(newLogs);
-      return;
-    }
-
-    // Sound toggle commands
-    if (lowerCmd === 'sfx-on') {
-      setSoundEnabled(true);
-      newLogs.push({ type: 'output', text: 'Mechanical keyboard sound FX activated.' });
-      setLogs(newLogs);
-      return;
-    }
-
-    if (lowerCmd === 'sfx-off') {
-      setSoundEnabled(false);
-      newLogs.push({ type: 'output', text: 'Mechanical keyboard sound FX deactivated.' });
-      setLogs(newLogs);
-      return;
-    }
-
-    // Easter Egg: Dangerous Linux command simulation
-    if (lowerCmd === 'sudo rm -rf /' || lowerCmd === 'rm -rf /') {
-      newLogs.push({
-        type: 'error',
-        text: '[WARNING] CRITICAL ERROR: Attempting to wipe system root directory...\n[!] Intercepted by Master Firewall Security...\n[SUCCESS] Just kidding! This system is heavily armored and owned by Maulana Rifa\'i. Nice try! 😎',
-      });
-      setLogs(newLogs);
-      return;
-    }
-
-    // Cyber Attack Simulation
-    if (lowerCmd === 'attack-sim' || lowerCmd === 'hack') {
-      newLogs.push({
-        type: 'output',
-        text: '[*] Initializing penetration testing sequence...\n[+] Scanning target firewall ports (80, 443, 22)...\n[+] Bypassing sub-routine encryption layers...\n[SUCCESS] Target penetrated! System fully secured and monitored by Maulana Rifa\'i.',
-      });
-      setLogs(newLogs);
-      return;
-    }
-
-    // Handle Code Snippet command: "code <lang>"
-    if (lowerCmd.startsWith('code ')) {
-      const targetLang = lowerCmd.substring(5).trim();
-      let codeSnippet = '';
-
-      if (targetLang === 'react' || targetLang === 'tsx') {
-        codeSnippet = `// React Component Structure by Maulana Rifa'i\nimport React, { useState } from 'react';\n\nexport const App = () => {\n  const [count, setCount] = useState(0);\n  return (\n    <div className="p-4 bg-slate-900 text-white">\n      <h1>Nexa Cloud UI</h1>\n      <button onClick={() => setCount(count + 1)}>Clicks: {count}</button>\n    </div>\n  );\n};`;
-      } else if (targetLang === 'typescript' || targetLang === 'ts') {
-        codeSnippet = `// TypeScript Enterprise Interface\ninterface CloudConfig {\n  nodeId: string;\n  region: string;\n  secure: boolean;\n}\n\nconst deployNode = (config: CloudConfig): void => {\n  console.log(\`Deploying to \${config.region}...\`);\n};`;
-      } else if (targetLang === 'docker') {
-        codeSnippet = `# Dockerfile for Edge Deployment\nFROM node:18-alpine\nWORKDIR /app\nCOPY package*.json ./\nRUN npm install\nCOPY . .\nEXPOSE 3000\nCMD ["npm", "run", "dev"]`;
-      } else {
-        codeSnippet = `// General Code Snippet\nconst systemOwner = "Maulana Rifa'i";\nconsole.log(\`System initialized by \${systemOwner}\`);`;
-      }
-
-      newLogs.push({ type: 'output', text: codeSnippet });
-      setLogs(newLogs);
-      return;
-    }
-
-    // Handle AI Assistant prefix command: "ai ..."
     if (lowerCmd.startsWith('ai ')) {
       const query = rawCmd.substring(3).trim();
-      let aiResponse = `[Nexa AI Core]: Halo! Saya asisten AI buatan Maulana Rifa'i. Menerima query "${query}".`;
+      let response = `[Quantum AI Matrix]: Analisis mendalam untuk "${query}" berhasil diproses. Sistem ini diarsiteki secara penuh oleh Maulana Rifa'i dengan standar rekayasa perangkat lunak tingkat kosmik.`;
       
-      if (query.includes('react')) {
-        aiResponse = '[Nexa AI Core]: React adalah pustaka UI komponen deklaratif berperforma tinggi buatan Maulana Rifa\'i.';
-      } else if (query.includes('owner') || query.includes('pembuat')) {
-        aiResponse = '[Nexa AI Core]: Website dan terminal ini dikembangkan secara mandiri oleh Maulana Rifa\'i.';
+      if (query.includes('siapa') || query.includes('pembuat') || query.includes('owner')) {
+        response = "[Quantum AI Matrix]: Pemilik mutlak, arsitek utama, dan pengembang jenius di balik seluruh sistem agung ini adalah Maulana Rifa'i.";
+      } else if (query.includes('teknologi') || query.includes('stack')) {
+        response = "[Quantum AI Matrix]: Dibangun menggunakan React 18, TypeScript, Tailwind CSS, WebGL/Canvas Shaders, dan Web Audio API kustom.";
       }
 
-      speakText(aiResponse);
-      newLogs.push({ type: 'output', text: aiResponse });
+      speakText(response);
+      newLogs.push({ type: 'output', text: response });
+      setLogs(newLogs);
+      return;
+    }
+
+    if (lowerCmd === 'bmg on') {
+      setBmgActive(true);
+      newLogs.push({ type: 'output', text: '[Quantum Audio]: Synthwave quantum ambience activated.' });
+      setLogs(newLogs);
+      return;
+    }
+
+    if (lowerCmd === 'bmg off') {
+      setBmgActive(false);
+      newLogs.push({ type: 'output', text: '[Quantum Audio]: Ambient sound deactivated.' });
+      setLogs(newLogs);
+      return;
+    }
+
+    if (lowerCmd === 'matrix-3d') {
+      setQuantumMode(!quantumMode);
+      newLogs.push({ type: 'output', text: `[Display Engine]: Mode visual diset ke ${!quantumMode ? 'Matrix Green' : 'Quantum Cyan Blue'}.` });
       setLogs(newLogs);
       return;
     }
@@ -329,41 +205,27 @@ export const AdvancedFeatures: React.FC = () => {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: chat <pesan>, speak <teks>, cam, run <js_code>, trace, snake, attack-sim, sfx-on, sfx-off, code react, code typescript, code docker, ai <pesan>, decrypt, owner, status, ping, matrix-on, matrix-off, clear',
+          text: 'Quantum Commands: ai <pertanyaan>, bmg on, bmg off, matrix-3d, owner, status, ping, clear',
         });
         break;
       case 'owner':
       case 'author':
         newLogs.push({
           type: 'output',
-          text: 'System Owner & Lead Architect: Maulana Rifa\'i | Elite Full-Stack & DevOps Engineer.',
-        });
-        break;
-      case 'decrypt':
-        newLogs.push({
-          type: 'output',
-          text: '[!] Bypassing firewall... Decrypting root keys...\n[SUCCESS] Master Controller & Creator: Maulana Rifa\'i.',
+          text: 'Supreme Architect & Founder: Maulana Rifa\'i | Elite Full-Stack Systems Engineer.',
         });
         break;
       case 'status':
         newLogs.push({
           type: 'output',
-          text: `Edge Status: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i | Cosmic Core: ACTIVE`,
+          text: `Quantum Singularity Node: ONLINE | Latency: ${ping}ms | Supreme Master: Maulana Rifa'i`,
         });
         break;
       case 'ping':
         newLogs.push({
           type: 'output',
-          text: `PING nexaglobal.tech (127.0.0.1) -> 64 bytes: time=${ping}ms | 0% packet loss.`,
+          text: `QUANTUM PING -> 127.0.0.1: time=${ping}ms | Zero Packet Loss | Stable Node.`,
         });
-        break;
-      case 'matrix-on':
-        setMatrixActive(true);
-        newLogs.push({ type: 'output', text: 'Matrix rain background effect activated.' });
-        break;
-      case 'matrix-off':
-        setMatrixActive(false);
-        newLogs.push({ type: 'output', text: 'Matrix rain background effect deactivated.' });
         break;
       case 'clear':
         setLogs([]);
@@ -371,7 +233,7 @@ export const AdvancedFeatures: React.FC = () => {
       default:
         newLogs.push({
           type: 'error',
-          text: `command not found: ${rawCmd}. Ketik "chat Halo", "speak Halo AI", atau "help".`,
+          text: `Quantum Error: Perintah "${rawCmd}" tidak dikenali. Ketik "ai siapa pemilik web ini", "bmg on", atau "help".`,
         });
     }
 
@@ -391,7 +253,6 @@ export const AdvancedFeatures: React.FC = () => {
 
   return (
     <div className="advanced-container" style={{ position: 'relative', overflow: 'hidden', minHeight: '100vh' }}>
-      {/* Matrix Rain Canvas Background */}
       {matrixActive && (
         <canvas
           ref={canvasRef}
@@ -403,73 +264,70 @@ export const AdvancedFeatures: React.FC = () => {
             height: '100%',
             zIndex: 0,
             pointerEvents: 'none',
-            opacity: 0.25,
+            opacity: 0.35,
           }}
         />
       )}
 
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: '800px', margin: '0 auto', padding: '10px' }}>
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: '820px', margin: '0 auto', padding: '12px' }}>
         {/* Telemetry Bar */}
         <div className="telemetry-bar" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '8px' }}>
           <div>
             <span className="status-indicator">
-              <span className="pulse-dot"></span> Vercel Edge: ONLINE
+              <span className="pulse-dot"></span> Quantum Core: ONLINE
             </span>
             <span className="telemetry-info" style={{ marginLeft: '12px' }}>Ping: {ping}ms</span>
-            <span className="telemetry-info" style={{ marginLeft: '12px' }}>Owner: Maulana Rifa'i</span>
+            <span className="telemetry-info" style={{ marginLeft: '12px' }}>Master: Maulana Rifa'i</span>
           </div>
-          <div style={{ display: 'flex', gap: '8px' }}>
+          <div style={{ display: 'flex', gap: '6px' }}>
             <button
-              onClick={toggleCamStream}
+              onClick={() => setBmgActive(!bmgActive)}
               style={{
-                background: camActive ? '#ef4444' : '#0284c7',
+                background: bmgActive ? '#38bdf8' : '#1e293b',
                 color: '#fff',
-                border: 'none',
+                border: '1px solid #38bdf8',
                 padding: '5px 10px',
                 borderRadius: '4px',
                 cursor: 'pointer',
                 fontWeight: 'bold',
-                fontSize: '0.8rem',
+                fontSize: '0.75rem',
               }}
             >
-              {camActive ? '📷 Stop Cam' : '📷 Matrix Cam'}
+              {bmgActive ? '🎵 Audio: ON' : '🎵 Audio: OFF'}
             </button>
             <button
-              onClick={startVoiceCommand}
+              onClick={() => setQuantumMode(!quantumMode)}
               style={{
-                background: isListening ? '#ef4444' : '#22c55e',
+                background: '#0284c7',
                 color: '#fff',
                 border: 'none',
                 padding: '5px 10px',
                 borderRadius: '4px',
                 cursor: 'pointer',
                 fontWeight: 'bold',
-                fontSize: '0.8rem',
+                fontSize: '0.75rem',
               }}
             >
-              {isListening ? '🎙️ Mendengarkan...' : '🎙️ Voice'}
+              🎨 Theme FX
             </button>
           </div>
         </div>
 
-        {/* Hidden video stream element for webcam processing */}
-        <video ref={videoRef} style={{ display: 'none' }} playsInline muted />
-
-        {/* Info Card / Welcome Preview */}
-        <div style={{ margin: '0 0 20px 0', background: 'rgba(15, 23, 42, 0.85)', border: '1px solid #1e293b', borderRadius: '8px', padding: '15px', color: '#cbd5e1', fontSize: '0.9rem', backdropFilter: 'blur(5px)' }}>
-          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>✨ Cosmic Neural Terminal (Maulana Rifa'i):</p>
+        {/* Info Card */}
+        <div style={{ margin: '0 0 15px 0', background: 'rgba(15, 23, 42, 0.9)', border: '1px solid #38bdf8', borderRadius: '8px', padding: '15px', color: '#cbd5e1', fontSize: '0.9rem', backdropFilter: 'blur(8px)' }}>
+          <p style={{ margin: '0 0 6px 0', color: '#38bdf8', fontWeight: 'bold' }}>🌌 Quantum Singularity Terminal (Maulana Rifa'i):</p>
           <p style={{ margin: 0 }}>
-            Ketik <code style={{color: '#4ade80'}}>chat Halo Dunia!</code> atau <code style={{color: '#4ade80'}}>speak Halo Maulana Rifa'i</code> untuk mendengar suara robot AI!
+            Ketik <code style={{color: '#38bdf8'}}>ai siapa pembuat web ini?</code> atau <code style={{color: '#38bdf8'}}>bmg on</code> untuk menikmati pengalaman web tingkat dewa tertinggi!
           </p>
         </div>
 
         {/* Terminal Box */}
-        <div className="terminal-box" style={{ background: 'rgba(3, 7, 18, 0.9)', backdropFilter: 'blur(8px)' }}>
+        <div className="terminal-box" style={{ background: 'rgba(2, 6, 23, 0.95)', border: '1px solid #334155', backdropFilter: 'blur(10px)' }}>
           <div className="terminal-header">
             <span className="dot red"></span>
             <span className="dot yellow"></span>
             <span className="dot green"></span>
-            <span className="terminal-title">maulana-rifai@cosmic-terminal:~</span>
+            <span className="terminal-title">maulana-rifai@quantum-singularity:~</span>
           </div>
           <div className="terminal-body">
             {logs.map((log, index) => (
@@ -478,12 +336,12 @@ export const AdvancedFeatures: React.FC = () => {
               </div>
             ))}
             <form onSubmit={handleFormSubmit} className="terminal-form">
-              <span className="prompt">$</span>
+              <span className="prompt" style={{ color: quantumMode ? '#38bdf8' : '#00ff66' }}>$</span>
               <input
                 type="text"
                 value={inputVal}
                 onChange={handleInputChange}
-                placeholder="ketik 'chat Halo', 'speak Selamat datang', 'help'..."
+                placeholder="ketik 'ai ...', 'bmg on', 'status', 'help'..."
                 className="terminal-input"
                 autoFocus
               />
