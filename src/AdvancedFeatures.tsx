@@ -6,11 +6,12 @@ export const AdvancedFeatures: React.FC = () => {
   const [currentTime, setCurrentTime] = useState<string>('');
   const [inputVal, setInputVal] = useState<string>('');
   const [matrixActive, setMatrixActive] = useState<boolean>(true);
+  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
   
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
-    { type: 'system', text: 'Nexa Global Cyber Core v6.0.0 (God-Tier Edition)' },
+    { type: 'system', text: 'Nexa Supreme Terminal v7.0.0 (Audio & Game Engine)' },
     { type: 'system', text: 'Lead Architect & Owner: Maulana Rifa\'i' },
-    { type: 'system', text: 'Type "help", "attack-sim", "code react", "ai <pesan>", or try "sudo rm -rf /".' },
+    { type: 'system', text: 'Type "help", "snake", "attack-sim", "sfx-off", or "code react".' },
   ]);
   
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -25,6 +26,32 @@ export const AdvancedFeatures: React.FC = () => {
     }, 1000);
     return () => clearInterval(timer);
   }, []);
+
+  // Web Audio API Mechanical Click Sound Generator
+  const playKeySound = () => {
+    if (!soundEnabled) return;
+    try {
+      const AudioContext = window.AudioContext || (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
+      const ctx = new AudioContext();
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = 'triangle';
+      // Random pitch tipis untuk efek mekanik natural
+      osc.frequency.setValueAtTime(120 + Math.random() * 80, ctx.currentTime);
+      
+      gain.gain.setValueAtTime(0.03, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.04);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+
+      osc.start();
+      osc.stop(ctx.currentTime + 0.04);
+    } catch {
+      // Ignore audio context errors if blocked by browser policy
+    }
+  };
 
   // Matrix Rain Canvas Animation Effect
   useEffect(() => {
@@ -82,6 +109,31 @@ export const AdvancedFeatures: React.FC = () => {
 
     const newLogs = [...logs, { type: 'input', text: `$ ${rawCmd}` }];
 
+    // Game Snake Simulation text-based
+    if (lowerCmd === 'snake' || lowerCmd === 'game') {
+      newLogs.push({
+        type: 'output',
+        text: '🎮 [NEXA ARCADE SNAKE]\n+--------------------+\n| . . . . . . . . .  |\n| . . O O O . . . .  |\n| . . . . O . . . .  |\n| . . . . # (food) . |\n+--------------------+\nScore: 30 | Status: RUNNING!\n(Gunakan tombol panah atau nikmati arcade mode buatan Maulana Rifa\'i ini!)',
+      });
+      setLogs(newLogs);
+      return;
+    }
+
+    // Sound toggle commands
+    if (lowerCmd === 'sfx-on') {
+      setSoundEnabled(true);
+      newLogs.push({ type: 'output', text: 'Mechanical keyboard sound FX activated.' });
+      setLogs(newLogs);
+      return;
+    }
+
+    if (lowerCmd === 'sfx-off') {
+      setSoundEnabled(false);
+      newLogs.push({ type: 'output', text: 'Mechanical keyboard sound FX deactivated.' });
+      setLogs(newLogs);
+      return;
+    }
+
     // Easter Egg: Dangerous Linux command simulation
     if (lowerCmd === 'sudo rm -rf /' || lowerCmd === 'rm -rf /') {
       newLogs.push({
@@ -92,11 +144,11 @@ export const AdvancedFeatures: React.FC = () => {
       return;
     }
 
-    // God-Tier Simulation: Cyber Attack / Penetration Testing
+    // Cyber Attack Simulation
     if (lowerCmd === 'attack-sim' || lowerCmd === 'hack') {
       newLogs.push({
         type: 'output',
-        text: '[*] Initializing penetration testing sequence...\n[+] Scanning target firewall ports (80, 443, 22)...\n[+] Bypassing sub-routine encryption layers...\n[+] Injecting payload to secure node...\n[SUCCESS] Target penetrated! System fully secured and monitored by Maulana Rifa\'i.',
+        text: '[*] Initializing penetration testing sequence...\n[+] Scanning target firewall ports (80, 443, 22)...\n[+] Bypassing sub-routine encryption layers...\n[SUCCESS] Target penetrated! System fully secured and monitored by Maulana Rifa\'i.',
       });
       setLogs(newLogs);
       return;
@@ -142,7 +194,7 @@ export const AdvancedFeatures: React.FC = () => {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: attack-sim, code react, code typescript, code docker, ai <pesan>, decrypt, owner, skills, status, ping, matrix-on, matrix-off, clear',
+          text: 'Commands: snake, attack-sim, sfx-on, sfx-off, code react, code typescript, code docker, ai <pesan>, decrypt, owner, status, ping, matrix-on, matrix-off, clear',
         });
         break;
       case 'owner':
@@ -161,7 +213,7 @@ export const AdvancedFeatures: React.FC = () => {
       case 'status':
         newLogs.push({
           type: 'output',
-          text: `Edge Status: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i | Security: GOD-TIER`,
+          text: `Edge Status: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i | Audio SFX: ${soundEnabled ? 'ON' : 'OFF'}`,
         });
         break;
       case 'ping':
@@ -184,11 +236,16 @@ export const AdvancedFeatures: React.FC = () => {
       default:
         newLogs.push({
           type: 'error',
-          text: `command not found: ${rawCmd}. Ketik "attack-sim", "code react", atau "help".`,
+          text: `command not found: ${rawCmd}. Ketik "snake", "attack-sim", atau "help".`,
         });
     }
 
     setLogs(newLogs);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputVal(e.target.value);
+    playKeySound();
   };
 
   const handleFormSubmit = (e: React.FormEvent) => {
@@ -228,9 +285,9 @@ export const AdvancedFeatures: React.FC = () => {
 
         {/* Info Card / Welcome Preview */}
         <div style={{ maxWidth: '700px', margin: '0 auto 20px auto', background: 'rgba(15, 23, 42, 0.85)', border: '1px solid #1e293b', borderRadius: '8px', padding: '15px', color: '#cbd5e1', fontSize: '0.9rem', backdropFilter: 'blur(5px)' }}>
-          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>🚀 God-Tier Terminal Active (Maulana Rifa'i):</p>
+          <p style={{ margin: '0 0 8px 0', color: '#38bdf8', fontWeight: 'bold' }}>🎮 Supreme God-Tier Terminal (Maulana Rifa'i):</p>
           <p style={{ margin: 0 }}>
-            Ketik perintah <code style={{color: '#4ade80'}}>attack-sim</code> atau <code style={{color: '#4ade80'}}>sudo rm -rf /</code> di bawah untuk melihat aksi simulasi tingkat dewa!
+            Ketik perintah <code style={{color: '#4ade80'}}>snake</code> untuk bermain game arcade atau <code style={{color: '#4ade80'}}>sfx-on</code> / <code style={{color: '#4ade80'}}>sfx-off</code> untuk audio ketikan!
           </p>
         </div>
 
@@ -240,7 +297,7 @@ export const AdvancedFeatures: React.FC = () => {
             <span className="dot red"></span>
             <span className="dot yellow"></span>
             <span className="dot green"></span>
-            <span className="terminal-title">maulana-rifai@god-tier-terminal:~</span>
+            <span className="terminal-title">maulana-rifai@supreme-terminal:~</span>
           </div>
           <div className="terminal-body">
             {logs.map((log, index) => (
@@ -253,8 +310,8 @@ export const AdvancedFeatures: React.FC = () => {
               <input
                 type="text"
                 value={inputVal}
-                onChange={(e) => setInputVal(e.target.value)}
-                placeholder="ketik 'attack-sim', 'sudo rm -rf /', 'help'..."
+                onChange={handleInputChange}
+                placeholder="ketik 'snake', 'attack-sim', 'help'..."
                 className="terminal-input"
                 autoFocus
               />
