@@ -1,5 +1,3 @@
-import React from 'react';
-
 export default function App() {
   return (
     <div style={{ padding: '20px', textAlign: 'center', background: '#030712', color: '#fff', minHeight: '100vh', fontFamily: 'sans-serif' }}>
