@@ -1,4 +1,4 @@
-import { AdvancedFeatures } from './src/AdvancedFeatures'; // atau import langsung jika sejajar
+import { AdvancedFeatures } from './AdvancedFeatures';
 
 function App() {
   return (
