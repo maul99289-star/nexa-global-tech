@@ -30,7 +30,7 @@ export const NexaTerminal: React.FC = () => {
 
   const terminalEndRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-  const bmgIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const bmgIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   // Live Telemetry, Threat & Motion Simulation
   useEffect(() => {
