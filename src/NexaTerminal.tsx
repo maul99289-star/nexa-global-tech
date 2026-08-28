@@ -10,22 +10,29 @@ export const NexaTerminal: React.FC = () => {
   const [hackingActive, setHackingActive] = useState<boolean>(false);
   const [hackTarget, setHackTarget] = useState<string>('');
   const [hackAttempts, setHackAttempts] = useState<number>(3);
+  const [matrixRain, setMatrixRain] = useState<boolean>(true);
+
+  // System Telemetry Metrics (PC-Grade simulation)
+  const [cpuUsage, setCpuUsage] = useState<number>(14.2);
+  const [ramUsage, setRamUsage] = useState<number>(4.1);
 
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
-    { type: 'system', text: 'Nexa Global Tech Terminal v9.9.9 [Supreme God-Tier #1 Global Core]' },
+    { type: 'system', text: 'Nexa Global Enterprise OS v10.4.0 [PC-Grade Ultimate Core]' },
     { type: 'system', text: 'Chief Executive Architect & Founder: Maulana Rifa\'i' },
-    { type: 'system', text: 'Ketik "help", "scan", "business", "blockchain", "agents", "firewall", "hack mainframe", "ai <pesan>", atau "owner".' },
+    { type: 'system', text: 'Ketik "help", "scan", "business", "blockchain", "agents", "metrics", "hack mainframe", "ai <pesan>", atau "owner".' },
   ]);
 
   const terminalEndRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const bmgIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Live Quantum Ping
+  // Live Quantum Ping & CPU telemetry fluctuation
   useEffect(() => {
     const timer = setInterval(() => {
       setPing(Math.floor(Math.random() * 2) + 1);
-    }, 1000);
+      setCpuUsage(+(10 + Math.random() * 12).toFixed(1));
+      setRamUsage(+(4.0 + Math.random() * 0.5).toFixed(2));
+    }, 1500);
     return () => clearInterval(timer);
   }, []);
 
@@ -197,6 +204,15 @@ export const NexaTerminal: React.FC = () => {
       return;
     }
 
+    if (lowerCmd === 'metrics' || lowerCmd === 'sys') {
+      newLogs.push({
+        type: 'output',
+        text: `[💻 PC TELEMETRY & SYSTEM MONITOR]:\n- CPU Load: ${cpuUsage}%\n- Memory Allocated: ${ramUsage} GB / 32 GB\n- Quantum Core: Stable (1.000 Qubits)\n- Security Clearance: Root Supreme [Maulana Rifa'i]`,
+      });
+      setLogs(newLogs);
+      return;
+    }
+
     if (lowerCmd === 'firewall' || lowerCmd === 'ddos') {
       setFirewallActive(!firewallActive);
       newLogs.push({
@@ -251,7 +267,7 @@ export const NexaTerminal: React.FC = () => {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: scan, business, blockchain, agents, firewall, hack <target>, bmg on, bmg off, ai <tanya>, owner, status, ping, clear',
+          text: 'Commands: scan, business, blockchain, agents, metrics, firewall, hack <target>, bmg on, bmg off, ai <tanya>, owner, status, ping, clear',
         });
         break;
       case 'owner':
@@ -268,7 +284,7 @@ export const NexaTerminal: React.FC = () => {
         setLogs([]);
         return;
       default:
-        newLogs.push({ type: 'error', text: `Command not found: ${rawCmd}. Ketik "scan", "business", "ai siapa pembuat web ini", atau "help".` });
+        newLogs.push({ type: 'error', text: `Command not found: ${rawCmd}. Ketik "scan", "business", "metrics", "ai siapa pembuat web ini", atau "help".` });
     }
 
     setLogs(newLogs);
@@ -286,54 +302,62 @@ export const NexaTerminal: React.FC = () => {
   };
 
   return (
-    <div style={{ background: '#020617', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '16px', fontFamily: 'monospace', position: 'relative', overflow: 'hidden' }}>
+    <div style={{ background: '#020617', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '12px', fontFamily: 'monospace', position: 'relative', overflow: 'hidden' }}>
       
-      {/* Background Matrix/Green Cipher Text effect */}
-      <div style={{ position: 'absolute', color: '#166534', fontSize: '0.75rem', opacity: 0.35, userSelect: 'none', lineHeight: '1.8', wordBreak: 'break-all', padding: '20px', zIndex: 0 }}>
-        {Array.from({ length: 15 }).map((_, i) => (
-          <div key={i}>
-            MAULANARIFAI010101SUPREMEGODTIERENTERPRISE#1$#@!0101010199AEF82VYAQ9SGV6IQD*+TXG&G7Z1KWS9L3PTWXH1STCNXC99NOVD87KAS3OCMYAR7YYWNN&CCQDFFET4WMKCFOILRAB72VZZ6INCXQDFET4WMCSUB73BGVAZ9UDRS0
+      {/* 🌧️ Matrix Hacker Rain Effect (Hujan Karakter Hijau Dinamis ala PC) */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, color: '#22c55e', fontSize: '0.7rem', opacity: 0.25, userSelect: 'none', lineHeight: '1.4', overflow: 'hidden', zIndex: 0, pointerEvents: 'none', display: 'flex', justifyContent: 'space-around' }}>
+        {Array.from({ length: 12 }).map((_, colIndex) => (
+          <div key={colIndex} style={{ writingMode: 'vertical-rl', animation: `fall ${3 + (colIndex % 4)}s linear infinite`, whiteSpace: 'nowrap' }}>
+            MAULANARIFAI010101SUPREMEGODTIERENTERPRISE#1$#@!0101010199AEF82VYAQ9SGV6IQD*+TXG&G7Z1KWS9L3PTWXH1STCNXC99NOVD87KAS3OCMYAR7YYWNN
           </div>
         ))}
       </div>
 
       {/* Quick Action Control Bar for Supreme Features */}
-      <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '700px', display: 'flex', gap: '6px', flexWrap: 'wrap', marginBottom: '12px' }}>
-        <button onClick={startBiometricScan} style={{ background: scanActive ? '#ef4444' : '#0284c7', color: '#fff', border: 'none', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.7rem' }}>
+      <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '720px', display: 'flex', gap: '5px', flexWrap: 'wrap', marginBottom: '10px' }}>
+        <button onClick={startBiometricScan} style={{ background: scanActive ? '#ef4444' : '#0284c7', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.65rem' }}>
           {scanActive ? '👁️ Scanning...' : '👁️ Biometric Scan'}
         </button>
-        <button onClick={() => executeCommand('business')} style={{ background: '#059669', color: '#fff', border: 'none', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.7rem' }}>
+        <button onClick={() => executeCommand('business')} style={{ background: '#059669', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.65rem' }}>
           📈 AI Business ($1B)
         </button>
-        <button onClick={() => executeCommand('blockchain')} style={{ background: '#7c3aed', color: '#fff', border: 'none', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.7rem' }}>
+        <button onClick={() => executeCommand('blockchain')} style={{ background: '#7c3aed', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.65rem' }}>
           ⛓️ Blockchain Ledger
         </button>
-        <button onClick={() => executeCommand('agents')} style={{ background: '#2563eb', color: '#fff', border: 'none', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.7rem' }}>
+        <button onClick={() => executeCommand('agents')} style={{ background: '#2563eb', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.65rem' }}>
           🤖 Multi-Agents
         </button>
-        <button onClick={() => executeCommand('hack mainframe')} style={{ background: '#ea580c', color: '#fff', border: 'none', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.7rem' }}>
+        <button onClick={() => executeCommand('metrics')} style={{ background: '#0891b2', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.65rem' }}>
+          💻 Telemetry Sys
+        </button>
+        <button onClick={() => executeCommand('hack mainframe')} style={{ background: '#ea580c', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.65rem' }}>
           🔓 Hack Minigame
         </button>
-        <button onClick={() => setBmgActive(!bmgActive)} style={{ background: bmgActive ? '#22c55e' : '#334155', color: '#fff', border: 'none', padding: '6px 10px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.7rem' }}>
+        <button onClick={() => setBmgActive(!bmgActive)} style={{ background: bmgActive ? '#22c55e' : '#334155', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.65rem' }}>
           {bmgActive ? '🎵 BGM: ON' : '🎵 BGM: OFF'}
         </button>
       </div>
 
       <video ref={videoRef} style={{ display: 'none' }} playsInline muted />
 
-      {/* Terminal Window Box */}
-      <div style={{ width: '100%', maxWidth: '700px', background: '#090d16', border: '1px solid #1e293b', borderRadius: '10px', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.8)', zIndex: 1, overflow: 'hidden' }}>
+      {/* PC Workstation Terminal Window Box */}
+      <div style={{ width: '100%', maxWidth: '720px', background: '#090d16', border: '1px solid #334155', borderRadius: '8px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.9)', zIndex: 1, overflow: 'hidden' }}>
         
-        {/* Terminal Header */}
-        <div style={{ background: '#0f172a', padding: '10px 14px', display: 'flex', alignItems: 'center', borderBottom: '1px solid #1e293b' }}>
-          <span style={{ width: '10px', height: '10px', backgroundColor: '#ef4444', borderRadius: '50%', display: 'inline-block', marginRight: '6px' }}></span>
-          <span style={{ width: '10px', height: '10px', backgroundColor: '#f59e0b', borderRadius: '50%', display: 'inline-block', marginRight: '6px' }}></span>
-          <span style={{ width: '10px', height: '10px', backgroundColor: '#22c55e', borderRadius: '50%', display: 'inline-block', marginRight: '6px' }}></span>
-          <span style={{ marginLeft: '8px', fontSize: '0.75rem', color: '#64748b' }}>maulana-rifai@supreme-god-tier-node-1:~</span>
+        {/* PC Desktop Window Titlebar */}
+        <div style={{ background: '#0f172a', padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #1e293b' }}>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <span style={{ width: '11px', height: '11px', backgroundColor: '#ef4444', borderRadius: '50%', display: 'inline-block', marginRight: '6px' }}></span>
+            <span style={{ width: '11px', height: '11px', backgroundColor: '#f59e0b', borderRadius: '50%', display: 'inline-block', marginRight: '6px' }}></span>
+            <span style={{ width: '11px', height: '11px', backgroundColor: '#22c55e', borderRadius: '50%', display: 'inline-block', marginRight: '6px' }}></span>
+            <span style={{ marginLeft: '10px', fontSize: '0.75rem', color: '#94a3b8', fontWeight: 'bold' }}>maulana-rifai@supreme-god-tier-workstation:~ (PC Mode)</span>
+          </div>
+          <div style={{ fontSize: '0.7rem', color: '#22c55e' }}>
+            CPU: {cpuUsage}% | RAM: {ramUsage}GB
+          </div>
         </div>
 
         {/* Terminal Body */}
-        <div style={{ padding: '18px', minHeight: '280px', maxHeight: '420px', overflowY: 'auto', fontSize: '0.85rem' }}>
+        <div style={{ padding: '16px', minHeight: '300px', maxHeight: '440px', overflowY: 'auto', fontSize: '0.85rem' }}>
           {logs.map((log, index) => (
             <div key={index} style={{ marginBottom: '8px', whiteSpace: 'pre-wrap', color: log.type === 'error' ? '#ef4444' : log.type === 'output' ? '#22c55e' : log.type === 'input' ? '#f8fafc' : '#38bdf8' }}>
               {log.text}
@@ -346,7 +370,7 @@ export const NexaTerminal: React.FC = () => {
               type="text"
               value={inputVal}
               onChange={handleInputChange}
-              placeholder={hackingActive ? "masukkan 4-digit PIN..." : "ketik 'scan', 'business', 'ai siapa pembuat web ini', 'help'..."}
+              placeholder={hackingActive ? "masukkan 4-digit PIN..." : "ketik 'scan', 'business', 'metrics', 'ai siapa pembuat web ini', 'help'..."}
               style={{ background: 'transparent', border: 'none', color: '#38bdf8', fontFamily: 'inherit', fontSize: '0.85rem', outline: 'none', flexGrow: '1' }}
               autoFocus
             />
