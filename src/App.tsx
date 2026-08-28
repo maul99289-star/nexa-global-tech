@@ -1,117 +1,255 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function App() {
-  const [selectedFeature, setSelectedFeature] = useState<{ title: string; desc: string; detail: string } | null>(null);
+  const [activeTab, setActiveTab] = useState<number | null>(null);
+  const [logs, setLogs] = useState<string[]>([
+    "[00:01:02] SYSTEM_BOOT: Core quantum mesh initialized successfully.",
+    "[00:01:05] SEC_GATEWAY: Zero-trust neural firewall active at 100Gbps.",
+    "[00:01:10] AI_CLUSTER: Reinforcement learning optimizer online."
+  ]);
+  const [metrics, setMetrics] = useState({ cpu: 14.2, memory: 38.6, rps: 124500, status: "OPTIMAL" });
+
+  // Simulasi fluktuasi data real-time ala software PC tingkat dewa
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMetrics({
+        cpu: +(10 + Math.random() * 25).toFixed(1),
+        memory: +(35 + Math.random() * 5).toFixed(1),
+        rps: Math.floor(120000 + Math.random() * 45000),
+        status: "SECURE"
+      });
+    }, 2500);
+    return () => clearInterval(interval);
+  }, []);
 
   const features = [
     { 
+      id: 1,
       title: "Quantum-Secured Neural Sharding", 
-      desc: "Arsitektur penyimpanan terdistribusi berbasis lattice-based cryptography.",
-      detail: "Menggunakan enkripsi tahan kuantum dengan auto-sharding prediktif berbasis neural network untuk mengamankan data dari ancaman dekripsi masa depan."
+      category: "Cryptography Core",
+      desc: "Lattice-based encryption dengan auto-sharding prediktif berbasis neural network.",
+      action: "Execute Shard Re-Encryption",
+      code: "sharding_core --quantum-lattice --auto-balance --entropy-check=99.9%"
     },
     { 
+      id: 2,
       title: "Autonomous Zero-Trust Neural Firewall", 
-      desc: "Sistem pertahanan perimeter jaringan adaptif berbasis machine learning.",
-      detail: "Mendeteksi zero-day exploit secara real-time dan mengisolasi node terinfeksi dalam mikrodetik tanpa memutus trafik sah."
+      category: "Perimeter Defense",
+      desc: "Deteksi zero-day exploit real-time menggunakan behavioral machine learning.",
+      action: "Purge Isolated Nodes",
+      code: "firewall_ai --zero-trust --mitigate-ddos --isolate-anomalies"
     },
     { 
+      id: 3,
       title: "Predictive AI Self-Healing Engine", 
-      desc: "Orkestrasi klaster berbasis Reinforcement Learning untuk pemulihan mandiri.",
-      detail: "Meregenerasi kontainer yang rusak sebelum terjadi crash, menjamin ketersediaan sistem hingga 99.9999% tanpa intervensi manual."
+      category: "Cluster Orchestration",
+      desc: "Pemulihan kontainer mandiri via Reinforcement Learning (Six Nines Uptime).",
+      action: "Run Diagnostic Sweep",
+      code: "k8s_ai_healer --target=cluster-alpha --auto-patch --predictive"
     },
     { 
+      id: 4,
       title: "Sub-Millisecond Global Anycast Edge Mesh", 
-      desc: "Jaringan distribusi konten terdesentralisasi latensi ultra-rendah.",
-      detail: "Memangkas latensi global di bawah 5 milidetik dengan mengarahkan trafik pengguna ke edge node terdekat secara cerdas."
+      category: "Global Network",
+      desc: "Routing edge node cerdas dengan latensi global di bawah 5 milidetik.",
+      action: "Optimize Edge Routes",
+      code: "anycast_mesh --global-routing --latency-target=<5ms --force-sync"
     },
     { 
+      id: 5,
       title: "Neural Code-Synthesizing CI/CD Pipeline", 
-      desc: "Pipa pengiriman software otomatis terintegrasi LLM lokal.",
-      detail: "Melakukan static analysis, bug fixing otomatis, refactoring kode, dan instant rollback dalam hitungan detik."
+      category: "DevOps Automation",
+      desc: "Static analysis LLM lokal untuk refactoring otomatis dan instant rollback.",
+      action: "Deploy Neural Build",
+      code: "cicd_synthesizer --llm-verify --auto-refactor --zero-downtime"
     },
     { 
+      id: 6,
       title: "Distributed Homomorphic Compute Engine", 
-      desc: "Komputasi awan langsung pada data yang terenkripsi.",
-      detail: "Menghilangkan celah kerentanan memori server karena pemrosesan data dilakukan tanpa proses dekripsi awal."
+      category: "Privacy & Cloud",
+      desc: "Komputasi awan langsung pada data terenkripsi tanpa proses dekripsi awal.",
+      action: "Execute Blind Compute",
+      code: "homomorphic_exec --blind-mode --tensor-compute --no-decrypt"
     },
     { 
+      id: 7,
       title: "Real-Time Memory Telemetry & Kernel Profiler", 
-      desc: "Diagnostik tingkat kernel untuk pemetaan alokasi memori.",
-      detail: "Mendeteksi memory leak dan race condition secara mikroskopis hingga tingkat instruksi mesin terendah."
+      category: "System Diagnostics",
+      desc: "Pemetaan alokasi memori tingkat kernel presisi mikroskopis.",
+      action: "Dump Kernel Telemetry",
+      code: "kernel_profiler --live-trace --detect-leaks --precision=micro"
     },
     { 
+      id: 8,
       title: "In-Memory Graph Database Neural Indexing", 
-      desc: "Basis data relasional graf dengan pengindeksan vektor neural.",
-      detail: "Memproses kueri multivariat dan pemetaan relasi data kompleks berjuta-juta entitas seketika."
+      category: "Data Storage",
+      desc: "Basis data relasional graf dengan pengindeksan vektor neural seketika.",
+      action: "Re-index Graph Vectors",
+      code: "graph_db --neural-index --multivariat-query --vector-sync"
     },
     { 
+      id: 9,
       title: "Zero-Latency Distributed State Synchronizer", 
-      desc: "Konsensus terdistribusi lintas benua berbasis CRDT.",
-      detail: "Menjamin sinkronisasi data global secara instan tanpa mengalami hambatan network bottleneck."
+      category: "State Management",
+      desc: "Konsensus lintas benua berbasis CRDT tanpa network bottleneck.",
+      action: "Force CRDT Sync",
+      code: "state_sync --crdt-consensus --cross-continent --zero-bottleneck"
     },
     { 
+      id: 10,
       title: "Dynamic Resource Hyper-Compression Engine", 
-      desc: "Kompresi aset dan memori berbasis neural tensor.",
-      detail: "Memperkecil ukuran payload data hingga 80% tanpa kehilangan satu bit pun presisi data asli."
+      category: "Resource Optimization",
+      desc: "Kompresi payload hingga 80% via neural tensor tanpa kehilangan presisi.",
+      action: "Compress Payload Matrix",
+      code: "tensor_compress --ratio=0.8 --lossless-tensor --optimize-ram"
     },
     { 
+      id: 11,
       title: "Automated Compliance & Regulatory Sentinel", 
-      desc: "Sistem audit otomatis kepatuhan standar internasional.",
-      detail: "Memindai basis kode secara terus-menerus untuk memastikan kepatuhan mutlak terhadap regulasi GDPR dan ISO."
+      category: "Security & Audit",
+      desc: "Pemindai basis kode berkelanjutan untuk standar GDPR dan ISO 27001.",
+      action: "Generate Audit Matrix",
+      code: "compliance_sentinel --scan-iso --gdpr-check --auto-remediate"
     },
     { 
+      id: 12,
       title: "High-Throughput Custom API Gateway Matrix", 
-      desc: "Gerbang API asynchronous event-driven performa tinggi.",
-      detail: "Menahan jutaan permintaan per detik (RPS) saat lonjakan trafik ekstrem tanpa lonjakan latensi."
+      category: "Network Gateway",
+      desc: "Gerbang API asynchronous event-driven penahan jutaan RPS ekstrem.",
+      action: "Stress Test Gateway",
+      code: "api_gateway --async-event --rps-limit=unlimited --load-balance"
     }
   ];
 
+  const handleTriggerAction = (feature: typeof features[0]) => {
+    const timeStr = new Date().toTimeString().split(' ')[0];
+    setLogs(prev => [
+      `[${timeStr}] EXECUTED: ${feature.title} -> ${feature.code}`,
+      ...prev.slice(0, 7)
+    ]);
+  };
+
   return (
-    <div style={{ minHeight: '100vh', background: '#030712', color: '#f3f4f6', fontFamily: 'sans-serif', padding: '40px 20px', position: 'relative' }}>
-      <div style={{ maxWidth: '1300px', margin: '0 auto' }}>
-        <header style={{ textAlign: 'center', marginBottom: '50px' }}>
-          <span style={{ background: '#0284c7', color: '#e0f2fe', padding: '6px 16px', borderRadius: '20px', fontSize: '0.85rem', fontWeight: '600', textTransform: 'uppercase', letterSpacing: '1px' }}>
-            Enterprise Quantum Grade
-          </span>
-          <h1 style={{ fontSize: '3rem', fontWeight: '800', margin: '20px 0' }}>Nexa Global Tech</h1>
-          <p style={{ fontSize: '1.1rem', color: '#9ca3af', maxWidth: '700px', margin: '0 auto', lineHeight: '1.6' }}>
-            Klik pada salah satu modul di bawah untuk membuka panel diagnostik dan spesifikasi aktif.
-          </p>
-        </header>
-
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px' }}>
-          {features.map((f, i) => (
-            <div 
-              key={i} 
-              onClick={() => setSelectedFeature(f)}
-              style={{ background: '#111827', border: '1px solid #1f2937', padding: '25px', borderRadius: '12px', cursor: 'pointer', transition: 'all 0.2s ease' }}
-              onMouseEnter={(e) => e.currentTarget.style.borderColor = '#38bdf8'}
-              onMouseLeave={(e) => e.currentTarget.style.borderColor = '#1f2937'}
-            >
-              <div style={{ color: '#38bdf8', fontWeight: 'bold', fontSize: '1.1rem', marginBottom: '10px' }}>0{i + 1}. {f.title}</div>
-              <p style={{ color: '#9ca3af', fontSize: '0.9rem', lineHeight: '1.6', margin: 0 }}>{f.desc}</p>
-              <span style={{ display: 'inline-block', marginTop: '15px', color: '#38bdf8', fontSize: '0.8rem', fontWeight: '600' }}>[ Lihat Detail Interaktif &rarr; ]</span>
-            </div>
-          ))}
+    <div style={{ minHeight: '100vh', background: '#020617', color: '#f8fafc', fontFamily: 'Inter, system-ui, sans-serif', padding: '30px' }}>
+      {/* Top Header Command Center */}
+      <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #1e293b', paddingBottom: '20px', marginBottom: '30px' }}>
+        <div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <span style={{ width: '12px', height: '12px', background: '#22c55e', borderRadius: '50%', display: 'inline-block', boxShadow: '0 0 10px #22c55e' }}></span>
+            <span style={{ fontSize: '0.85rem', fontWeight: 'bold', color: '#22c55e', letterSpacing: '1px' }}>SYSTEM OPERATIONAL: SECURE</span>
+          </div>
+          <h1 style={{ fontSize: '2.2rem', fontWeight: '800', margin: '5px 0 0 0', letterSpacing: '-0.5px' }}>NEXA GLOBAL TECH // ENTERPRISE KERNEL</h1>
         </div>
-      </div>
-
-      {/* Modal Detail Interaktif */}
-      {selectedFeature && (
-        <div style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', background: 'rgba(0,0,0,0.8)', display: 'flex', justifyContent: 'center', alignItems: 'center', zIndex: 1000, padding: '20px' }}>
-          <div style={{ background: '#111827', border: '1px solid #38bdf8', padding: '30px', borderRadius: '16px', maxWidth: '600px', width: '100%', boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.5)' }}>
-            <span style={{ color: '#38bdf8', fontSize: '0.85rem', fontWeight: 'bold', textTransform: 'uppercase' }}>Terminal Diag: Active Node</span>
-            <h2 style={{ fontSize: '1.8rem', fontWeight: 'bold', margin: '10px 0 20px 0', color: '#fff' }}>{selectedFeature.title}</h2>
-            <p style={{ color: '#9ca3af', fontSize: '1rem', lineHeight: '1.7', marginBottom: '30px' }}>{selectedFeature.detail}</p>
-            <button 
-              onClick={() => setSelectedFeature(null)}
-              style={{ background: '#0284c7', color: '#fff', border: 'none', padding: '10px 24px', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', fontSize: '0.95rem' }}
-            >
-              Tutup Panel
-            </button>
+        
+        {/* Live Metrics Header Bar */}
+        <div style={{ display: 'flex', gap: '15px', background: '#0f172a', border: '1px solid #1e293b', padding: '12px 20px', borderRadius: '10px' }}>
+          <div>
+            <div style={{ fontSize: '0.7rem', color: '#64748b' }}>CPU LOAD</div>
+            <div style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#38bdf8' }}>{metrics.cpu}%</div>
+          </div>
+          <div style={{ borderLeft: '1px solid #1e293b', paddingLeft: '15px' }}>
+            <div style={{ fontSize: '0.7rem', color: '#64748b' }}>MEMORY</div>
+            <div style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#a855f7' }}>{metrics.memory}%</div>
+          </div>
+          <div style={{ borderLeft: '1px solid #1e293b', paddingLeft: '15px' }}>
+            <div style={{ fontSize: '0.7rem', color: '#64748b' }}>REQUESTS/SEC</div>
+            <div style={{ fontSize: '1.1rem', fontWeight: 'bold', color: '#22c55e' }}>{metrics.rps.toLocaleString()}</div>
           </div>
         </div>
-      )}
+      </header>
+
+      {/* Main Grid Layout ala Desktop Software */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 380px', gap: '25px' }}>
+        
+        {/* Left Column: 12 Modul Tingkat Dewa */}
+        <div>
+          <h2 style={{ fontSize: '1.1rem', color: '#94a3b8', marginBottom: '15px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+            Active Enterprise Core Modules (12 Sub-Systems)
+          </h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '15px' }}>
+            {features.map((f) => (
+              <div 
+                key={f.id}
+                onClick={() => setActiveTab(f.id)}
+                style={{ 
+                  background: activeTab === f.id ? '#0f172a' : '#090d16', 
+                  border: activeTab === f.id ? '1px solid #38bdf8' : '1px solid #1e293b', 
+                  padding: '20px', 
+                  borderRadius: '10px', 
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  boxShadow: activeTab === f.id ? '0 0 15px rgba(56, 189, 248, 0.15)' : 'none'
+                }}
+              >
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+                  <span style={{ fontSize: '0.75rem', fontWeight: '600', color: '#38bdf8', background: 'rgba(56, 189, 248, 0.1)', padding: '2px 8px', borderRadius: '4px' }}>
+                    {f.category}
+                  </span>
+                  <span style={{ fontSize: '0.8rem', color: '#64748b' }}>MOD-0{f.id}</span>
+                </div>
+                <div style={{ fontSize: '1.05rem', fontWeight: '700', color: '#fff', marginBottom: '6px' }}>{f.title}</div>
+                <p style={{ fontSize: '0.85rem', color: '#94a3b8', margin: 0, lineHeight: '1.4' }}>{f.desc}</p>
+                <div style={{ marginTop: '12px', fontSize: '0.75rem', color: '#38bdf8', fontWeight: '600' }}>
+                  Klik untuk kontrol panel &rarr;
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Right Column: Interactive Terminal & Live Console */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+          
+          {/* Active Control Panel */}
+          <div style={{ background: '#0f172a', border: '1px solid #1e293b', borderRadius: '12px', padding: '20px' }}>
+            <h3 style={{ fontSize: '0.95rem', fontWeight: 'bold', color: '#fff', marginTop: 0, marginBottom: '15px', borderBottom: '1px solid #1e293b', paddingBottom: '10px' }}>
+              {activeTab ? `MOD-0${activeTab} Control Hub` : 'Select Module for Execution'}
+            </h3>
+            
+            {activeTab ? (() => {
+              const current = features.find(f => f.id === activeTab)!;
+              return (
+                <div>
+                  <div style={{ fontSize: '1.05rem', fontWeight: 'bold', color: '#38bdf8', marginBottom: '8px' }}>{current.title}</div>
+                  <p style={{ fontSize: '0.85rem', color: '#94a3b8', marginBottom: '15px' }}>{current.desc}</p>
+                  
+                  <div style={{ background: '#020617', padding: '10px', borderRadius: '6px', fontFamily: 'monospace', fontSize: '0.75rem', color: '#22c55e', marginBottom: '15px', border: '1px solid #1e293b' }}>
+                    $ {current.code}
+                  </div>
+
+                  <button 
+                    onClick={() => handleTriggerAction(current)}
+                    style={{ width: '100%', background: '#0284c7', color: '#fff', border: 'none', padding: '10px', borderRadius: '6px', fontWeight: 'bold', fontSize: '0.9rem', cursor: 'pointer' }}
+                  >
+                    {current.action}
+                  </button>
+                </div>
+              );
+            })() : (
+              <div style={{ color: '#64748b', fontSize: '0.85rem', textAlign: 'center', padding: '30px 0' }}>
+                Silakan pilih salah satu dari 12 modul di sebelah kiri untuk menjalankan eksekusi sistem tingkat dewa.
+              </div>
+            )}
+          </div>
+
+          {/* Live System Console Logs */}
+          <div style={{ background: '#090d16', border: '1px solid #1e293b', borderRadius: '12px', padding: '15px', flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
+            <div style={{ fontSize: '0.8rem', fontWeight: 'bold', color: '#64748b', marginBottom: '10px', textTransform: 'uppercase', display: 'flex', justifyContent: 'space-between' }}>
+              <span>Live Kernel Logs</span>
+              <span style={{ color: '#22c55e' }}>● STREAMING</span>
+            </div>
+            <div style={{ background: '#020617', borderRadius: '6px', padding: '10px', fontFamily: 'monospace', fontSize: '0.72rem', color: '#cbd5e1', flexGrow: 1, minHeight: '180px', maxHeight: '220px', overflowY: 'auto', border: '1px solid #1e293b' }}>
+              {logs.map((log, index) => (
+                <div key={index} style={{ marginBottom: '6px', borderLeft: '2px solid #38bdf8', paddingLeft: '6px' }}>
+                  {log}
+                </div>
+              ))}
+            </div>
+          </div>
+
+        </div>
+
+      </div>
     </div>
   );
 }
