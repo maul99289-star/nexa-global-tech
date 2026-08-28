@@ -10,9 +10,7 @@ export const NexaTerminal: React.FC = () => {
   const [hackingActive, setHackingActive] = useState<boolean>(false);
   const [hackTarget, setHackTarget] = useState<string>('');
   const [hackAttempts, setHackAttempts] = useState<number>(3);
-  const [matrixRain, setMatrixRain] = useState<boolean>(true);
 
-  // System Telemetry Metrics (PC-Grade simulation)
   const [cpuUsage, setCpuUsage] = useState<number>(14.2);
   const [ramUsage, setRamUsage] = useState<number>(4.1);
 
@@ -26,7 +24,6 @@ export const NexaTerminal: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const bmgIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Live Quantum Ping & CPU telemetry fluctuation
   useEffect(() => {
     const timer = setInterval(() => {
       setPing(Math.floor(Math.random() * 2) + 1);
@@ -36,7 +33,6 @@ export const NexaTerminal: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  // Cyberpunk Ambient Synth BGM Generator
   useEffect(() => {
     if (!bmgActive) {
       if (bmgIntervalRef.current) clearInterval(bmgIntervalRef.current);
@@ -61,7 +57,7 @@ export const NexaTerminal: React.FC = () => {
         osc.start();
         osc.stop(ctx.currentTime + 0.4);
       } catch {
-        // Ignore audio policy
+        // Ignore
       }
     };
 
@@ -71,7 +67,6 @@ export const NexaTerminal: React.FC = () => {
     };
   }, [bmgActive]);
 
-  // Mechanical Click Audio
   const playKeySound = () => {
     if (!soundEnabled) return;
     try {
@@ -94,7 +89,6 @@ export const NexaTerminal: React.FC = () => {
     }
   };
 
-  // Robot Voice Synthesis (TTS)
   const speakText = (text: string) => {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
@@ -106,7 +100,6 @@ export const NexaTerminal: React.FC = () => {
     }
   };
 
-  // Biometric Retina & Facial Deep-Scan (Buka Kamera)
   const startBiometricScan = async () => {
     setScanActive(true);
     setLogs(prev => [...prev, { type: 'system', text: '[biometric] Mengaktifkan sensor kamera untuk verifikasi wajah tingkat dewa...' }]);
@@ -304,16 +297,24 @@ export const NexaTerminal: React.FC = () => {
   return (
     <div style={{ background: '#020617', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '12px', fontFamily: 'monospace', position: 'relative', overflow: 'hidden' }}>
       
-      {/* 🌧️ Matrix Hacker Rain Effect (Hujan Karakter Hijau Dinamis ala PC) */}
-      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, color: '#22c55e', fontSize: '0.7rem', opacity: 0.25, userSelect: 'none', lineHeight: '1.4', overflow: 'hidden', zIndex: 0, pointerEvents: 'none', display: 'flex', justifyContent: 'space-around' }}>
+      {/* CSS Animation Keyframes untuk Hujan Hacker Bergerak */}
+      <style>{`
+        @keyframes matrixRainMove {
+          0% { transform: translateY(-100%); }
+          100% { transform: translateY(100%); }
+        }
+      `}</style>
+
+      {/* 🌧️ Matrix Hacker Rain Berjalan Dinamis */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, color: '#22c55e', fontSize: '0.75rem', opacity: 0.3, userSelect: 'none', overflow: 'hidden', zIndex: 0, pointerEvents: 'none', display: 'flex', justifyContent: 'space-around' }}>
         {Array.from({ length: 12 }).map((_, colIndex) => (
-          <div key={colIndex} style={{ writingMode: 'vertical-rl', animation: `fall ${3 + (colIndex % 4)}s linear infinite`, whiteSpace: 'nowrap' }}>
+          <div key={colIndex} style={{ writingMode: 'vertical-rl', animation: `matrixRainMove ${3 + (colIndex % 4)}s linear infinite`, whiteSpace: 'nowrap' }}>
             MAULANARIFAI010101SUPREMEGODTIERENTERPRISE#1$#@!0101010199AEF82VYAQ9SGV6IQD*+TXG&G7Z1KWS9L3PTWXH1STCNXC99NOVD87KAS3OCMYAR7YYWNN
           </div>
         ))}
       </div>
 
-      {/* Quick Action Control Bar for Supreme Features */}
+      {/* Quick Action Control Bar */}
       <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '720px', display: 'flex', gap: '5px', flexWrap: 'wrap', marginBottom: '10px' }}>
         <button onClick={startBiometricScan} style={{ background: scanActive ? '#ef4444' : '#0284c7', color: '#fff', border: 'none', padding: '5px 8px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.65rem' }}>
           {scanActive ? '👁️ Scanning...' : '👁️ Biometric Scan'}
