@@ -13,6 +13,10 @@ export const NexaTerminal: React.FC = () => {
   const [databaseActive, setDatabaseActive] = useState<boolean>(false);
   const [threatCount, setThreatCount] = useState<number>(0);
 
+  // New Corporate & Enterprise Feature States
+  const [portfolioActive, setPortfolioActive] = useState<boolean>(false);
+  const [aiNeuralActive, setAiNeuralActive] = useState<boolean>(false);
+
   // Camera Advanced State
   const [cameraMode, setCameraMode] = useState<'off' | 'biometric' | 'detect' | 'analyze'>('off');
   const [, setMotionLevel] = useState<number>(0);
@@ -23,16 +27,15 @@ export const NexaTerminal: React.FC = () => {
   const [ramUsage, setRamUsage] = useState<number>(3.0);
 
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
-    { type: 'system', text: 'Nexa Global Cyber-Matrix OS v35.0 [Ultimate Supreme God-Tier & Enterprise Core]' },
-    { type: 'system', text: 'Chief Executive Architect & Founder: Maulana Rifa\'i' },
-    { type: 'system', text: 'Ketik "help", "database", "fleet", "drone", "scan", "camera detect", "quantum", "compile", atau "ai <pesan>".' },
+    { type: 'system', text: 'Nexa Global Enterprise Inc. OS v35.0 [Corporate Command Center]' },
+    { type: 'system', text: 'Chief Executive Officer & Founder: Maulana Rifa\'i' },
+    { type: 'system', text: 'Ketik "help", "portfolio", "enterprise", "database", "fleet", "scan", atau "ai <pesan>".' },
   ]);
 
   const terminalEndRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const bmgIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  // Live Telemetry, Threat & Motion Simulation
   useEffect(() => {
     const timer = setInterval(() => {
       setPing(Math.floor(Math.random() * 2) + 1);
@@ -58,7 +61,6 @@ export const NexaTerminal: React.FC = () => {
     return () => clearInterval(timer);
   }, [cameraMode]);
 
-  // Cyberpunk Ambient Synth BGM Generator
   useEffect(() => {
     if (!bmgActive) {
       if (bmgIntervalRef.current) clearInterval(bmgIntervalRef.current);
@@ -93,7 +95,6 @@ export const NexaTerminal: React.FC = () => {
     };
   }, [bmgActive]);
 
-  // Mechanical Click Audio
   const playKeySound = () => {
     if (!soundEnabled) return;
     try {
@@ -116,7 +117,6 @@ export const NexaTerminal: React.FC = () => {
     }
   };
 
-  // Robot Voice Synthesis (TTS)
   const speakText = (text: string) => {
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
@@ -128,7 +128,6 @@ export const NexaTerminal: React.FC = () => {
     }
   };
 
-  // Advanced Camera Manager
   const stopCamera = () => {
     if (videoRef.current && videoRef.current.srcObject) {
       const stream = videoRef.current.srcObject as MediaStream;
@@ -146,8 +145,8 @@ export const NexaTerminal: React.FC = () => {
     let voiceText = '';
     
     if (mode === 'biometric') {
-        actionText = '[biometric] Mengaktifkan sensor kamera untuk verifikasi wajah tingkat dewa...';
-        voiceText = 'Memindai biometrik wajah. Otorisasi tingkat dewa untuk Maulana Rifa\'i.';
+        actionText = '[biometric] Mengaktifkan sensor kamera untuk verifikasi korporat CEO...';
+        voiceText = 'Memindai biometrik wajah CEO Maulana Rifa\'i.';
         let progress = 0;
         const interval = setInterval(() => {
             progress += 5;
@@ -155,11 +154,11 @@ export const NexaTerminal: React.FC = () => {
             if (progress >= 100) clearInterval(interval);
         }, 150);
     } else if (mode === 'detect') {
-        actionText = '[camera:detect] Mengaktifkan sistem pengawasan gerakan real-time...';
-        voiceText = 'Sistem pengawasan gerakan diaktifkan.';
+        actionText = '[camera:detect] Mengaktifkan sistem keamanan perimeter korporat...';
+        voiceText = 'Sistem keamanan perusahaan diaktifkan.';
     } else if (mode === 'analyze') {
-        actionText = '[camera:analyze] Mengaktifkan AI Computer Vision untuk identifikasi lingkungan...';
-        voiceText = 'Kecerdasan buatan analisis lingkungan diaktifkan.';
+        actionText = '[camera:analyze] Mengaktifkan AI Computer Vision untuk analisis fasilitas...';
+        voiceText = 'Analisis fasilitas perusahaan diaktifkan.';
     }
     
     setLogs(prev => [...prev, { type: 'system', text: actionText }]);
@@ -177,9 +176,9 @@ export const NexaTerminal: React.FC = () => {
             stopCamera();
             setLogs(prev => [
               ...prev, 
-              { type: 'output', text: '[SUCCESS] Biometric Verified 100% MATCH!\n[GOD-TIER ACCESS #1] Selamat datang, Pimpinan Tertinggi & Supreme Architect Maulana Rifa\'i.' }
+              { type: 'output', text: '[SUCCESS] Corporate Biometric Verified 100% MATCH!\n[CEO ACCESS] Selamat datang kembali, Chief Executive Officer Maulana Rifa\'i.' }
             ]);
-            speakText('Verifikasi biometrik berhasil. Hak akses mutlak diberikan.');
+            speakText('Verifikasi CEO berhasil. Akses penuh korporat diberikan.');
             setScanProgress(0);
         }, 3500);
       }
@@ -187,46 +186,83 @@ export const NexaTerminal: React.FC = () => {
     } catch (err) {
       console.error(err);
       stopCamera();
-      setLogs(prev => [...prev, { type: 'error', text: '[ERROR] Gagal mengakses kamera. Pastikan izin diberikan.' }]);
+      setLogs(prev => [...prev, { type: 'error', text: '[ERROR] Gagal mengakses kamera perangkat.' }]);
     }
   };
 
-  // Enterprise Database Master Sync
+  // New Feature: Corporate Portfolio & Asset Tracker
+  const startCorporatePortfolio = () => {
+    setPortfolioActive(true);
+    setLogs(prev => [
+      ...prev,
+      { type: 'system', text: '[PORTFOLIO] Mengambil data portofolio finansial dan aset global Nexa Global Enterprise...' }
+    ]);
+    speakText('Memuat portofolio aset perusahaan.');
+
+    setTimeout(() => {
+      setPortfolioActive(false);
+      setLogs(prev => [
+        ...prev,
+        { type: 'output', text: '[SUCCESS] Nexa Global Enterprise Financial Portfolio:\n- Total Valuation: $1,250,000,000 (Unicorn Certified)\n- Active Subsidiary Nodes: 12 Global Regions\n- Q3 Revenue Growth: +142% YoY\n- Founder & CEO: Maulana Rifa\'i' }
+      ]);
+      speakText('Portofolio perusahaan berhasil dimuat.');
+    }, 2000);
+  };
+
+  // New Feature: AI Neural Executive Decision Support
+  const startAiNeuralEngine = () => {
+    setAiNeuralActive(true);
+    setLogs(prev => [
+      ...prev,
+      { type: 'system', text: '[AI NEURAL] Menjalankan simulasi keputusan strategis eksekutif...' }
+    ]);
+    speakText('Menjalankan kecerdasan buatan eksekutif.');
+
+    setTimeout(() => {
+      setAiNeuralActive(false);
+      setLogs(prev => [
+        ...prev,
+        ...prev,
+        { type: 'output', text: '[SUCCESS] AI Executive Decision Ready:\n- Rekomendasi Pasar: Ekspansi infrastruktur Asia Pasifik & Cloud Quantum.\n- Status Risiko: Minimal (0.02%)\n- Chief Strategy Officer AI: Online\n- Disetujui oleh: Maulana Rifa\'i' }
+      ]);
+      speakText('Analisis keputusan eksekutif selesai.');
+    }, 2000);
+  };
+
   const startEnterpriseDatabase = () => {
     setDatabaseActive(true);
     setLogs(prev => [
       ...prev,
-      { type: 'system', text: '[DATABASE] Menghubungkan ke Enterprise Distributed Quantum Database Cluster #1...' }
+      { type: 'system', text: '[DATABASE] Menghubungkan ke Enterprise Distributed Quantum Database Cluster...' }
     ]);
-    speakText('Menghubungkan ke basis data enterprise kuantum.');
+    speakText('Menghubungkan ke basis data perusahaan.');
 
     setTimeout(() => {
       setDatabaseActive(false);
       setLogs(prev => [
         ...prev,
-        { type: 'output', text: '[SUCCESS] Enterprise Database Synced (0.1ms Latency)!\n- Active Records: 1,000,000,000+ Encrypted Nodes\n- Storage Engine: Nexa Distributed Sharding\n- Supreme Administrator: Maulana Rifa\'i' }
+        { type: 'output', text: '[SUCCESS] Enterprise Database Synced!\n- Active Records: 1,000,000,000+ Encrypted Nodes\n- Supreme Administrator: Maulana Rifa\'i' }
       ]);
-      speakText('Basis data enterprise berhasil disinkronisasi.');
-    }, 2500);
+      speakText('Basis data perusahaan berhasil disinkronisasi.');
+    }, 2000);
   };
 
-  // Global Autonomous Drone & Satellite Fleet Master Uplink
   const startDroneFleetUplink = () => {
     setDroneFleetActive(true);
     setLogs(prev => [
       ...prev,
-      { type: 'system', text: '[FLEET] Menginisialisasi Global Autonomous Drone & Satellite Fleet (64 Satellites & 120 Drones)...' }
+      { type: 'system', text: '[FLEET] Menginisialisasi Global Corporate Fleet (64 Satellites & 120 Drones)...' }
     ]);
-    speakText('Mengaktifkan armada satelit dan drone otonom global.');
+    speakText('Mengaktifkan armada logistik global.');
 
     setTimeout(() => {
       setDroneFleetActive(false);
       setLogs(prev => [
         ...prev,
-        { type: 'output', text: '[SUCCESS] Global Autonomous Drone & Satellite Fleet Active!\n- Satellite Grid: 64 Orbital Nodes Linked\n- Autonomous Drones: 120 Units Patrolling Airspace\n- Ultimate Commander: Maulana Rifa\'i' }
+        { type: 'output', text: '[SUCCESS] Global Corporate Fleet Active!\n- Satellite Grid: 64 Orbital Nodes Linked\n- Ultimate Commander: Maulana Rifa\'i' }
       ]);
-      speakText('Armada satelit dan drone global siap dan beroperasi penuh.');
-    }, 3000);
+      speakText('Armada perusahaan siap beroperasi.');
+    }, 2500);
   };
 
   useEffect(() => {
@@ -242,8 +278,8 @@ export const NexaTerminal: React.FC = () => {
       const newLogs = [...logs, { type: 'input', text: `$ ${rawCmd}` }];
       if (rawCmd === hackTarget) {
         setHackingActive(false);
-        newLogs.push({ type: 'output', text: `[SUCCESS] PIN Correct! Enterprise root access #1 granted to Supreme Master Maulana Rifa'i.` });
-        speakText('Akses root utama berhasil dibuka.');
+        newLogs.push({ type: 'output', text: `[SUCCESS] PIN Correct! Corporate root access granted to CEO Maulana Rifa'i.` });
+        speakText('Akses root utama dibuka.');
       } else {
         const remaining = hackAttempts - 1;
         setHackAttempts(remaining);
@@ -252,7 +288,7 @@ export const NexaTerminal: React.FC = () => {
           newLogs.push({ type: 'error', text: '[SECURITY LOCKOUT] Percobaan habis! Sistem pertahanan aktif.' });
           speakText('Sistem pertahanan aktif.');
         } else {
-          newLogs.push({ type: 'error', text: `[FAILED] PIN salah. Sisa kesempatan: ${remaining}. Masukkan PIN 4-digit:` });
+          newLogs.push({ type: 'error', text: `[FAILED] PIN salah. Sisa kesempatan: ${remaining}.` });
         }
       }
       setLogs(newLogs);
@@ -260,6 +296,18 @@ export const NexaTerminal: React.FC = () => {
     }
 
     const newLogs = [...logs, { type: 'input', text: `$ ${rawCmd}` }];
+
+    if (lowerCmd === 'portfolio' || lowerCmd === 'assets') {
+      startCorporatePortfolio();
+      setLogs(newLogs);
+      return;
+    }
+
+    if (lowerCmd === 'ai-neural' || lowerCmd === 'executive') {
+      startAiNeuralEngine();
+      setLogs(newLogs);
+      return;
+    }
 
     if (lowerCmd === 'scan' || lowerCmd === 'biometric') {
       startCamera('biometric');
@@ -278,13 +326,6 @@ export const NexaTerminal: React.FC = () => {
       setLogs(newLogs);
       return;
     }
-    
-    if (lowerCmd === 'camera off' || lowerCmd === 'stop camera') {
-        stopCamera();
-        newLogs.push({ type: 'system', text: '[camera] Semua sensor kamera dinonaktifkan.' });
-        setLogs(newLogs);
-        return;
-    }
 
     if (lowerCmd === 'database' || lowerCmd === 'db') {
       startEnterpriseDatabase();
@@ -292,7 +333,7 @@ export const NexaTerminal: React.FC = () => {
       return;
     }
 
-    if (lowerCmd === 'fleet' || lowerCmd === 'drone' || lowerCmd === 'satellites') {
+    if (lowerCmd === 'fleet' || lowerCmd === 'drone') {
       startDroneFleetUplink();
       setLogs(newLogs);
       return;
@@ -301,9 +342,9 @@ export const NexaTerminal: React.FC = () => {
     if (lowerCmd === 'quantum' || lowerCmd === 'core') {
       newLogs.push({
         type: 'output',
-        text: '[⚛️ QUANTUM NEURAL SYNTHESIZER & QUBIT ENGINE]\n- Active Qubits: 10,000 Qubits (Entangled State)\n- Processing Speed: 9.8 PetaFLOPS\n- Error Correction: Surface Code Active (Zero-Decoherence)\n- Lead Quantum Physicist & Architect: Maulana Rifa\'i',
+        text: '[⚛️ QUANTUM NEURAL SYNTHESIZER]\n- Processing Speed: 9.8 PetaFLOPS\n- Chief Technology Officer: Maulana Rifa\'i',
       });
-      speakText('Sintesis kuantum neural aktif.');
+      speakText('Sintesis kuantum aktif.');
       setLogs(newLogs);
       return;
     }
@@ -311,102 +352,30 @@ export const NexaTerminal: React.FC = () => {
     if (lowerCmd === 'compile' || lowerCmd === 'academic') {
       newLogs.push({
         type: 'output',
-        text: '[🎓 ACADEMIC DEEP-CODE & ALGORITHM ANALYZER]\n- Target Engine: Nexa Quantum Compiler v35.0\n- Big-O Complexity: O(n log n) [Optimized Tier-1]\n- Memory Leak Test: 0 Detected (Zero-Allocation Heap)\n- Chief Architect & Lead Researcher: Maulana Rifa\'i\n- Status: Approved by Academic Board & Dean Committee',
+        text: '[🎓 CORPORATE COMPILER & COMPLIANCE ENGINE]\n- Status: Approved by Board of Directors\n- Lead Architect: Maulana Rifa\'i',
       });
-      speakText('Analisis algoritma akademik berhasil dikompilasi.');
-      setLogs(newLogs);
-      return;
-    }
-
-    if (lowerCmd === 'threats' || lowerCmd === 'firewall-status') {
-      newLogs.push({
-        type: 'output',
-        text: `[🛡️ QUANTUM THREAT INTERCEPTOR & DDOS DEFENSE]\n- Firewall Status: ${firewallActive ? 'ACTIVE (Encrypted Mode)' : 'STANDBY'}\n- Neutralized Packets: ${threatCount + 188} attacks blocked\n- Integrity Check: 100% Secure\n- Master Supervisor: Maulana Rifa\'i`,
-      });
-      setLogs(newLogs);
-      return;
-    }
-
-    if (lowerCmd === 'business' || lowerCmd === 'analytics') {
-      newLogs.push({
-        type: 'output',
-        text: '[📈 AI BUSINESS PREDICTIVE ANALYTICS #1 (GLOBAL UNICORN)]\n- Projected Annual Revenue: $125.8M (Global Market Leader)\n- Corporate Valuation: $1,000,000,000 (Unicorn Status)\n- Supreme Founder & Architect: Maulana Rifa\'i\n- Status: Autonomous Global Expansion Active',
-      });
-      setLogs(newLogs);
-      return;
-    }
-
-    if (lowerCmd === 'blockchain' || lowerCmd === 'ledger') {
-      newLogs.push({
-        type: 'output',
-        text: '[⛓️ ENTERPRISE QUANTUM BLOCKCHAIN LEDGER #1]\n- Master Hash: 0x99a1...ff00 (SHA-256 Quantum Secured)\n- Consensus: Proof-of-Authority (PoA) Global Node\n- Smart Contract: Fully Deployed & Immutable\n- Chief Architect: Maulana Rifa\'i',
-      });
-      setLogs(newLogs);
-      return;
-    }
-
-    if (lowerCmd === 'agents' || lowerCmd === 'multi-agent') {
-      newLogs.push({
-        type: 'output',
-        text: '[🤖 MULTI-AGENT NEURAL ORCHESTRATOR #1]\n- Worker AI 1 (Cloud Ops): Active\n- Worker AI 2 (Cyber Security): Monitoring 0 Threats\n- Worker AI 3 (Financial Analytics): Optimized\n- Master Controller: Maulana Rifa\'i',
-      });
-      setLogs(newLogs);
-      return;
-    }
-
-    if (lowerCmd === 'metrics' || lowerCmd === 'sys') {
-      newLogs.push({
-        type: 'output',
-        text: `[💻 PC TELEMETRY & SYSTEM MONITOR]:\n- CPU Load: ${cpuUsage}%\n- Memory Allocated: ${ramUsage} GB / 32 GB\n- Quantum Core: Stable (1.000 Qubits)\n- Security Clearance: Root Supreme [Maulana Rifa'i]`,
-      });
-      setLogs(newLogs);
-      return;
-    }
-
-    if (lowerCmd === 'firewall' || lowerCmd === 'ddos') {
-      setFirewallActive(!firewallActive);
-      newLogs.push({
-        type: 'output',
-        text: `[🛡️ CYBER-SECURITY FIREWALL & DDOS DEFENSE #1]: Status diubah ke ${!firewallActive ? 'AKTIF (Secure)' : 'STANDBY'}.`,
-      });
-      setLogs(newLogs);
-      return;
-    }
-
-    if (lowerCmd.startsWith('hack ')) {
-      const target = rawCmd.substring(5).trim() || 'mainframe';
-      const secretPin = Math.floor(1000 + Math.random() * 9000).toString();
-      setHackTarget(secretPin);
-      setHackAttempts(3);
-      setHackingActive(true);
-      newLogs.push({
-        type: 'output',
-        text: `[*] Brute-force target [${target.toUpperCase()}] diinisialisasi...\n[?] Hint PIN: ${secretPin}\nMasukkan PIN 4-digit untuk membobol sistem:`,
-      });
+      speakText('Kompilasi korporat berhasil.');
       setLogs(newLogs);
       return;
     }
 
     if (lowerCmd === 'bmg on') {
       setBmgActive(true);
-      newLogs.push({ type: 'output', text: '[Cyberpunk Synth BGM]: Diaktifkan.' });
+      newLogs.push({ type: 'output', text: '[Synth BGM]: Diaktifkan.' });
       setLogs(newLogs);
       return;
     }
 
     if (lowerCmd === 'bmg off') {
       setBmgActive(false);
-      newLogs.push({ type: 'output', text: '[Cyberpunk Synth BGM]: Dimatikan.' });
+      newLogs.push({ type: 'output', text: '[Synth BGM]: Dimatikan.' });
       setLogs(newLogs);
       return;
     }
 
     if (lowerCmd.startsWith('ai ')) {
       const query = rawCmd.substring(3).trim();
-      let res = `[God-Tier AI #1]: Menganalisis "${query}". Ekosistem bisnis dan teknologi tertinggi ini diciptakan secara mutlak oleh Maulana Rifa'i.`;
-      if (query.includes('owner') || query.includes('pembuat') || query.includes('siapa') || query.includes('dosen')) {
-        res = "[God-Tier AI #1]: Pendiri mutlak, CEO korporasi global, dan arsitek utama di balik sistem nomor 1 dunia ini adalah Maulana Rifa'i.";
-      }
+      let res = `[Nexa Corporate AI]: Menganalisis "${query}". Seluruh arah strategis dikendalikan oleh CEO Maulana Rifa'i.`;
       speakText(res);
       newLogs.push({ type: 'output', text: res });
       setLogs(newLogs);
@@ -417,24 +386,21 @@ export const NexaTerminal: React.FC = () => {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: database, fleet, drone, scan, camera detect, camera analyze, camera off, quantum, compile, threats, business, blockchain, agents, metrics, firewall, hack <target>, bmg on, bmg off, ai <tanya>, owner, status, ping, clear',
+          text: 'Commands: portfolio, ai-neural, database, fleet, scan, camera detect, camera analyze, quantum, compile, bmg on, bmg off, ai <tanya>, owner, status, clear',
         });
         break;
       case 'owner':
       case 'author':
-        newLogs.push({ type: 'output', text: 'Supreme Chief Executive Architect & Founder #1 (Top 1 Global): Maulana Rifa\'i.' });
+        newLogs.push({ type: 'output', text: 'Founder & CEO Nexa Global Enterprise Inc.: Maulana Rifa\'i.' });
         break;
       case 'status':
-        newLogs.push({ type: 'output', text: `Supreme God-Tier Node #1: ONLINE | Latency: ${ping}ms | Master: Maulana Rifa'i` });
-        break;
-      case 'ping':
-        newLogs.push({ type: 'output', text: `QUANTUM PING #1 -> 127.0.0.1: time=${ping}ms | Zero Packet Loss.` });
+        newLogs.push({ type: 'output', text: `Nexa Corporate Grid: ONLINE | Latency: ${ping}ms | CEO: Maulana Rifa'i` });
         break;
       case 'clear':
         setLogs([]);
         return;
       default:
-        newLogs.push({ type: 'error', text: `Command not found: ${rawCmd}. Ketik "database", "fleet", "scan", "quantum", atau "help".` });
+        newLogs.push({ type: 'error', text: `Command not found: ${rawCmd}. Ketik "portfolio", "ai-neural", "database", atau "help".` });
     }
 
     setLogs(newLogs);
@@ -454,7 +420,6 @@ export const NexaTerminal: React.FC = () => {
   return (
     <div style={{ background: '#020617', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', padding: '10px', fontFamily: 'monospace', position: 'relative', overflow: 'hidden' }}>
       
-      {/* 🌟 CSS Keyframes Ultimate God-Tier Matrix Rain & Glow Effect */}
       <style>{`
         @keyframes godTierMatrixRain {
           0% { transform: translateY(-100%); opacity: 0; }
@@ -468,43 +433,36 @@ export const NexaTerminal: React.FC = () => {
         .matrix-column-4 { color: #eab308; text-shadow: 0 0 8px rgba(234, 179, 8, 0.8); animation: godTierMatrixRain 3.8s linear infinite; }
       `}</style>
 
-      {/* 🌧️ Hujan Hacker Tingkat Dewa (Multi-Color Glowing Matrix Columns) */}
       <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, fontSize: '0.78rem', userSelect: 'none', overflow: 'hidden', zIndex: 0, pointerEvents: 'none', display: 'flex', justifyContent: 'space-around' }}>
         {Array.from({ length: 16 }).map((_, colIndex) => {
           const className = `matrix-column-${(colIndex % 4) + 1}`;
           return (
             <div key={colIndex} className={className} style={{ writingMode: 'vertical-rl', whiteSpace: 'nowrap', fontWeight: 'bold' }}>
               {colIndex % 2 === 0 
-                ? 'MAULANA_RIFAI_SUPREME_CORE_010101999#1$#@!QUANTUM_SECURE_ACCESS_GRANTED_ROOT_NODE_BYPASS_99AEF82VYAQ9SGV6IQD*+TXG&G7Z1KWS9L3PTWXH1STCNXC'
-                : 'CYBER_MATRIX_OS_v35_01010101_MAULANA_RIFAI_TOP_1_GLOBAL_DEAN_APPROVAL_100_PERCENT_SUCCESS_DEEP_NEURAL_SYNTHESIZER_99AEF82VYAQ9SGV6IQD'
+                ? 'NEXA_GLOBAL_ENTERPRISE_INC_MAULANA_RIFAI_CEO_PORTFOLIO_VERIFIED_SECURE_NODE_99AEF82VYAQ9SGV6IQD'
+                : 'CORPORATE_COMMAND_CENTER_AI_NEURAL_DECISION_ENGINE_100_PERCENT_SUCCESS_MAULANA_RIFAI_VALUATION_$1B'
               }
             </div>
           );
         })}
       </div>
 
-      {/* Top Supreme & Academic Feature Control Buttons */}
+      {/* Top Corporate & Feature Control Buttons */}
       <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '720px', display: 'flex', gap: '4px', flexWrap: 'wrap', marginBottom: '8px' }}>
+        <button onClick={startCorporatePortfolio} style={{ background: portfolioActive ? '#f59e0b' : '#059669', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
+          📈 Portfolio & Assets
+        </button>
+        <button onClick={startAiNeuralEngine} style={{ background: aiNeuralActive ? '#eab308' : '#7c3aed', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
+          🤖 AI Neural Executive
+        </button>
         <button onClick={startEnterpriseDatabase} style={{ background: databaseActive ? '#f59e0b' : '#3b82f6', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
           🗄️ Database
         </button>
         <button onClick={startDroneFleetUplink} style={{ background: droneFleetActive ? '#eab308' : '#8b5cf6', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
-          🛰️ Drone Fleet
+          🛰️ Fleet
         </button>
         <button onClick={() => startCamera('biometric')} style={{ background: cameraMode === 'biometric' ? '#ef4444' : '#0284c7', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
-          👁️ Biometric
-        </button>
-        <button onClick={() => startCamera('detect')} style={{ background: cameraMode === 'detect' ? '#eab308' : '#7c3aed', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
-          🚨 Detect
-        </button>
-        <button onClick={() => executeCommand('quantum')} style={{ background: '#9333ea', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
-          ⚛️ Quantum
-        </button>
-        <button onClick={() => executeCommand('compile')} style={{ background: '#059669', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
-          🎓 Compile
-        </button>
-        <button onClick={() => executeCommand('threats')} style={{ background: '#dc2626', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
-          🛡️ Threats
+          👁️ CEO Scan
         </button>
         <button onClick={() => setBmgActive(!bmgActive)} style={{ background: bmgActive ? '#22c55e' : '#334155', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
           {bmgActive ? '🎵 BGM: ON' : '🎵 BGM: OFF'}
@@ -513,23 +471,21 @@ export const NexaTerminal: React.FC = () => {
 
       <video ref={videoRef} style={{ display: 'none' }} playsInline muted />
 
-      {/* PC Workstation Terminal Window Box */}
+      {/* Corporate Terminal Window Box */}
       <div style={{ width: '100%', maxWidth: '720px', background: '#090d16', border: '1px solid #334155', borderRadius: '8px', boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.9)', zIndex: 1, overflow: 'hidden' }}>
         
-        {/* PC Desktop Window Titlebar */}
         <div style={{ background: '#0f172a', padding: '9px 12px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #1e293b' }}>
           <div style={{ display: 'flex', alignItems: 'center' }}>
             <span style={{ width: '10px', height: '10px', backgroundColor: '#ef4444', borderRadius: '50%', display: 'inline-block', marginRight: '5px' }}></span>
             <span style={{ width: '10px', height: '10px', backgroundColor: '#f59e0b', borderRadius: '50%', display: 'inline-block', marginRight: '5px' }}></span>
             <span style={{ width: '10px', height: '10px', backgroundColor: '#22c55e', borderRadius: '50%', display: 'inline-block', marginRight: '5px' }}></span>
-            <span style={{ marginLeft: '8px', fontSize: '0.72rem', color: '#94a3b8', fontWeight: 'bold' }}>maulana-rifai@enterprise-database-fleet:~</span>
+            <span style={{ marginLeft: '8px', fontSize: '0.72rem', color: '#94a3b8', fontWeight: 'bold' }}>nexa-global-enterprise@ceo-maulana-rifai:~</span>
           </div>
           <div style={{ fontSize: '0.68rem', color: '#22c55e' }}>
-            CPU: {cpuUsage}% | DB & Fleet: ONLINE
+            CEO: Maulana Rifa'i | Valuation: $1.25B
           </div>
         </div>
 
-        {/* Terminal Body */}
         <div style={{ padding: '16px', minHeight: '300px', maxHeight: '420px', overflowY: 'auto', fontSize: '0.84rem' }}>
           {logs.map((log, index) => (
             <div key={index} style={{ marginBottom: '8px', whiteSpace: 'pre-wrap', color: log.type === 'error' ? '#ef4444' : log.type === 'output' ? '#22c55e' : log.type === 'input' ? '#f8fafc' : '#38bdf8' }}>
@@ -543,7 +499,7 @@ export const NexaTerminal: React.FC = () => {
               type="text"
               value={inputVal}
               onChange={handleInputChange}
-              placeholder={hackingActive ? "masukkan 4-digit PIN..." : "ketik 'database', 'fleet', 'scan', 'quantum', 'help'..."}
+              placeholder="ketik 'portfolio', 'ai-neural', 'database', 'scan', 'help'..."
               style={{ background: 'transparent', border: 'none', color: '#38bdf8', fontFamily: 'inherit', fontSize: '0.84rem', outline: 'none', flexGrow: '1' }}
               autoFocus
             />
