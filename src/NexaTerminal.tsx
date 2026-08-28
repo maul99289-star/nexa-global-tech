@@ -11,26 +11,30 @@ export const NexaTerminal: React.FC = () => {
   const [hackTarget, setHackTarget] = useState<string>('');
   const [hackAttempts, setHackAttempts] = useState<number>(3);
   const [satelliteActive, setSatelliteActive] = useState<boolean>(false);
+  const [threatCount, setThreatCount] = useState<number>(0);
 
-  const [cpuUsage, setCpuUsage] = useState<number>(12.4);
-  const [ramUsage, setRamUsage] = useState<number>(3.8);
+  const [cpuUsage, setCpuUsage] = useState<number>(11.8);
+  const [ramUsage, setRamUsage] = useState<number>(3.6);
 
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
-    { type: 'system', text: 'Nexa Global Cyber-Matrix OS v12.0 [Supreme Top 1 Global Core]' },
+    { type: 'system', text: 'Nexa Global Cyber-Matrix OS v15.0 [Quantum Enterprise Academic Core]' },
     { type: 'system', text: 'Chief Executive Architect & Founder: Maulana Rifa\'i' },
-    { type: 'system', text: 'Ketik "help", "scan", "satellite", "business", "blockchain", "agents", "metrics", "firewall", "hack mainframe", atau "ai <pesan>".' },
+    { type: 'system', text: 'Ketik "help", "scan", "satellite", "compile", "threats", "business", "blockchain", "agents", "metrics", atau "ai <pesan>".' },
   ]);
 
   const terminalEndRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const bmgIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Live Telemetry Fluctuations
+  // Live Telemetry & Threat Simulation
   useEffect(() => {
     const timer = setInterval(() => {
       setPing(Math.floor(Math.random() * 2) + 1);
-      setCpuUsage(+(10 + Math.random() * 8).toFixed(1));
-      setRamUsage(+(3.5 + Math.random() * 0.4).toFixed(2));
+      setCpuUsage(+(10 + Math.random() * 7).toFixed(1));
+      setRamUsage(+(3.4 + Math.random() * 0.3).toFixed(2));
+      if (Math.random() > 0.7) {
+        setThreatCount(prev => prev + 1);
+      }
     }, 1500);
     return () => clearInterval(timer);
   }, []);
@@ -105,7 +109,7 @@ export const NexaTerminal: React.FC = () => {
     }
   };
 
-  // Biometric Retina & Facial Deep-Scan (Buka Kamera)
+  // Biometric Camera Scan
   const startBiometricScan = async () => {
     setScanActive(true);
     setLogs(prev => [...prev, { type: 'system', text: '[biometric] Mengaktifkan sensor kamera untuk verifikasi wajah tingkat dewa...' }]);
@@ -138,7 +142,7 @@ export const NexaTerminal: React.FC = () => {
     }
   };
 
-  // Satellite Global Uplink Simulation
+  // Satellite Global Uplink
   const startSatelliteUplink = () => {
     setSatelliteActive(true);
     setLogs(prev => [
@@ -197,6 +201,25 @@ export const NexaTerminal: React.FC = () => {
 
     if (lowerCmd === 'satellite' || lowerCmd === 'gps') {
       startSatelliteUplink();
+      setLogs(newLogs);
+      return;
+    }
+
+    if (lowerCmd === 'compile' || lowerCmd === 'academic') {
+      newLogs.push({
+        type: 'output',
+        text: '[🎓 ACADEMIC DEEP-CODE & ALGORITHM ANALYZER]\n- Target Engine: Nexa Quantum Compiler v9.2\n- Big-O Complexity: O(n log n) [Optimized Tier-1]\n- Memory Leak Test: 0 Detected (Zero-Allocation Heap)\n- Chief Architect & Lead Researcher: Maulana Rifa\'i\n- Status: Approved by Academic Board & Dean Committee',
+      });
+      speakText('Analisis algoritma akademik berhasil dikompilasi.');
+      setLogs(newLogs);
+      return;
+    }
+
+    if (lowerCmd === 'threats' || lowerCmd === 'firewall-status') {
+      newLogs.push({
+        type: 'output',
+        text: `[🛡️ QUANTUM THREAT INTERCEPTOR & DDOS DEFENSE]\n- Firewall Status: ${firewallActive ? 'ACTIVE (Encrypted Mode)' : 'STANDBY'}\n- Neutralized Packets: ${threatCount + 42} attacks blocked\n- Integrity Check: 100% Secure\n- Master Supervisor: Maulana Rifa\'i`,
+      });
       setLogs(newLogs);
       return;
     }
@@ -291,7 +314,7 @@ export const NexaTerminal: React.FC = () => {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: scan, satellite, business, blockchain, agents, metrics, firewall, hack <target>, bmg on, bmg off, ai <tanya>, owner, status, ping, clear',
+          text: 'Commands: scan, satellite, compile, threats, business, blockchain, agents, metrics, firewall, hack <target>, bmg on, bmg off, ai <tanya>, owner, status, ping, clear',
         });
         break;
       case 'owner':
@@ -308,7 +331,7 @@ export const NexaTerminal: React.FC = () => {
         setLogs([]);
         return;
       default:
-        newLogs.push({ type: 'error', text: `Command not found: ${rawCmd}. Ketik "scan", "satellite", "business", "metrics", atau "help".` });
+        newLogs.push({ type: 'error', text: `Command not found: ${rawCmd}. Ketik "scan", "compile", "threats", "business", atau "help".` });
     }
 
     setLogs(newLogs);
@@ -345,7 +368,7 @@ export const NexaTerminal: React.FC = () => {
         ))}
       </div>
 
-      {/* Top Supreme Feature Control Buttons */}
+      {/* Top Supreme & Academic Feature Control Buttons */}
       <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '720px', display: 'flex', gap: '4px', flexWrap: 'wrap', marginBottom: '8px' }}>
         <button onClick={startBiometricScan} style={{ background: scanActive ? '#ef4444' : '#0284c7', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
           {scanActive ? '👁️ Scanning...' : '👁️ Biometric'}
@@ -353,20 +376,20 @@ export const NexaTerminal: React.FC = () => {
         <button onClick={startSatelliteUplink} style={{ background: satelliteActive ? '#eab308' : '#7c3aed', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
           {satelliteActive ? '🛰️ Linking...' : '🛰️ Satellite'}
         </button>
-        <button onClick={() => executeCommand('business')} style={{ background: '#059669', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
+        <button onClick={() => executeCommand('compile')} style={{ background: '#059669', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
+          🎓 Academic Compile
+        </button>
+        <button onClick={() => executeCommand('threats')} style={{ background: '#dc2626', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
+          🛡️ Threat Interceptor
+        </button>
+        <button onClick={() => executeCommand('business')} style={{ background: '#10b981', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
           📈 AI Business
         </button>
         <button onClick={() => executeCommand('blockchain')} style={{ background: '#6d28d9', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
           ⛓️ Blockchain
         </button>
-        <button onClick={() => executeCommand('agents')} style={{ background: '#2563eb', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
-          🤖 Agents
-        </button>
         <button onClick={() => executeCommand('metrics')} style={{ background: '#0891b2', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
           💻 Telemetry
-        </button>
-        <button onClick={() => executeCommand('hack mainframe')} style={{ background: '#ea580c', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
-          🔓 Hack
         </button>
         <button onClick={() => setBmgActive(!bmgActive)} style={{ background: bmgActive ? '#22c55e' : '#334155', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
           {bmgActive ? '🎵 BGM: ON' : '🎵 BGM: OFF'}
@@ -384,10 +407,10 @@ export const NexaTerminal: React.FC = () => {
             <span style={{ width: '10px', height: '10px', backgroundColor: '#ef4444', borderRadius: '50%', display: 'inline-block', marginRight: '5px' }}></span>
             <span style={{ width: '10px', height: '10px', backgroundColor: '#f59e0b', borderRadius: '50%', display: 'inline-block', marginRight: '5px' }}></span>
             <span style={{ width: '10px', height: '10px', backgroundColor: '#22c55e', borderRadius: '50%', display: 'inline-block', marginRight: '5px' }}></span>
-            <span style={{ marginLeft: '8px', fontSize: '0.72rem', color: '#94a3b8', fontWeight: 'bold' }}>maulana-rifai@top-1-global-workstation:~</span>
+            <span style={{ marginLeft: '8px', fontSize: '0.72rem', color: '#94a3b8', fontWeight: 'bold' }}>maulana-rifai@academic-top-1-global-os:~</span>
           </div>
           <div style={{ fontSize: '0.68rem', color: '#22c55e' }}>
-            CPU: {cpuUsage}% | RAM: {ramUsage}GB
+            CPU: {cpuUsage}% | Threats Blocked: {threatCount + 42}
           </div>
         </div>
 
@@ -405,7 +428,7 @@ export const NexaTerminal: React.FC = () => {
               type="text"
               value={inputVal}
               onChange={handleInputChange}
-              placeholder={hackingActive ? "masukkan 4-digit PIN..." : "ketik 'scan', 'satellite', 'business', 'metrics', 'help'..."}
+              placeholder={hackingActive ? "masukkan 4-digit PIN..." : "ketik 'scan', 'compile', 'threats', 'satellite', 'help'..."}
               style={{ background: 'transparent', border: 'none', color: '#38bdf8', fontFamily: 'inherit', fontSize: '0.84rem', outline: 'none', flexGrow: '1' }}
               autoFocus
             />
