@@ -10,6 +10,8 @@ export const NexaTerminal: React.FC = () => {
   const [hackTarget, setHackTarget] = useState<string>('');
   const [hackAttempts, setHackAttempts] = useState<number>(3);
   const [satelliteActive, setSatelliteActive] = useState<boolean>(false);
+  const [droneFleetActive, setDroneFleetActive] = useState<boolean>(false);
+  const [databaseActive, setDatabaseActive] = useState<boolean>(false);
   const [threatCount, setThreatCount] = useState<number>(0);
 
   // Camera Advanced State
@@ -22,9 +24,9 @@ export const NexaTerminal: React.FC = () => {
   const [ramUsage, setRamUsage] = useState<number>(3.0);
 
   const [logs, setLogs] = useState<Array<{ type: string; text: string }>>([
-    { type: 'system', text: 'Nexa Global Cyber-Matrix OS v30.0 [Ultimate God-Tier Matrix & AI Core]' },
+    { type: 'system', text: 'Nexa Global Cyber-Matrix OS v35.0 [Ultimate Supreme God-Tier & Enterprise Core]' },
     { type: 'system', text: 'Chief Executive Architect & Founder: Maulana Rifa\'i' },
-    { type: 'system', text: 'Ketik "help", "scan", "camera detect", "camera analyze", "quantum", "fleet", "compile", atau "ai <pesan>".' },
+    { type: 'system', text: 'Ketik "help", "database", "fleet", "drone", "scan", "camera detect", "quantum", "compile", atau "ai <pesan>".' },
   ]);
 
   const terminalEndRef = useRef<HTMLDivElement>(null);
@@ -192,22 +194,41 @@ export const NexaTerminal: React.FC = () => {
     }
   };
 
-  // Satellite Global Uplink
-  const startSatelliteUplink = () => {
-    setSatelliteActive(true);
+  // Enterprise Database Master Sync
+  const startEnterpriseDatabase = () => {
+    setDatabaseActive(true);
     setLogs(prev => [
       ...prev,
-      { type: 'system', text: '[SATELLITE] Menghubungkan ke Nexa Global Orbital Node #1 (GPS 6.2088° S, 106.8456° E)...' }
+      { type: 'system', text: '[DATABASE] Menghubungkan ke Enterprise Distributed Quantum Database Cluster #1...' }
     ]);
-    speakText('Menghubungkan ke satelit orbital global.');
+    speakText('Menghubungkan ke basis data enterprise kuantum.');
 
     setTimeout(() => {
-      setSatelliteActive(false);
+      setDatabaseActive(false);
       setLogs(prev => [
         ...prev,
-        { type: 'output', text: '[SUCCESS] Global Satellite Uplink Connected!\n- Orbital Node: Active & Encrypted\n- Signal Latency: 0.4ms\n- Master Controller: Maulana Rifa\'i' }
+        { type: 'output', text: '[SUCCESS] Enterprise Database Synced (0.1ms Latency)!\n- Active Records: 1,000,000,000+ Encrypted Nodes\n- Storage Engine: Nexa Distributed Sharding\n- Supreme Administrator: Maulana Rifa\'i' }
       ]);
-      speakText('Koneksi satelit global aktif.');
+      speakText('Basis data enterprise berhasil disinkronisasi.');
+    }, 2500);
+  };
+
+  // Global Autonomous Drone & Satellite Fleet Master Uplink
+  const startDroneFleetUplink = () => {
+    setDroneFleetActive(true);
+    setLogs(prev => [
+      ...prev,
+      { type: 'system', text: '[FLEET] Menginisialisasi Global Autonomous Drone & Satellite Fleet (64 Satellites & 120 Drones)...' }
+    ]);
+    speakText('Mengaktifkan armada satelit dan drone otonom global.');
+
+    setTimeout(() => {
+      setDroneFleetActive(false);
+      setLogs(prev => [
+        ...prev,
+        { type: 'output', text: '[SUCCESS] Global Autonomous Drone & Satellite Fleet Active!\n- Satellite Grid: 64 Orbital Nodes Linked\n- Autonomous Drones: 120 Units Patrolling Airspace\n- Ultimate Commander: Maulana Rifa\'i' }
+      ]);
+      speakText('Armada satelit dan drone global siap dan beroperasi penuh.');
     }, 3000);
   };
 
@@ -268,8 +289,14 @@ export const NexaTerminal: React.FC = () => {
         return;
     }
 
-    if (lowerCmd === 'satellite' || lowerCmd === 'gps') {
-      startSatelliteUplink();
+    if (lowerCmd === 'database' || lowerCmd === 'db') {
+      startEnterpriseDatabase();
+      setLogs(newLogs);
+      return;
+    }
+
+    if (lowerCmd === 'fleet' || lowerCmd === 'drone' || lowerCmd === 'satellites') {
+      startDroneFleetUplink();
       setLogs(newLogs);
       return;
     }
@@ -284,20 +311,10 @@ export const NexaTerminal: React.FC = () => {
       return;
     }
 
-    if (lowerCmd === 'fleet' || lowerCmd === 'drone') {
-      newLogs.push({
-        type: 'output',
-        text: '[🛰️ GLOBAL AUTONOMOUS DRONE & SATELLITE FLEET]\n- Active Nodes: 64 Satellites & 120 Defense Drones\n- Global Coverage: 100% Terrestrial Grid\n- Authorization: Absolute Master [Maulana Rifa\'i]',
-      });
-      speakText('Armada satelit dan drone otonom siap.');
-      setLogs(newLogs);
-      return;
-    }
-
     if (lowerCmd === 'compile' || lowerCmd === 'academic') {
       newLogs.push({
         type: 'output',
-        text: '[🎓 ACADEMIC DEEP-CODE & ALGORITHM ANALYZER]\n- Target Engine: Nexa Quantum Compiler v30.0\n- Big-O Complexity: O(n log n) [Optimized Tier-1]\n- Memory Leak Test: 0 Detected (Zero-Allocation Heap)\n- Chief Architect & Lead Researcher: Maulana Rifa\'i\n- Status: Approved by Academic Board & Dean Committee',
+        text: '[🎓 ACADEMIC DEEP-CODE & ALGORITHM ANALYZER]\n- Target Engine: Nexa Quantum Compiler v35.0\n- Big-O Complexity: O(n log n) [Optimized Tier-1]\n- Memory Leak Test: 0 Detected (Zero-Allocation Heap)\n- Chief Architect & Lead Researcher: Maulana Rifa\'i\n- Status: Approved by Academic Board & Dean Committee',
       });
       speakText('Analisis algoritma akademik berhasil dikompilasi.');
       setLogs(newLogs);
@@ -307,7 +324,7 @@ export const NexaTerminal: React.FC = () => {
     if (lowerCmd === 'threats' || lowerCmd === 'firewall-status') {
       newLogs.push({
         type: 'output',
-        text: `[🛡️ QUANTUM THREAT INTERCEPTOR & DDOS DEFENSE]\n- Firewall Status: ${firewallActive ? 'ACTIVE (Encrypted Mode)' : 'STANDBY'}\n- Neutralized Packets: ${threatCount + 145} attacks blocked\n- Integrity Check: 100% Secure\n- Master Supervisor: Maulana Rifa\'i`,
+        text: `[🛡️ QUANTUM THREAT INTERCEPTOR & DDOS DEFENSE]\n- Firewall Status: ${firewallActive ? 'ACTIVE (Encrypted Mode)' : 'STANDBY'}\n- Neutralized Packets: ${threatCount + 188} attacks blocked\n- Integrity Check: 100% Secure\n- Master Supervisor: Maulana Rifa\'i`,
       });
       setLogs(newLogs);
       return;
@@ -403,7 +420,7 @@ export const NexaTerminal: React.FC = () => {
       case 'help':
         newLogs.push({
           type: 'output',
-          text: 'Commands: scan, camera detect, camera analyze, camera off, satellite, quantum, fleet, compile, threats, business, blockchain, agents, metrics, firewall, hack <target>, bmg on, bmg off, ai <tanya>, owner, status, ping, clear',
+          text: 'Commands: database, fleet, drone, scan, camera detect, camera analyze, camera off, quantum, compile, threats, business, blockchain, agents, metrics, firewall, hack <target>, bmg on, bmg off, ai <tanya>, owner, status, ping, clear',
         });
         break;
       case 'owner':
@@ -420,7 +437,7 @@ export const NexaTerminal: React.FC = () => {
         setLogs([]);
         return;
       default:
-        newLogs.push({ type: 'error', text: `Command not found: ${rawCmd}. Ketik "scan", "quantum", "compile", atau "help".` });
+        newLogs.push({ type: 'error', text: `Command not found: ${rawCmd}. Ketik "database", "fleet", "scan", "quantum", atau "help".` });
     }
 
     setLogs(newLogs);
@@ -462,7 +479,7 @@ export const NexaTerminal: React.FC = () => {
             <div key={colIndex} className={className} style={{ writingMode: 'vertical-rl', whiteSpace: 'nowrap', fontWeight: 'bold' }}>
               {colIndex % 2 === 0 
                 ? 'MAULANA_RIFAI_SUPREME_CORE_010101999#1$#@!QUANTUM_SECURE_ACCESS_GRANTED_ROOT_NODE_BYPASS_99AEF82VYAQ9SGV6IQD*+TXG&G7Z1KWS9L3PTWXH1STCNXC'
-                : 'CYBER_MATRIX_OS_v30_01010101_MAULANA_RIFAI_TOP_1_GLOBAL_DEAN_APPROVAL_100_PERCENT_SUCCESS_DEEP_NEURAL_SYNTHESIZER_99AEF82VYAQ9SGV6IQD'
+                : 'CYBER_MATRIX_OS_v35_01010101_MAULANA_RIFAI_TOP_1_GLOBAL_DEAN_APPROVAL_100_PERCENT_SUCCESS_DEEP_NEURAL_SYNTHESIZER_99AEF82VYAQ9SGV6IQD'
               }
             </div>
           );
@@ -471,20 +488,20 @@ export const NexaTerminal: React.FC = () => {
 
       {/* Top Supreme & Academic Feature Control Buttons */}
       <div style={{ position: 'relative', zIndex: 2, width: '100%', maxWidth: '720px', display: 'flex', gap: '4px', flexWrap: 'wrap', marginBottom: '8px' }}>
+        <button onClick={startEnterpriseDatabase} style={{ background: databaseActive ? '#f59e0b' : '#3b82f6', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
+          🗄️ Database
+        </button>
+        <button onClick={startDroneFleetUplink} style={{ background: droneFleetActive ? '#eab308' : '#8b5cf6', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
+          🛰️ Drone Fleet
+        </button>
         <button onClick={() => startCamera('biometric')} style={{ background: cameraMode === 'biometric' ? '#ef4444' : '#0284c7', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
           👁️ Biometric
         </button>
         <button onClick={() => startCamera('detect')} style={{ background: cameraMode === 'detect' ? '#eab308' : '#7c3aed', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
-          🚨 Motion Detect
-        </button>
-        <button onClick={() => startCamera('analyze')} style={{ background: cameraMode === 'analyze' ? '#10b981' : '#4f46e5', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
-          🤖 AI Vision
-        </button>
-        <button onClick={stopCamera} style={{ background: '#334155', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
-          ❌ Cam Off
+          🚨 Detect
         </button>
         <button onClick={() => executeCommand('quantum')} style={{ background: '#9333ea', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
-          ⚛️ Quantum Core
+          ⚛️ Quantum
         </button>
         <button onClick={() => executeCommand('compile')} style={{ background: '#059669', color: '#fff', border: 'none', padding: '5px 7px', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold', fontSize: '0.62rem' }}>
           🎓 Compile
@@ -508,10 +525,10 @@ export const NexaTerminal: React.FC = () => {
             <span style={{ width: '10px', height: '10px', backgroundColor: '#ef4444', borderRadius: '50%', display: 'inline-block', marginRight: '5px' }}></span>
             <span style={{ width: '10px', height: '10px', backgroundColor: '#f59e0b', borderRadius: '50%', display: 'inline-block', marginRight: '5px' }}></span>
             <span style={{ width: '10px', height: '10px', backgroundColor: '#22c55e', borderRadius: '50%', display: 'inline-block', marginRight: '5px' }}></span>
-            <span style={{ marginLeft: '8px', fontSize: '0.72rem', color: '#94a3b8', fontWeight: 'bold' }}>maulana-rifai@god-tier-matrix-os:~</span>
+            <span style={{ marginLeft: '8px', fontSize: '0.72rem', color: '#94a3b8', fontWeight: 'bold' }}>maulana-rifai@enterprise-database-fleet:~</span>
           </div>
           <div style={{ fontSize: '0.68rem', color: '#22c55e' }}>
-            CPU: {cpuUsage}% | Cam: {cameraMode.toUpperCase()}
+            CPU: {cpuUsage}% | DB & Fleet: ONLINE
           </div>
         </div>
 
@@ -529,7 +546,7 @@ export const NexaTerminal: React.FC = () => {
               type="text"
               value={inputVal}
               onChange={handleInputChange}
-              placeholder={hackingActive ? "masukkan 4-digit PIN..." : "ketik 'scan', 'camera detect', 'quantum', 'compile', 'help'..."}
+              placeholder={hackingActive ? "masukkan 4-digit PIN..." : "ketik 'database', 'fleet', 'scan', 'quantum', 'help'..."}
               style={{ background: 'transparent', border: 'none', color: '#38bdf8', fontFamily: 'inherit', fontSize: '0.84rem', outline: 'none', flexGrow: '1' }}
               autoFocus
             />
