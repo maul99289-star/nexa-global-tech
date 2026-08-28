@@ -3,22 +3,21 @@ import React, { useState, useEffect, useRef } from 'react';
 export const NexaTerminal: React.FC = () => {
   const [inputVal, setInputVal] = useState<string>('');
   const [ping, setPing] = useState<number>(1);
-  const [soundEnabled, setSoundEnabled] = useState<boolean>(true);
+  const [soundEnabled] = useState<boolean>(true);
   const [bmgActive, setBmgActive] = useState<boolean>(false);
   const [firewallActive, setFirewallActive] = useState<boolean>(true);
   const [hackingActive, setHackingActive] = useState<boolean>(false);
   const [hackTarget, setHackTarget] = useState<string>('');
   const [hackAttempts, setHackAttempts] = useState<number>(3);
-  const [satelliteActive, setSatelliteActive] = useState<boolean>(false);
   const [droneFleetActive, setDroneFleetActive] = useState<boolean>(false);
   const [databaseActive, setDatabaseActive] = useState<boolean>(false);
   const [threatCount, setThreatCount] = useState<number>(0);
 
   // Camera Advanced State
   const [cameraMode, setCameraMode] = useState<'off' | 'biometric' | 'detect' | 'analyze'>('off');
-  const [motionLevel, setMotionLevel] = useState<number>(0);
-  const [detectedObject, setDetectedObject] = useState<string>('Initializing...');
-  const [scanProgress, setScanProgress] = useState<number>(0);
+  const [, setMotionLevel] = useState<number>(0);
+  const [, setDetectedObject] = useState<string>('Initializing...');
+  const [, setScanProgress] = useState<number>(0);
 
   const [cpuUsage, setCpuUsage] = useState<number>(9.8);
   const [ramUsage, setRamUsage] = useState<number>(3.0);
@@ -32,7 +31,6 @@ export const NexaTerminal: React.FC = () => {
   const terminalEndRef = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const bmgIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const animationFrameId = useRef<number>();
 
   // Live Telemetry, Threat & Motion Simulation
   useEffect(() => {
@@ -70,8 +68,8 @@ export const NexaTerminal: React.FC = () => {
     const freqs = [110, 130.81, 164.81, 196, 220, 261.63, 329.63, 392, 523.25];
     const playTone = () => {
       try {
-        const AudioContext = window.AudioContext || (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
-        const ctx = new AudioContext();
+        const AudioContextWindow = window.AudioContext || (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
+        const ctx = new AudioContextWindow();
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
 
@@ -99,8 +97,8 @@ export const NexaTerminal: React.FC = () => {
   const playKeySound = () => {
     if (!soundEnabled) return;
     try {
-      const AudioContext = window.AudioContext || (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
-      const ctx = new AudioContext();
+      const AudioContextWindow = window.AudioContext || (window as unknown as { webkitAudioContext: typeof window.AudioContext }).webkitAudioContext;
+      const ctx = new AudioContextWindow();
       const osc = ctx.createOscillator();
       const gain = ctx.createGain();
 
@@ -137,7 +135,6 @@ export const NexaTerminal: React.FC = () => {
       stream.getTracks().forEach(track => track.stop());
       videoRef.current.srcObject = null;
     }
-    if (animationFrameId.current) cancelAnimationFrame(animationFrameId.current);
     setCameraMode('off');
   };
 
