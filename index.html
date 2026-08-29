@@ -1,13 +1,187 @@
-<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>web-perusahaan</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vortex Prime Cyber-Matrix OS v35.0 - Enterprise Edition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            background-color: #030307;
+            color: #00ff66;
+            font-family: 'Share Tech Mono', monospace;
+            overflow-x: hidden;
+        }
+        .orbitron {
+            font-family: 'Orbitron', sans-serif;
+        }
+        .matrix-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            opacity: 0.12;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.3) 50%), 
+                        linear-gradient(90deg, rgba(0, 255, 255, 0.04), rgba(0, 255, 102, 0.02), rgba(255, 0, 0, 0.04));
+            background-size: 100% 4px, 6px 100%;
+        }
+        .terminal-window {
+            background: rgba(8, 12, 22, 0.95);
+            border: 1px solid #1e293b;
+            box-shadow: 0 0 40px rgba(0, 255, 102, 0.18), inset 0 0 15px rgba(0, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        .glow-text {
+            text-shadow: 0 0 10px rgba(0, 255, 102, 0.5);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between p-2 md:p-6 relative">
+
+    <div class="matrix-bg"></div>
+
+    <header class="relative z-10 flex flex-wrap justify-between items-center bg-[#070b14]/90 border border-slate-800/80 px-4 py-3 rounded-lg shadow-xl mb-4 text-sm backdrop-blur-md">
+        <div class="flex items-center space-x-6 text-slate-400">
+            <span class="text-cyan-400 font-bold tracking-wider orbitron flex items-center gap-2">
+                <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span> VORTEX PRIME
+            </span>
+            <span class="hidden md:inline hover:text-cyan-300 cursor-pointer transition">Enterprise Solutions</span>
+            <span class="hidden md:inline hover:text-cyan-300 cursor-pointer transition">AI Core Architecture</span>
+            <span class="hidden md:inline hover:text-cyan-300 cursor-pointer transition">Global Neural Network</span>
+        </div>
+        <div class="flex items-center gap-3">
+            <span class="px-2 py-1 bg-cyan-950/60 border border-cyan-800 text-cyan-300 text-xs rounded">Academic & Pro Standard</span>
+            <div class="orbitron text-cyan-400 font-bold tracking-wider">
+                Maulana R's Profile
+            </div>
+        </div>
+    </header>
+
+    <div class="relative z-10 flex flex-wrap gap-2 mb-4 overflow-x-auto pb-2">
+        <button onclick="runCommand('database')" class="bg-blue-950/90 hover:bg-blue-900 text-blue-300 text-xs px-3 py-1.5 rounded border border-blue-600 transition flex items-center gap-1 shadow-lg">🗄️ DB Cluster</button>
+        <button onclick="runCommand('fleet')" class="bg-purple-950/90 hover:bg-purple-900 text-purple-300 text-xs px-3 py-1.5 rounded border border-purple-600 transition flex items-center gap-1 shadow-lg">🛸 Drone Fleet</button>
+        <button onclick="runCommand('biometric')" class="bg-cyan-950/90 hover:bg-cyan-900 text-cyan-300 text-xs px-3 py-1.5 rounded border border-cyan-600 transition flex items-center gap-1 shadow-lg">👁️ Biometric Auth</button>
+        <button onclick="runCommand('camera detect')" class="bg-amber-950/90 hover:bg-amber-900 text-amber-300 text-xs px-3 py-1.5 rounded border border-amber-600 transition flex items-center gap-1 shadow-lg">🚨 AI Vision Detect</button>
+        <button onclick="runCommand('quantum')" class="bg-indigo-950/90 hover:bg-indigo-900 text-indigo-300 text-xs px-3 py-1.5 rounded border border-indigo-600 transition flex items-center gap-1 shadow-lg">⚛️ Quantum Core</button>
+        <button onclick="runCommand('compile')" class="bg-emerald-950/90 hover:bg-emerald-900 text-emerald-300 text-xs px-3 py-1.5 rounded border border-emerald-600 transition flex items-center gap-1 shadow-lg">⚙️ OS Compiler</button>
+        <button onclick="runCommand('threats')" class="bg-red-950/90 hover:bg-red-900 text-red-300 text-xs px-3 py-1.5 rounded border border-red-600 transition flex items-center gap-1 shadow-lg">⚠️ Threat Intel</button>
+    </div>
+
+    <main class="relative z-10 flex-grow terminal-window flex flex-col p-4 md:p-6 mb-4 max-w-6xl mx-auto w-full">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+            <div class="flex space-x-2">
+                <div class="w-3 h-3 rounded-full bg-red-500 shadow-sm"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-500 shadow-sm"></div>
+                <div class="w-3 h-3 rounded-full bg-green-500 shadow-sm"></div>
+            </div>
+            <div class="text-xs text-slate-400 font-mono flex items-center gap-3">
+                <span>maulana-rifai@vortex-prime-enterprise:~</span>
+                <span class="text-yellow-400 bg-yellow-950/40 px-2 py-0.5 rounded border border-yellow-800">CPU: <span id="cpu-load">10.9</span>%</span>
+                <span class="hidden sm:inline">DB & Fleet: <span class="text-green-400 font-bold">ONLINE</span></span>
+            </div>
+        </div>
+
+        <div id="terminal-screen" class="flex-grow overflow-y-auto space-y-3 text-sm md:text-base mb-4 max-h-[52vh] pr-2">
+            <div class="text-cyan-300 font-bold orbitron text-center md:text-left glow-text">
+                Vortex Prime Cyber-Matrix OS v35.0 [Ultimate Supreme God-Tier & Enterprise Core]
+            </div>
+            <div class="text-slate-300 text-center md:text-left">
+                Chief Executive Architect & Founder: <span class="text-white font-bold underline decoration-cyan-500">Maulana Rifaii</span>
+            </div>
+            <div class="text-slate-400 bg-slate-900/60 p-3 rounded border border-slate-800 text-xs md:text-sm">
+                💡 <span class="text-cyan-400 font-bold">Panduan Akademik & Profesional:</span> Sistem terkalibrasi penuh untuk standar industri & riset kampus. Ketik perintah <span class="text-cyan-400">"help"</span>, <span class="text-cyan-400">"database"</span>, <span class="text-cyan-400">"fleet"</span>, <span class="text-cyan-400">"scan"</span>, <span class="text-cyan-400">"camera detect"</span>, <span class="text-cyan-400">"quantum"</span>, <span class="text-cyan-400">"compile"</span>, atau <span class="text-cyan-400">"ai &lt;pesan&gt;"</span>.
+            </div>
+            <div id="dynamic-output" class="space-y-2"></div>
+        </div>
+
+        <form id="command-form" onsubmit="handleFormSubmit(event)" class="flex items-center bg-black/80 border border-slate-700 rounded-lg px-3 py-2.5 shadow-inner">
+            <span class="text-cyan-400 font-bold mr-2 text-lg">$</span>
+            <input type="text" id="command-input" autofocus autocomplete="off" placeholder="ketik perintah di sini (contoh: help, scan, database)..." class="w-full bg-transparent border-none outline-none text-white font-mono placeholder-slate-600 text-sm md:text-base">
+            <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-black font-bold px-4 py-1 rounded text-xs transition orbitron">EXEC</button>
+        </form>
+    </main>
+
+    <footer class="relative z-10 text-center text-xs text-slate-500">
+        &copy; 2026 Vortex Prime Cyber-Matrix. Built with PC-Grade Architecture by Maulana Rifaii. All Rights Reserved.
+    </footer>
+
+    <script>
+        const outputContainer = document.getElementById('dynamic-output');
+        const commandInput = document.getElementById('command-input');
+
+        setInterval(() => {
+            let randomCpu = (Math.random() * 4 + 8.5).toFixed(1);
+            document.getElementById('cpu-load').innerText = randomCpu;
+        }, 3000);
+
+        function appendOutput(command, resultHtml, isAlert = false) {
+            const cmdDiv = document.createElement('div');
+            cmdDiv.innerHTML = `<span class="text-slate-500">$</span> <span class="text-white font-semibold">${command}</span>`;
+            outputContainer.appendChild(cmdDiv);
+
+            const resDiv = document.createElement('div');
+            resDiv.className = isAlert ? "text-red-400 font-bold bg-red-950/20 p-2 rounded border border-red-900/50" : "text-green-400 bg-green-950/10 p-2 rounded border border-green-900/30";
+            resDiv.innerHTML = resultHtml;
+            outputContainer.appendChild(resDiv);
+
+            const screen = document.getElementById('terminal-screen');
+            screen.scrollTop = screen.scrollHeight;
+        }
+
+        function runCommand(cmd) {
+            let cleanCmd = cmd.trim().toLowerCase();
+            let response = "";
+            let isAlert = false;
+
+            if (cleanCmd === 'help') {
+                response = `> [DAFTAR PERINTAH PROFESIONAL VORTEX PRIME]:<br>
+                - database : Sinkronisasi cluster database global enterprise (1.4M+ Nodes).<br>
+                - fleet / drone : Pemantauan armada autonomous drone pertahanan global.<br>
+                - scan : Diagnostic security audit menyeluruh pada port dan firewall.<br>
+                - camera detect : [ALERTS] Sistem deteksi intrusi pergerakan AI Vision 99%.<br>
+                - quantum : Eksekusi enkripsi tingkat post-quantum Q-Bit.<br>
+                - compile : Rebuild kernel sistem operasi Matrix OS v35.0.<br>
+                - threats : Analisis intelijen ancaman siber global secara real-time.<br>
+                - clear : Membersihkan layar log terminal.`;
+            } else if (cleanCmd === 'database') {
+                response = `[OK] Enterprise Database Cluster Synchronized. 1,420,900 Nodes Active. Latency: 0.18ms. Storage Tier: NVMe Distributed Matrix.`;
+            } else if (cleanCmd === 'fleet' || cleanCmd === 'drone') {
+                response = `[OK] Autonomous Drone Fleet Status: 845 Units Deployed across 12 sectors. Telemetry: Optimal. Battery/Fuel: 98% Average.`;
+            } else if (cleanCmd === 'scan') {
+                response = `[SECURITY AUDIT] Melakukan penetrasi dan pemindaian port jaringan... 100% Selesai. Zero vulnerabilities detected. Enterprise firewall secure.`;
+            } else if (cleanCmd === 'camera detect') {
+                isAlert = true;
+                response = `[CRITICAL ALERT] Intrusion Movement Detected! Level: 99% - Sektor B-4 Terdeteksi Pergerakan Tidak Dikenal! Protokol pertahanan otomatis diaktifkan.`;
+            } else if (cleanCmd === 'quantum') {
+                response = `[QUANTUM CORE] Post-Quantum Cryptography (PQC) Q-Bit aktif. Kunci enkripsi aman dari ancaman dekripsi superkomputer masa depan.`;
+            } else if (cleanCmd === 'compile') {
+                response = `[KERNEL BUILD] Mengkompilasi ulang Vortex Prime Cyber-Matrix OS v35.0... 0 Error, 0 Warning. Kernel teroptimasi untuk lingkungan PC & Server.`;
+            } else if (cleanCmd === 'threats') {
+                response = `[THREAT INTELLIGENCE] Zero active cyber attacks. Automated AI countermeasures running smoothly across all network perimeters.`;
+            } else if (cleanCmd === 'clear') {
+                outputContainer.innerHTML = '';
+                return;
+            } else if (cleanCmd.startsWith('ai ')) {
+                let msg = cleanCmd.replace('ai ', '');
+                response = `[AI CORE NEURAL RESPONSE]: Pesan "${msg}" berhasil diproses oleh sistem kognitif tingkat lanjut arsitek Maulana Rifaii. Analisis: Sistem berjalan stabil dan siap eksekusi.`;
+            } else {
+                response = `[ERROR] Perintah "${cmd}" tidak terdaftar dalam kamus sistem. Ketik "help" untuk melihat panduan perintah profesional.`;
+                isAlert = true;
+            }
+
+            appendOutput(cmd, response, isAlert);
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            let val = commandInput.value;
+            if(val) {
+                runCommand(val);
+                commandInput.value = '';
+            }
+        }
+    </script>
+</body>
 </html>
+
