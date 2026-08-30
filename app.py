@@ -5,11 +5,10 @@ HTML_CONTENT = """<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vortex Prime Cyber-Matrix OS v35.0 - Enterprise Edition</title>
+    <title>Vortex Prime Cyber-Matrix OS v35.0 - Enterprise Edition with AI</title>
     <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        /* Latar belakang tema korporat profesional (Deep Navy & Slate Blue) */
         body { 
             background: linear-gradient(135deg, #070e1c 0%, #0f172a 50%, #030712 100%); 
             color: #38bdf8; 
@@ -37,6 +36,10 @@ HTML_CONTENT = """<!DOCTYPE html>
         .animated-corporate-img {
             animation: floatEffect 4s ease-in-out infinite;
         }
+        .ai-chat-box {
+            max-height: 200px;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body class="min-h-screen flex flex-col justify-between p-2 md:p-6 relative">
@@ -47,6 +50,7 @@ HTML_CONTENT = """<!DOCTYPE html>
             <span class="text-sky-400 font-bold tracking-wider orbitron flex items-center gap-2">
                 <span class="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span> VORTEX PRIME
             </span>
+            <span onclick="runCommand('ai')" class="hover:text-sky-300 cursor-pointer transition font-bold text-cyan-400">🤖 AI Assistant</span>
             <span onclick="runCommand('about')" class="hidden md:inline hover:text-sky-300 cursor-pointer transition">About Company</span>
             <span onclick="runCommand('services')" class="hidden md:inline hover:text-sky-300 cursor-pointer transition">Enterprise Solutions</span>
             <span onclick="runCommand('portfolio')" class="hidden md:inline hover:text-sky-300 cursor-pointer transition">Global Projects</span>
@@ -58,7 +62,9 @@ HTML_CONTENT = """<!DOCTYPE html>
         </div>
     </header>
 
+    <!-- Tombol Navigasi Lengkap (Semua Fitur Disimpan) -->
     <div class="relative z-10 flex flex-wrap gap-2 mb-4 overflow-x-auto pb-2">
+        <button onclick="runCommand('ai')" class="bg-cyan-950/90 text-cyan-300 text-xs px-3 py-1.5 rounded border border-cyan-500 transition shadow-lg font-bold animate-pulse">🤖 Tanya AI Pribadi</button>
         <button onclick="runCommand('about')" class="bg-sky-950/90 text-sky-300 text-xs px-3 py-1.5 rounded border border-sky-600 transition shadow-lg">🏢 About Us</button>
         <button onclick="runCommand('services')" class="bg-teal-950/90 text-teal-300 text-xs px-3 py-1.5 rounded border border-teal-600 transition shadow-lg">💼 Services</button>
         <button onclick="runCommand('portfolio')" class="bg-blue-950/90 text-blue-300 text-xs px-3 py-1.5 rounded border border-blue-600 transition shadow-lg">📈 Portfolio</button>
@@ -74,6 +80,25 @@ HTML_CONTENT = """<!DOCTYPE html>
         <button onclick="runCommand('press')" class="bg-sky-900/90 text-sky-200 text-xs px-3 py-1.5 rounded border border-sky-400 transition shadow-lg">📰 Multi-Format Press</button>
     </div>
 
+    <!-- AI Chat Box Pribadi -->
+    <div class="relative z-10 max-w-6xl mx-auto w-full mb-4 bg-slate-900/95 border border-cyan-500/50 rounded-xl p-4 shadow-2xl backdrop-blur-md">
+        <div class="flex items-center justify-between border-b border-slate-700 pb-2 mb-3">
+            <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-full bg-cyan-400 animate-ping"></span>
+                <h3 class="text-xs md:text-sm font-bold text-cyan-300 orbitron uppercase tracking-wider">Vortex Neural AI Assistant (Pribadi)</h3>
+            </div>
+            <span class="text-[10px] text-cyan-400 bg-cyan-950 px-2 py-0.5 rounded border border-cyan-700">ONLINE</span>
+        </div>
+        <div id="ai-chat-log" class="ai-chat-box space-y-2 mb-3 p-2 bg-slate-950/80 rounded border border-slate-800 text-xs font-mono">
+            <div class="text-cyan-300">🤖 <b>Vortex AI:</b> Halo! Saya asisten AI pribadi Anda. Silakan ketik pertanyaan tentang profil CEO Maulana Rifaii, layanan perusahaan, atau fitur lainnya di sini.</div>
+        </div>
+        <form onsubmit="handleAIChatSubmit(event)" class="flex gap-2">
+            <input type="text" id="ai-chat-input" placeholder="Tanya AI tentang perusahaan atau CEO..." class="flex-grow bg-slate-950 border border-slate-700 rounded px-3 py-1.5 text-xs text-white outline-none focus:border-cyan-400">
+            <button type="submit" class="bg-cyan-600 hover:bg-cyan-500 text-white font-bold px-4 py-1.5 rounded text-xs orbitron transition">KIRIM AI</button>
+        </form>
+    </div>
+
+    <!-- Banner Atas -->
     <div class="relative z-10 max-w-6xl mx-auto w-full mb-4 overflow-hidden rounded-xl border border-sky-500/40 bg-gradient-to-r from-slate-900 via-sky-950/40 to-slate-900 p-4 shadow-2xl flex flex-col sm:flex-row items-center justify-between gap-4 backdrop-blur-md">
         <div class="text-left px-2">
             <span class="text-xs uppercase tracking-widest text-sky-400 font-bold orbitron">Vortex Prime Enterprise Visualizer</span>
@@ -93,6 +118,7 @@ HTML_CONTENT = """<!DOCTYPE html>
         </div>
     </div>
 
+    <!-- Terminal Interaktif -->
     <main class="relative z-10 flex-grow terminal-window flex flex-col p-4 md:p-6 mb-4 max-w-6xl mx-auto w-full">
         <div class="flex items-center justify-between border-b border-slate-700 pb-3 mb-4">
             <div class="flex space-x-2">
@@ -102,21 +128,19 @@ HTML_CONTENT = """<!DOCTYPE html>
             </div>
             <div class="text-xs text-slate-400 font-mono">maulana-rifai@vortex-prime-enterprise:~</div>
         </div>
-        <div id="terminal-screen" class="flex-grow overflow-y-auto space-y-3 text-sm md:text-base mb-4 max-h-[35vh] pr-2">
+        <div id="terminal-screen" class="flex-grow overflow-y-auto space-y-3 text-sm md:text-base mb-4 max-h-[30vh] pr-2">
             <div class="text-sky-300 font-bold orbitron glow-text">Vortex Prime Cyber-Matrix OS v35.0 [Enterprise Edition]</div>
             <div class="text-slate-200">Chief Executive Architect & Founder: <span class="text-white font-bold underline">Maulana Rifaii</span></div>
-            <div class="text-slate-300 bg-slate-800/80 p-3 rounded border border-slate-700 text-xs">
-                💡 Klik salah satu tombol fitur di atas atau ketik perintah untuk melihat visualisasi dan detail instan di bawah.
-            </div>
             <div id="dynamic-output" class="space-y-2"></div>
         </div>
         <form id="command-form" onsubmit="handleFormSubmit(event)" class="flex items-center bg-[#070e1c]/90 border border-slate-700 rounded-lg px-3 py-2.5">
             <span class="text-sky-400 font-bold mr-2 text-lg">$</span>
-            <input type="text" id="command-input" autofocus autocomplete="off" placeholder="ketik perintah perusahaan..." class="w-full bg-transparent border-none outline-none text-white font-mono text-sm">
+            <input type="text" id="command-input" autocomplete="off" placeholder="ketik perintah (contoh: ai, about, services)..." class="w-full bg-transparent border-none outline-none text-white font-mono text-sm">
             <button type="submit" class="bg-sky-600 hover:bg-sky-500 text-white font-bold px-4 py-1 rounded text-xs orbitron transition">EXEC</button>
         </form>
     </main>
 
+    <!-- Panel Visualisasi Fitur -->
     <section class="relative z-10 max-w-6xl mx-auto w-full mb-6 bg-[#0f172a]/95 border border-slate-700 rounded-xl p-4 md:p-5 shadow-2xl backdrop-blur-md">
         <div class="flex items-center justify-between border-b border-slate-700 pb-2 mb-3">
             <div class="flex items-center gap-2">
@@ -135,7 +159,7 @@ HTML_CONTENT = """<!DOCTYPE html>
             <div class="md:col-span-2 flex flex-col justify-center space-y-2">
                 <h4 id="feature-title" class="text-base font-bold text-white orbitron">Pilih Fitur di Atas untuk Menampilkan Detail</h4>
                 <p id="feature-desc" class="text-xs text-slate-300 leading-relaxed">
-                    Setiap tombol fitur perusahaan (About, Banking Security, API-First, Real-Time Data, Career, Press, dll.) akan menampilkan visualisasi kartu dan telemetri langsung secara real-time di area ini tanpa menghilangkan elemen apa pun.
+                    Gunakan AI Assistant pribadi atau tombol menu di atas untuk memantau telemetri dan sistem keamanan secara real-time.
                 </p>
                 <div class="flex items-center gap-2 pt-1">
                     <span class="text-[10px] bg-sky-950 text-sky-300 px-2 py-0.5 rounded border border-sky-800">Top 1 Standard</span>
@@ -152,12 +176,13 @@ HTML_CONTENT = """<!DOCTYPE html>
     <script>
         const outputContainer = document.getElementById('dynamic-output');
         const commandInput = document.getElementById('command-input');
-        
         const featureTitle = document.getElementById('feature-title');
         const featureDesc = document.getElementById('feature-desc');
         const featureIconDisplay = document.getElementById('feature-icon-display');
         const featureBadgeTitle = document.getElementById('feature-badge-title');
         const activeFeatureTag = document.getElementById('active-feature-tag');
+        const aiChatLog = document.getElementById('ai-chat-log');
+        const aiChatInput = document.getElementById('ai-chat-input');
 
         function updateVisualPanel(title, desc, icon, badge) {
             featureTitle.innerText = title;
@@ -168,10 +193,32 @@ HTML_CONTENT = """<!DOCTYPE html>
             activeFeatureTag.className = "text-xs font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-700";
         }
 
-        function appendOutput(command, resultHtml, isAlert = false) {
-            outputContainer.innerHTML += `<div><span class="text-slate-400">$</span> <span class="text-white">${command}</span></div>`;
-            outputContainer.innerHTML += `<div class="${isAlert ? 'text-red-400' : 'text-emerald-300'} bg-emerald-950/20 p-2 rounded border border-emerald-800/40">${resultHtml}</div>`;
-            document.getElementById('terminal-screen').scrollTop = document.getElementById('terminal-screen').scrollHeight;
+        function appendAIResponse(question, answer) {
+            aiChatLog.innerHTML += `<div class="text-slate-300">👤 <b>Anda:</b> ${question}</div>`;
+            aiChatLog.innerHTML += `<div class="text-cyan-300 bg-cyan-950/30 p-2 rounded border border-cyan-800/40">🤖 <b>Vortex AI:</b> ${answer}</div>`;
+            aiChatLog.scrollTop = aiChatLog.scrollHeight;
+        }
+
+        function handleAIChatSubmit(e) {
+            e.preventDefault();
+            let q = aiChatInput.value.trim();
+            if(!q) return;
+            
+            let qLower = q.toLowerCase();
+            let ans = "Saya mencatat pertanyaan Anda mengenai sistem Vortex Prime. Silakan gunakan tombol perintah di atas atau ketik perintah terminal untuk informasi mendalam.";
+            
+            if(qLower.includes('maulana') || qLower.includes('ceo') || qLower.includes('siapa')) {
+                ans = "Maulana Rifaii adalah Founder & Chief Executive Architect dari Vortex Prime Enterprise, pemimpin Top 1 Enterprise Solutions di bidang keamanan siber & sistem cerdas.";
+            } else if(qLower.includes('ai') || qLower.includes('asisten')) {
+                ans = "Saya adalah AI Assistant internal yang terintegrasi langsung dengan ekosistem Vortex Prime untuk membantu navigasi dan analisis data korporat Anda.";
+            } else if(qLower.includes('layanan') || qLower.includes('service') || qLower.includes('jasa')) {
+                ans = "Layanan unggulan kami meliputi Post-Quantum Cryptography, AI Neural Network, Distributed DB Cluster, Autonomous Drone Fleet, dan Banking-Grade Security.";
+            } else if(qLower.includes('kontak') || qLower.includes('hubungi') || qLower.includes('email')) {
+                ans = "Anda dapat menghubungi pusat kendali utama di Vortex Prime Tower atau melalui email resmi contact@vortexprime-matrix.io.";
+            }
+            
+            appendAIResponse(q, ans);
+            aiChatInput.value = '';
         }
 
         function runCommand(cmd) {
@@ -179,12 +226,15 @@ HTML_CONTENT = """<!DOCTYPE html>
             let res = "";
             let alertState = false;
 
-            if (c === 'about') {
+            if (c === 'ai') {
+                res = "[AI ASSISTANT ACTIVE] Neural AI siap melayani pertanyaan Anda melalui panel interaktif di atas.";
+                updateVisualPanel("Vortex Neural AI Assistant", "Asisten AI pribadi yang terintegrasi penuh untuk memberikan informasi instan mengenai perusahaan, profil CEO, dan sistem teknologi korporat.", "🤖", "AI ASSISTANT");
+            } else if (c === 'about') {
                 res = "[COMPANY PROFILE] Vortex Prime Corp dipimpin oleh Maulana Rifaii sebagai Top 1 Enterprise Solutions dalam keamanan siber & AI.";
-                updateVisualPanel("About Vortex Prime Corp", "Perusahaan teknologi terdepan yang berfokus pada keamanan siber tingkat tinggi, sistem otonom cerdas, dan arsitektur enterprise masa depan di bawah kepemimpinan CEO Maulana Rifaii.", "🏢", "ABOUT US");
+                updateVisualPanel("About Vortex Prime Corp", "Perusahaan teknologi terdepan yang berfokus pada keamanan siber tingkat tinggi, sistem otonom cerdas, dan arsitektur enterprise masa depan.", "🏢", "ABOUT US");
             } else if (c === 'services') {
                 res = "[ENTERPRISE SERVICES] 1. Post-Quantum Cryptography 2. AI Neural Network 3. Autonomous Drone Fleet 4. NVMe Database.";
-                updateVisualPanel("Enterprise Solutions & Services", "Menyediakan layanan kelas dunia mulai dari Post-Quantum Cryptography, integrasi AI Neural Network, hingga pengelolaan armada autonomous drone skala besar.", "💼", "SERVICES");
+                updateVisualPanel("Enterprise Solutions & Services", "Menyediakan layanan kelas dunia mulai dari Post-Quantum Cryptography, integrasi AI Neural Network, hingga pengelolaan armada autonomous drone.", "💼", "SERVICES");
             } else if (c === 'portfolio') {
                 res = "[PORTFOLIO PROJECTS] - Project Matrix-Alpha (1.4M Nodes) - Project Sky-Sentinel Drone Grid.";
                 updateVisualPanel("Global Projects & Portfolio", "Rekam jejak proyek global termasuk Project Matrix-Alpha dengan 1.4 juta node aktif dan Project Sky-Sentinel untuk pertahanan sektor strategis.", "📈", "PORTFOLIO");
@@ -204,33 +254,35 @@ HTML_CONTENT = """<!DOCTYPE html>
                 res = "[THREAT INTEL] Zero active cyber attacks. Automated AI countermeasures online.";
                 updateVisualPanel("Global Threat Intelligence", "Sistem AI pemantau ancaman siber otonom mendeteksi nol serangan aktif dengan pertahanan proaktif otomatis.", "⚠️", "THREAT INTEL");
             } else if (c === 'banking') {
-                res = "[BANKING SECURITY] Enkripsi End-to-End AES-256, Multi-Factor Authentication (MFA) Hardware Token, dan Real-Time Fraud Detection Engine aktif.";
+                res = "[BANKING SECURITY] Enkripsi End-to-End AES-256, Multi-Factor Authentication (MFA) Hardware Token aktif.";
                 updateVisualPanel("Banking-Grade Security", "Standar keamanan perbankan tertinggi dengan enkripsi AES-256 end-to-end, hardware token MFA, dan AI fraud detection real-time.", "🛡️", "BANKING SECURE");
             } else if (c === 'apifirst') {
-                res = "[API-FIRST ARCHITECTURE] RESTful & GraphQL microservices core terintegrasi dengan Swagger/OpenAPI v3.0, rate-limiting, dan OAuth2 security layer.";
+                res = "[API-FIRST ARCHITECTURE] RESTful & GraphQL microservices core terintegrasi dengan Swagger/OpenAPI v3.0.";
                 updateVisualPanel("API-First Architecture", "Arsitektur microservices berbasis RESTful dan GraphQL yang tangguh, terdokumentasi via OpenAPI v3.0, serta dilengkapi OAuth2.", "⚡", "API-FIRST ARCH");
             } else if (c === 'realtime') {
-                res = "[REAL-TIME DATA CENTER] Latensi throughput < 0.05ms, WebSocket live telemetry streaming, dan auto-failover cluster aktif.";
+                res = "[REAL-TIME DATA CENTER] Latensi throughput < 0.05ms, WebSocket live telemetry streaming aktif.";
                 updateVisualPanel("Real-Time Data Center", "Pusat data real-time berkecepatan tinggi dengan latensi throughput di bawah 0.05ms dan streaming WebSocket live telemetry.", "📊", "REAL-TIME DATA");
             } else if (c === 'career') {
-                res = "[CAREER MANAGEMENT SYSTEM] Portal rekrutmen internal & eksternal aktif. Lowongan terbuka: Lead AI Architect, Senior Security Engineer. Kirim CV via sistem.";
+                res = "[CAREER MANAGEMENT SYSTEM] Lowongan terbuka: Lead AI Architect, Senior Security Engineer.";
                 updateVisualPanel("Career Management System", "Sistem rekrutmen dan manajemen karier profesional. Bergabunglah dengan tim elit teknologi bersama para pakar industri.", "👔", "CAREER PORTAL");
             } else if (c === 'press') {
-                res = "[MULTI-FORMAT PRESS ROOM] Pusat publikasi pers tersedia dalam format PDF, Markdown, JSON, dan Live RSS Feed untuk media global.";
+                res = "[MULTI-FORMAT PRESS ROOM] Pusat publikasi pers tersedia dalam format PDF, Markdown, JSON, dan Live RSS Feed.";
                 updateVisualPanel("Multi-Format Press Room", "Ruang pers resmi perusahaan yang menyediakan siaran pers, laporan media, dan unduhan berkas dalam format PDF, Markdown, dan JSON.", "📰", "PRESS ROOM");
             } else if (c === 'help') {
-                res = "Perintah tersedia: about, services, portfolio, contact, database, fleet, quantum, threats, banking, apifirst, realtime, career, press, clear.";
+                res = "Perintah tersedia: ai, about, services, portfolio, contact, database, fleet, quantum, threats, banking, apifirst, realtime, career, press, clear.";
                 updateVisualPanel("Command Help Center", "Panduan lengkap daftar perintah terminal perusahaan untuk navigasi sistem secara cepat dan efisien.", "💡", "HELP CENTER");
             } else if (c === 'clear') {
                 outputContainer.innerHTML = '';
                 updateVisualPanel("Terminal Cleared", "Layar terminal telah dibersihkan. Sistem berjalan normal dan stabil.", "✨", "CLEARED");
                 return;
             } else {
-                res = `[ERROR] Perintah "${cmd}" tidak dikenal. Ketik 'help' untuk daftar perintah.`;
+                res = `[ERROR] Perintah "${cmd}" tidak dikenal. Ketik 'help' atau tanyakan ke AI Assistant.`;
                 alertState = true;
                 updateVisualPanel("Command Error", `Perintah "${cmd}" tidak terdaftar di dalam sistem korporat. Periksa kembali input Anda.`, "❌", "INVALID CMD");
             }
-            appendOutput(cmd, res, alertState);
+            outputContainer.innerHTML += `<div><span class="text-slate-400">$</span> <span class="text-white">${cmd}</span></div>`;
+            outputContainer.innerHTML += `<div class="${alertState ? 'text-red-400' : 'text-emerald-300'} bg-emerald-950/20 p-2 rounded border border-emerald-800/40">${res}</div>`;
+            document.getElementById('terminal-screen').scrollTop = document.getElementById('terminal-screen'].scrollHeight;
         }
 
         function handleFormSubmit(e) {
@@ -242,7 +294,8 @@ HTML_CONTENT = """<!DOCTYPE html>
         }
     </script>
 </body>
-</html>"""
+</html>
+"""
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
